@@ -12,6 +12,7 @@ export default defineConfig({
       strategies: "generateSW",
       registerType: "autoUpdate",
       includeAssets: ["icons/*.ico"],
+      injectRegister: "inline",
       manifest: {
         name: "WebAuth ❤️ WebRTC",
         short_name: "wA❤️wRTC",

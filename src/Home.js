@@ -1,9 +1,22 @@
-import {LitElement, html} from 'lit';
+import { LitElement, html } from "lit";
+import { card } from "../public/css/component.module.css";
 
 class Home extends LitElement {
-	render() {
-		return html`<h1>Home</h1><ul><li><a href="/login">Login</a></li><li><a href="/stats">Stats</a></li></ul>`;
-	}
+  createRenderRoot() {
+    return this;
+  }
+
+  render() {
+    return html`
+      <div class="${card}">
+        <h2>Welcome!</h2>
+        <p>
+          This is a basic WebAuth application that makes use of WebRTC to enroll new devices easily,
+          without the need for 3rd party apps or services.
+        </p>
+      </div>
+    `;
+  }
 }
 
-customElements.define('auth-home', Home);
+customElements.define("auth-home", Home);

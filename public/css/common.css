@@ -1,0 +1,42 @@
+/* Light color theme variables */
+:root,
+:root[data-theme="light"] {
+  --canvas-primary: #fafafa;
+  --canvas-secondary: #e7e7e7;
+  --canvas-contrast: #ebb;
+  --text-primary: #111;
+  --text-link: #37f;
+  --text-link-active: #f33;
+  --button-canvas-primary: #37f;
+  --button-text-primary: #fafafa;
+}
+
+/* Dark color theme variables */
+@media screen and (prefers-color-scheme: dark) {
+  :root,
+  :root[data-theme="dark"] {
+    --canvas-primary: #000;
+    --canvas-secondary: #222;
+    --canvas-contrast: #422;
+    --text-primary: #eee;
+    --text-link: #5af;
+    --text-link-active: #f77;
+    --button-canvas-primary: #5af;
+    --button-text-primary: #000;
+  }
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  margin: 0;
+  font-family: Calibri, "Trebuchet MS", sans-serif;
+  background-color: var(--canvas-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+}

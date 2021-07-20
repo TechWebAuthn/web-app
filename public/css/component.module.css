@@ -1,0 +1,145 @@
+.link {
+  color: var(--text-link);
+}
+
+.home-link {
+  font-size: 1.5rem;
+  padding: 1rem;
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+}
+
+.page-title {
+  text-align: center;
+  margin: 0 4rem;
+  padding-block-start: 1rem;
+  padding-block-end: 1rem;
+}
+
+.page > * {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.theme-toggle {
+  display: flex;
+  font-size: 1.5rem;
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+}
+
+.theme-toggle input {
+  display: none;
+}
+
+.theme-toggle label {
+  padding: 1rem;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+}
+
+.nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  justify-content: center;
+}
+
+.nav li {
+  display: inline-flex;
+}
+
+.nav a {
+  padding: 1rem;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav a[data-active] {
+  color: var(--text-link-active);
+}
+
+@media screen and (max-width: 720px) {
+  .nav {
+    position: fixed;
+    inset-block-end: 0;
+    width: 100%;
+  }
+
+  .nav nav {
+    width: 100%;
+  }
+
+  .nav ul {
+    margin: 0;
+    width: 100%;
+    justify-content: space-evenly;
+    gap: 1px;
+  }
+
+  .nav li,
+  .nav a {
+    flex: 1;
+  }
+
+  .nav a {
+    background-color: var(--canvas-secondary);
+    text-align: center;
+    font-size: 4vw;
+  }
+
+  .nav a[data-active] {
+    background-color: var(--canvas-contrast);
+  }
+}
+
+.card {
+  padding: 2rem;
+  margin: 1rem;
+  max-width: 100%;
+  background-color: var(--canvas-secondary);
+}
+
+.card h3 {
+  margin-block-start: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 1.4rem;
+  align-items: center;
+}
+
+.form input {
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  max-width: 100%;
+  background-color: var(--canvas-primary);
+  color: var(--text-primary);
+  border: 2px solid var(--button-canvas-primary);
+}
+
+.form button {
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  border: 2px solid var(--button-canvas-primary);
+  margin-block-start: 1rem;
+  background-color: var(--button-canvas-primary);
+  color: var(--button-text-primary);
+}

@@ -1,7 +1,19 @@
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>WebAuth + WebRTC</title>
-		<script type="module" src="./src/index.js"></script> 
-	</head>
-	<body></body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>WebAuth + WebRTC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/css/common.css" />
+    <script>
+      document.documentElement.dataset.theme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light";
+    </script>
+    <script type="module" src="./src/index.js"></script>
+  </head>
+  <body>
+    <auth-app></auth-app>
+  </body>
 </html>

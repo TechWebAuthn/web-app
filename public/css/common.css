@@ -3,10 +3,10 @@
 :root[data-theme="light"] {
   --canvas-primary: #fafafa;
   --canvas-secondary: #e7e7e7;
-  --canvas-contrast: #ebb;
+  --canvas-contrast: #ecc;
   --text-primary: #111;
   --text-link: #37f;
-  --text-link-active: #f33;
+  --text-link-active: #d33;
   --button-canvas-primary: #37f;
   --button-text-primary: #fafafa;
 }

@@ -3,13 +3,13 @@
 :root[data-theme="light"] {
   --canvas-primary: #fafafa;
   --canvas-secondary: #e7e7e7;
-  --canvas-contrast: #ecc;
+  --canvas-contrast: #ece;
   --canvas-success: #9e7;
   --canvas-info: #9cf;
   --canvas-error: #f99;
   --text-primary: #111;
   --text-link: #37f;
-  --text-link-active: #d33;
+  --text-link-active: #c2c;
   --button-canvas-primary: #37f;
   --button-text-primary: #fafafa;
 }
@@ -20,13 +20,13 @@
   :root[data-theme="dark"] {
     --canvas-primary: #000;
     --canvas-secondary: #222;
-    --canvas-contrast: #422;
+    --canvas-contrast: #323;
     --canvas-success: #173;
     --canvas-info: #17b;
     --canvas-error: #922;
     --text-primary: #eee;
     --text-link: #5af;
-    --text-link-active: #f77;
+    --text-link-active: #d6d;
     --button-canvas-primary: #5af;
     --button-text-primary: #000;
   }

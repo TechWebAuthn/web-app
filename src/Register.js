@@ -25,38 +25,38 @@ class Register extends LitElement {
     const formData = new FormData(event.target);
     const username = formData.get("username");
 
-    const startResponse = await fetch("/api/registration/start", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username }),
-    });
+    try {
+      const startResponse = await fetch("/api/registration/start", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username }),
+      });
 
-    console.log(startResponse);
+      const { status, registrationId, publicKeyCredentialCreationOptions } =
+        await startResponse.json();
 
-    // const createCredentialsArgs = {
-    //   publicKey: {
-    //     challenge: Uint8Array.from("randomStringFromServer", (c) => c.charCodeAt(0)),
-    //     rp: {
-    //       name: "WebAuth + WebRTC",
-    //       id: "auth.marv.ro",
-    //     },
-    //     user: {
-    //       id: window.crypto.getRandomValues(new Uint8Array(16)),
-    //       name: username,
-    //       displayName: username,
-    //     },
-    //     authenticatorSelection: {
-    //       authenticatorAttachment: "cross-platform",
-    //     },
-    //     pubKeyCredParams: [{ alg: -7, type: "public-key" }],
-    //     timeout: 60000,
-    //     attestation: "direct",
-    //   },
-    // };
+      if (status === "OK") {
+        const credentials = await navigator.credentials.create({
+          publicKey: publicKeyCredentialCreationOptions,
+        });
 
-    // const credentials = await navigator.credentials.create(createCredentialsArgs);
+        const finishResponse = await fetch("/api/registration/finish", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ registrationId, credentials }),
+        });
+
+        const recoveryToken = await finishResponse.text();
+
+        console.log(recoveryToken);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 

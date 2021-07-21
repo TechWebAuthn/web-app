@@ -38,8 +38,14 @@ class Register extends LitElement {
         await startResponse.json();
 
       if (status === "OK") {
-        publicKeyCredentialCreationOptions?.user?.id = Uint8Array.from(window.atob(publicKeyCredentialCreationOptions?.user?.id), c => c.charCodeAt(0));
-        publicKeyCredentialCreationOptions?.challenge = Uint8Array.from(window.atob(publicKeyCredentialCreationOptions?.challenge), c => c.charCodeAt(0));
+        publicKeyCredentialCreationOptions.user.id = Uint8Array.from(
+          window.atob(publicKeyCredentialCreationOptions?.user?.id),
+          (c) => c.charCodeAt(0)
+        );
+        publicKeyCredentialCreationOptions.challenge = Uint8Array.from(
+          window.atob(publicKeyCredentialCreationOptions?.challenge),
+          (c) => c.charCodeAt(0)
+        );
 
         const credentials = await navigator.credentials.create({
           publicKey: publicKeyCredentialCreationOptions,

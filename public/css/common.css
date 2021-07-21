@@ -11,6 +11,7 @@
   --text-link: #37f;
   --text-link-active: #c2c;
   --button-canvas-primary: #37f;
+  --button-canvas-secondary: #9ce;
   --button-text-primary: #fafafa;
 }
 
@@ -28,6 +29,7 @@
     --text-link: #5af;
     --text-link-active: #d6d;
     --button-canvas-primary: #5af;
+    --button-canvas-secondary: #57e;
     --button-text-primary: #000;
   }
 }

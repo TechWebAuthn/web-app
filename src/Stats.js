@@ -1,6 +1,11 @@
 import { LitElement, html } from "lit";
 import { notification, stats } from "../public/css/component.module.css";
 
+const statsMap = {
+  login: "Logged in",
+  register: "Registered"
+}
+
 class Stats extends LitElement {
   constructor() {
     super();
@@ -33,7 +38,7 @@ class Stats extends LitElement {
       <dl class="${stats}">
         ${Object.keys(this.stats).map(
           (key) => html`
-            <dt>${key}</dt>
+            <dt>${statsMap[key]}</dt>
             <dd>${this.stats[key]} <span>${this._statsDirection[key]}</span></dd>
           `
         )}
@@ -50,7 +55,7 @@ class Stats extends LitElement {
     this._sseConnection.addEventListener("register", this._updateStats.bind(this));
     this._sseConnection.onopen = () =>
       this._updateStatusMessage("Connection established", "success");
-    this._sseConnection.onclose = () => this._updateStatusMessage("Connection closed", "close");
+    this._sseConnection.onclose = () => this._updateStatusMessage("Connection closed", "info");
     this._sseConnection.onerror = () =>
       this._updateStatusMessage("Connection could not be established", "error");
   }
@@ -58,7 +63,7 @@ class Stats extends LitElement {
   _updateStats(event) {
     try {
       const newData = JSON.parse(event.data);
-      this._updateStatsDirection({ ...this.stats }, newData);
+      this._updateStatsDirection({ ...this.stats }, newData, event.type);
       this.stats = { ...this.stats, ...newData };
     } catch (e) {
       this._updateStatusMessage("Something went wrong", "error");
@@ -71,7 +76,9 @@ class Stats extends LitElement {
     messageContainer.dataset.type = type;
   }
 
-  _updateStatsDirection(oldData, newData) {
+  _updateStatsDirection(oldData, newData, eventType) {
+    if (eventType === 'welcome') return;
+
     for (const stat in oldData) {
       this._statsDirection[stat] =
         newData[stat] > oldData[stat] ? "⬆️" : newData[stat] < oldData[stat] ? "⬇️" : "⏳";

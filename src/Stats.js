@@ -22,6 +22,10 @@ class Stats extends LitElement {
     this.getStats();
   }
 
+  disconnectedCallback() {
+    this._sseConnection.close();
+  }
+
   render() {
     return html`
       <h1>Stats</h1>
@@ -38,13 +42,17 @@ class Stats extends LitElement {
   }
 
   getStats() {
-    const sse = new EventSource("https://auth.marv.ro/api/users", { withCredentials: true });
-    sse.addEventListener("welcome", this._updateStats.bind(this));
-    sse.addEventListener("login", this._updateStats.bind(this));
-    sse.addEventListener("register", this._updateStats.bind(this));
-    sse.onopen = () => this._updateStatusMessage("Connection established", "success");
-    sse.onclose = () => this._updateStatusMessage("Connection closed", "close");
-    sse.onerror = () => this._updateStatusMessage("Connection could not be established", "error");
+    this._sseConnection = new EventSource("https://auth.marv.ro/api/users", {
+      withCredentials: true,
+    });
+    this._sseConnection.addEventListener("welcome", this._updateStats.bind(this));
+    this._sseConnection.addEventListener("login", this._updateStats.bind(this));
+    this._sseConnection.addEventListener("register", this._updateStats.bind(this));
+    this._sseConnection.onopen = () =>
+      this._updateStatusMessage("Connection established", "success");
+    this._sseConnection.onclose = () => this._updateStatusMessage("Connection closed", "close");
+    this._sseConnection.onerror = () =>
+      this._updateStatusMessage("Connection could not be established", "error");
   }
 
   _updateStats(event) {

@@ -25,7 +25,7 @@ class Register extends LitElement {
     const formData = new FormData(event.target);
     const username = formData.get("username");
 
-    const startResponse = await fetch("https://auth.marv.ro/api/registration/start", {
+    const startResponse = await fetch("/api/registration/start", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

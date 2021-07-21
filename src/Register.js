@@ -25,28 +25,38 @@ class Register extends LitElement {
     const formData = new FormData(event.target);
     const username = formData.get("username");
 
-    const createCredentialsArgs = {
-      publicKey: {
-        challenge: Uint8Array.from("randomStringFromServer", (c) => c.charCodeAt(0)),
-        rp: {
-          name: "WebAuth + WebRTC",
-          id: "auth.marv.ro",
-        },
-        user: {
-          id: window.crypto.getRandomValues(new Uint8Array(16)),
-          name: username,
-          displayName: username,
-        },
-        authenticatorSelection: {
-          authenticatorAttachment: "cross-platform",
-        },
-        pubKeyCredParams: [{ alg: -7, type: "public-key" }],
-        timeout: 60000,
-        attestation: "direct",
+    const startResponse = await fetch("https://auth.marv.ro/api/registration/start", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    };
+      body: JSON.stringify({ username }),
+    });
 
-    const credentials = await navigator.credentials.create(createCredentialsArgs);
+    console.log(startResponse);
+
+    // const createCredentialsArgs = {
+    //   publicKey: {
+    //     challenge: Uint8Array.from("randomStringFromServer", (c) => c.charCodeAt(0)),
+    //     rp: {
+    //       name: "WebAuth + WebRTC",
+    //       id: "auth.marv.ro",
+    //     },
+    //     user: {
+    //       id: window.crypto.getRandomValues(new Uint8Array(16)),
+    //       name: username,
+    //       displayName: username,
+    //     },
+    //     authenticatorSelection: {
+    //       authenticatorAttachment: "cross-platform",
+    //     },
+    //     pubKeyCredParams: [{ alg: -7, type: "public-key" }],
+    //     timeout: 60000,
+    //     attestation: "direct",
+    //   },
+    // };
+
+    // const credentials = await navigator.credentials.create(createCredentialsArgs);
   }
 }
 

@@ -12,11 +12,9 @@
     <meta name="color-scheme" content="dark light" />
     <link rel="stylesheet" href="/css/common.css" />
     <script>
-      document.documentElement.dataset.theme = window.matchMedia(
-        "screen and (prefers-color-scheme: dark)"
-      ).matches
-        ? "dark"
-        : "light";
+      document.documentElement.dataset.theme =
+        window.localStorage.getItem("theme") ||
+        (window.matchMedia("screen and (prefers-color-scheme: dark)").matches ? "dark" : "light");
     </script>
     <script type="module" src="./src/index.js"></script>
   </head>

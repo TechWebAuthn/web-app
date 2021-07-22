@@ -36,12 +36,11 @@
   right: 0;
 }
 
-.theme-toggle input {
-  display: none;
-}
-
-.theme-toggle label {
+.theme-toggle button {
   padding: 1rem;
+  border: none;
+  background-color: transparent;
+  font-size: inherit;
 }
 
 .nav {

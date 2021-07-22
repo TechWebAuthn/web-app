@@ -19,9 +19,24 @@
 }
 
 /* Dark color theme variables */
+:root[data-theme="dark"] {
+  color-scheme: dark light;
+  --canvas-primary: #000;
+  --canvas-secondary: #222;
+  --canvas-contrast: #2b3a48;
+  --canvas-success: #173;
+  --canvas-info: #17b;
+  --canvas-error: #922;
+  --text-primary: #eee;
+  --text-link: #5af;
+  --text-link-active: #f80;
+  --button-canvas-primary: #5af;
+  --button-canvas-secondary: #57e;
+  --button-text-primary: #000;
+}
+
 @media screen and (prefers-color-scheme: dark) {
-  :root,
-  :root[data-theme="dark"] {
+  :root {
     color-scheme: dark light;
     --canvas-primary: #000;
     --canvas-secondary: #222;

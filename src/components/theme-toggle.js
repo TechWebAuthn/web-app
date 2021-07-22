@@ -1,13 +1,10 @@
 class ThemeToggle extends HTMLElement {
   constructor() {
     super();
-    this._id = Date.now().toString(32);
     this._labelMap = {
       dark: "🌘",
       light: "☀️",
     };
-    this.setAttribute("role", "button");
-    this.setAttribute("tabindex", "0");
   }
 
   connectedCallback() {
@@ -16,21 +13,22 @@ class ThemeToggle extends HTMLElement {
 
   render() {
     this._label = this._labelMap[this._mode];
-    this.innerHTML = `<label for="${this._id}"><span>${this._label}</span><input id="${this._id}" type="checkbox"></label>`;
-    const input = this.querySelector("input");
-    input.addEventListener("change", this._update.bind(this));
-    this.addEventListener("keydown", (event) => {
-      if (["Enter", "Space"].includes(event.code)) input.click();
-    });
+    this.innerHTML = `<form><button>${this._label}</button></form>`;
+    this.querySelector("form").addEventListener("submit", this._update.bind(this));
   }
 
   get _mode() {
     return document.documentElement.dataset.theme || "light";
   }
 
-  _update() {
+  _update(event) {
+    event.preventDefault();
+
     document.documentElement.dataset.theme = this._mode === "light" ? "dark" : "light";
-    this.querySelector("span").textContent = this._labelMap[this._mode];
+    document.head.querySelector("meta[name=theme-color]").content =
+      this._mode === "dark" ? "#000" : "#e9e9e9";
+    this.querySelector("button").textContent = this._labelMap[this._mode];
+    window.localStorage.setItem("theme", document.documentElement.dataset.theme);
   }
 }
 

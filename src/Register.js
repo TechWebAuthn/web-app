@@ -8,7 +8,7 @@ import {
   itemsRow,
   pageSubtitle,
 } from "../public/css/component.module.css";
-import { base64StringToUint8Array, parseCredential } from "./utils/parse";
+import { base64UrlStringToUint8Array, parseRegisterCredential } from "./utils/parse";
 import { clearNotificationMessage, setNotificationMessage } from "./utils/notification";
 
 class Register extends LitElement {
@@ -32,10 +32,10 @@ class Register extends LitElement {
   render() {
     return html` <h2 class="${pageSubtitle}">Register</h2>
       <p id="notification" class="${notification}"></p>
-      <div class="${card}" @submit=${this._startRegister}>
+      <div class="${card}">
         ${!this._registrationComplete
           ? html`
-              <form class="${form}">
+              <form class="${form}" @submit="${this._startRegister}">
                 <label for="username">
                   Username
                   <input type="text" id="username" name="username" required />
@@ -80,12 +80,19 @@ class Register extends LitElement {
       const { status, registrationId, publicKeyCredentialCreationOptions } =
         await startResponse.json();
 
+      if (status === "USERNAME_TAKEN") {
+        throw new Error("Username is already taken");
+      }
+
+      if (status === "TOKEN_INVALID") {
+        throw new Error("Token is invalid");
+      }
+
       if (status === "OK") {
-        publicKeyCredentialCreationOptions.user.id = base64StringToUint8Array(
-          publicKeyCredentialCreationOptions.user.id,
-          true
+        publicKeyCredentialCreationOptions.user.id = base64UrlStringToUint8Array(
+          publicKeyCredentialCreationOptions.user.id
         );
-        publicKeyCredentialCreationOptions.challenge = base64StringToUint8Array(
+        publicKeyCredentialCreationOptions.challenge = base64UrlStringToUint8Array(
           publicKeyCredentialCreationOptions.challenge
         );
 
@@ -93,12 +100,12 @@ class Register extends LitElement {
           publicKey: publicKeyCredentialCreationOptions,
         });
 
-        this._completeRegister(registrationId, parseCredential(credential));
+        this._completeRegister(registrationId, parseRegisterCredential(credential));
       }
     } catch (error) {
       setNotificationMessage(
         document.getElementById("notification"),
-        "Something went wrong",
+        error.message || "Something went wrong",
         "error"
       );
     }

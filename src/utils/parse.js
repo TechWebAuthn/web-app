@@ -1,19 +1,13 @@
-
-/**
- * Tranforms a string to an Uint8Array
- * @param {String} base64UrlString Base64 URL String to be tranfsormed
- * @param {Boolean} isBase64Encoded Is the string base64 encoded
- */
-export function base64StringToUint8Array(base64UrlString, isBase64Encoded = false) {
+export function base64UrlStringToUint8Array(base64UrlString) {
   const padding = "==".slice(0, (4 - (base64UrlString.length % 4)) % 4);
   const base64String = base64UrlString.replace(/-/g, "+").replace(/_/g, "/") + padding;
 
   const string = window.atob(base64String);
 
-  return Uint8Array.from(string, c => c.charCodeAt(0));
+  return Uint8Array.from(string, (c) => c.charCodeAt(0));
 }
 
-export function arrayBufferToBase64String(arrayBuffer) {
+export function arrayBufferToBase64UrlString(arrayBuffer) {
   const characters = [];
   for (const char of new Uint8Array(arrayBuffer)) {
     characters.push(String.fromCharCode(char));
@@ -23,15 +17,30 @@ export function arrayBufferToBase64String(arrayBuffer) {
   return base64UrlString;
 }
 
-export function parseCredential(credential) {
-  return ({
+export function parseRegisterCredential(credential) {
+  return {
     id: credential.id,
-    rawId: arrayBufferToBase64String(credential.rawId),
+    rawId: arrayBufferToBase64UrlString(credential.rawId),
     response: {
-      attestationObject: arrayBufferToBase64String(credential.response.attestationObject),
-      clientDataJSON: arrayBufferToBase64String(credential.response.clientDataJSON)
+      attestationObject: arrayBufferToBase64UrlString(credential.response.attestationObject),
+      clientDataJSON: arrayBufferToBase64UrlString(credential.response.clientDataJSON),
     },
     clientExtensionResults: credential.getClientExtensionResults(),
-    type: credential.type
-  });
+    type: credential.type,
+  };
+}
+
+export function parseLoginCredential(credential) {
+  return {
+    id: credential.id,
+    rawId: arrayBufferToBase64UrlString(credential.rawId),
+    response: {
+      authenticatorData: arrayBufferToBase64UrlString(credential.response.authenticatorData),
+      clientDataJSON: arrayBufferToBase64UrlString(credential.response.clientDataJSON),
+      signature: arrayBufferToBase64UrlString(credential.response.signature),
+      userHandle: arrayBufferToBase64UrlString(credential.response.userHandle),
+    },
+    clientExtensionResults: credential.getClientExtensionResults(),
+    type: credential.type,
+  };
 }

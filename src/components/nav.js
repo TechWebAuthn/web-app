@@ -1,8 +1,13 @@
 import { LitElement, html } from "lit";
-import { isLoggedIn } from "../utils/session";
 import { link, nav } from "../../public/css/component.module.css";
 
 class AuthNav extends LitElement {
+  static get properties() {
+    return {
+      isLoggedIn: Boolean,
+    };
+  }
+
   createRenderRoot() {
     return this;
   }
@@ -23,7 +28,7 @@ class AuthNav extends LitElement {
     return html`
       <nav>
         <ul>
-          ${isLoggedIn()
+          ${this.isLoggedIn
             ? html`<li><a class="${link}" href="/dashboard">🎛️ Dashboard</a></li>`
             : html`
                 <li><a class="${link}" href="/login">🔑 Login</a></li>

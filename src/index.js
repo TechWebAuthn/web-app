@@ -43,12 +43,27 @@ const routes = [
 router.setRoutes(routes);
 
 class AuthApp extends LitElement {
+  constructor() {
+    super();
+
+    this.isLoggedIn = isLoggedIn();
+  }
+
+  static get properties() {
+    return {
+      isLoggedIn: Boolean,
+    };
+  }
+
   createRenderRoot() {
     return this;
   }
 
   firstUpdated() {
     router.setOutlet(this.querySelector("main"));
+    window.addEventListener("session-changed", (event) => {
+      this.isLoggedIn = event.detail.isLoggedIn;
+    });
   }
 
   render() {
@@ -56,7 +71,7 @@ class AuthApp extends LitElement {
       <a class="${homeLink}" href="/">🏠</a>
       <theme-toggle class="${themeToggle}"></theme-toggle>
       <h1 class="${pageTitle}">WebAuth ❤️ WebRTC</h1>
-      <auth-nav></auth-nav>
+      <auth-nav .isLoggedIn="${this.isLoggedIn}"></auth-nav>
       <main class="${page}"></main>
     `;
   }

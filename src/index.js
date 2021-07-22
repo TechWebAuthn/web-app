@@ -2,6 +2,7 @@ import { Router } from "@vaadin/router";
 import { LitElement, html } from "lit";
 import "./components/theme-toggle";
 import "./components/nav";
+import { isLoggedIn } from "./utils/session";
 import { themeToggle, page, homeLink, pageTitle } from "../public/css/component.module.css";
 
 const router = new Router();
@@ -14,16 +15,22 @@ const routes = [
     action: () => import("./Home.js"),
   },
   {
+    name: "dashboard",
+    path: "/dashboard",
+    component: "auth-dashboard",
+    action: (_ctx, cmd) => isLoggedIn() ? import('./Dashboard') : cmd.redirect('/')
+  },
+  {
     name: "login",
     path: "/login",
     component: "auth-login",
-    action: () => import("./Login.js"),
+    action: (_ctx, cmd) => isLoggedIn() ? cmd.redirect('/dashboard') : import('./Login')
   },
   {
     name: "register",
     path: "/register",
     component: "auth-register",
-    action: () => import("./Register.js"),
+    action: (_ctx, cmd) => isLoggedIn() ? cmd.redirect('/dashboard') : import('./Register')
   },
   {
     name: "stats",

@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { card, form } from "../public/css/component.module.css";
+import { card, form, notification, pageSubtitle } from "../public/css/component.module.css";
 
 class Login extends LitElement {
   createRenderRoot() {
@@ -7,7 +7,9 @@ class Login extends LitElement {
   }
 
   render() {
-    return html`<h1>Login</h1>
+    return html`
+      <h2 class="${pageSubtitle}">Login</h2>
+      <p id="notification" class="${notification}"></p>
       <div class="${card}">
         <form class="${form}">
           <label for="username">

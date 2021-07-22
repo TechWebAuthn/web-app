@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { notification, stats, card } from "../public/css/component.module.css";
+import { notification, stats, card, pageSubtitle } from "../public/css/component.module.css";
 
 const statsMap = {
   login: "Logged in",
@@ -33,16 +33,16 @@ class Stats extends LitElement {
 
   render() {
     return html`
-      <h1>Stats</h1>
+      <h2 class="${pageSubtitle}">Stats</h2>
       <p id="status" class="${notification}"></p>
       <div class="${card}">
         <dl class="${stats}">
           ${Object.keys(this.stats).map(
-            (key) => html`
+      (key) => html`
               <dt>${statsMap[key]}</dt>
               <dd>${this.stats[key]} <span>${this._statsDirection[key]}</span></dd>
             `
-          )}
+    )}
         </dl>
       </div>
     `;

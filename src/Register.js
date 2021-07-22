@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { card, form, code, notification, iconButton, itemsRow } from "../public/css/component.module.css";
+import { card, form, code, notification, iconButton, itemsRow, pageSubtitle } from "../public/css/component.module.css";
 import { base64StringToUint8Array, parseCredential } from './utils/parse';
 import { clearNotificationMessage, setNotificationMessage } from './utils/notification';
 
@@ -22,7 +22,8 @@ class Register extends LitElement {
   }
 
   render() {
-    return html`<h1>Register</h1>
+    return html`
+      <h2 class="${pageSubtitle}">Register</h2>
       <p id="notification" class="${notification}"></p>
       <div class="${card}" @submit=${this._startRegister}>
         ${!this._registrationComplete ? html`
@@ -79,17 +80,17 @@ class Register extends LitElement {
   async _completeRegister(registrationId, credential) {
     try {
       const finishResponse = await fetch("/api/registration/finish", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({registrationId, credential}),
-        });
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ registrationId, credential }),
+      });
 
-        this._recoveryCode = await finishResponse.text();
-        this._registrationComplete = true;
+      this._recoveryCode = await finishResponse.text();
+      this._registrationComplete = true;
 
-        setNotificationMessage(document.getElementById('notification'), "Account successfuly created!", "success");
+      setNotificationMessage(document.getElementById('notification'), "Account successfuly created!", "success");
     } catch (error) {
       setNotificationMessage(document.getElementById('notification'), 'Something went wrong', "error");
     }

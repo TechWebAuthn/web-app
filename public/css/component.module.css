@@ -153,6 +153,11 @@
   color: var(--button-text-primary);
 }
 
+.form button[data-type="danger"] {
+  background-color: var(--button-canvas-danger);
+  border-color: var(--button-canvas-danger);
+}
+
 .notification {
   padding: 0.5rem 1rem;
   margin: 0;

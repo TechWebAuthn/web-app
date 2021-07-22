@@ -13,6 +13,7 @@
   --text-link-active: #f60;
   --button-canvas-primary: #37f;
   --button-canvas-secondary: #9ce;
+  --button-canvas-danger: #f44;
   --button-text-primary: #fafafa;
   --drop-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   --drop-shadow-upwards: 0 -0.25rem 0.5rem rgba(0, 0, 0, 0.1);
@@ -32,6 +33,7 @@
   --text-link-active: #f80;
   --button-canvas-primary: #5af;
   --button-canvas-secondary: #57e;
+  --button-canvas-danger: #d66;
   --button-text-primary: #000;
 }
 
@@ -49,6 +51,7 @@
     --text-link-active: #f80;
     --button-canvas-primary: #5af;
     --button-canvas-secondary: #57e;
+    --button-canvas-danger: #d66;
     --button-text-primary: #000;
   }
 }

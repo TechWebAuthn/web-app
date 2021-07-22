@@ -4,7 +4,9 @@ export function isLoggedIn() {
   return window.localStorage.getItem("session") !== null;
 }
 
-export async function logout() {
+export async function logout(event) {
+  event.preventDefault();
+
   await fetch("/api/logout", {
     method: "POST",
     credentials: "include",

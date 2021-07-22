@@ -25,13 +25,13 @@ export function arrayBufferToBase64String(arrayBuffer) {
 
 export function parseCredential(credential) {
   return ({
-    id: credential?.id,
-    rawId: arrayBufferToBase64String(credential?.rawId),
+    id: credential.id,
+    rawId: arrayBufferToBase64String(credential.rawId),
     response: {
-      attestationObject: arrayBufferToBase64String(credential?.response?.attestationObject),
-      clientDataJSON: arrayBufferToBase64String(credential?.response?.clientDataJSON)
+      attestationObject: arrayBufferToBase64String(credential.response.attestationObject),
+      clientDataJSON: arrayBufferToBase64String(credential.response.clientDataJSON)
     },
     clientExtensionResults: credential.getClientExtensionResults(),
-    type: credential?.type
+    type: credential.type
   });
 }

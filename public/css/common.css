@@ -1,33 +1,37 @@
 /* Light color theme variables */
 :root,
 :root[data-theme="light"] {
-  --canvas-primary: #fafafa;
-  --canvas-secondary: #e7e7e7;
-  --canvas-contrast: #ece;
+  color-scheme: light dark;
+  --canvas-primary: #e9e9e9;
+  --canvas-secondary: #fafafa;
+  --canvas-contrast: #ffebc3;
   --canvas-success: #9e7;
   --canvas-info: #9cf;
   --canvas-error: #f99;
   --text-primary: #111;
   --text-link: #37f;
-  --text-link-active: #c2c;
+  --text-link-active: #f60;
   --button-canvas-primary: #37f;
   --button-canvas-secondary: #9ce;
   --button-text-primary: #fafafa;
+  --drop-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1);
+  --drop-shadow-upwards: 0 -0.25rem 0.5rem rgba(0,0,0,0.1);
 }
 
 /* Dark color theme variables */
 @media screen and (prefers-color-scheme: dark) {
   :root,
   :root[data-theme="dark"] {
+    color-scheme: dark light;
     --canvas-primary: #000;
     --canvas-secondary: #222;
-    --canvas-contrast: #323;
+    --canvas-contrast: #2b3a48;
     --canvas-success: #173;
     --canvas-info: #17b;
     --canvas-error: #922;
     --text-primary: #eee;
     --text-link: #5af;
-    --text-link-active: #d6d;
+    --text-link-active: #f80;
     --button-canvas-primary: #5af;
     --button-canvas-secondary: #57e;
     --button-text-primary: #000;

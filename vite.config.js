@@ -13,10 +13,13 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["icons/*.ico"],
       injectRegister: "inline",
+      workbox: {
+        cleanupOutdatedCaches: true
+      },
       manifest: {
         name: "WebAuth ❤️ WebRTC",
-        short_name: "wA❤️wRTC",
-        start_url: "index.html",
+        short_name: "WAuth❤️WRTC",
+        start_url: "/",
         display: "standalone",
         background_color: "#000",
         theme_color: "#37f",

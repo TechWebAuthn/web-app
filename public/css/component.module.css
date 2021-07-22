@@ -6,8 +6,8 @@
   font-size: 1.5rem;
   padding: 1rem;
   position: absolute;
-  inset-block-start: 0;
-  inset-inline-start: 0;
+  top: 0;
+  left: 0;
 }
 
 .page-title {
@@ -28,8 +28,8 @@
   display: flex;
   font-size: 1.5rem;
   position: absolute;
-  inset-block-start: 0;
-  inset-inline-end: 0;
+  top: 0;
+  right: 0;
 }
 
 .theme-toggle input {
@@ -61,6 +61,7 @@
   padding: 1rem;
   text-decoration: none;
   font-weight: bold;
+  font-size: 1.2rem;
 }
 
 .nav a[data-active] {
@@ -70,7 +71,7 @@
 @media screen and (max-width: 720px) {
   .nav {
     position: fixed;
-    inset-block-end: 0;
+    bottom: 0;
     width: 100%;
   }
 
@@ -96,8 +97,12 @@
     font-size: 4vw;
   }
 
+  .nav a:not([data-active]) {
+    box-shadow: var(--drop-shadow-upwards);
+  }
+
   .nav a[data-active] {
-    background-color: var(--canvas-contrast);
+    background-color: var(--canvas-primary);
   }
 }
 
@@ -106,6 +111,7 @@
   margin: 1rem;
   max-width: 100%;
   background-color: var(--canvas-secondary);
+  box-shadow: var(--drop-shadow);
 }
 
 .card h3 {
@@ -146,7 +152,7 @@
 
 .notification {
   padding: 0.5rem 1rem;
-  margin: 1rem;
+  margin: 0;
   line-height: 1;
   background-color: var(--canvas-secondary);
 }
@@ -196,4 +202,10 @@
   font-size: 1.2rem;
   line-height: 1.2;
   background-color: var(--button-canvas-secondary);
+}
+
+.items-row {
+  display: inline-flex;
+  align-items: baseline;
+  max-width: 100%;
 }

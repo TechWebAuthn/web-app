@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { card, form, code, notification, iconButton } from "../public/css/component.module.css";
+import { card, form, code, notification, iconButton, itemsRow } from "../public/css/component.module.css";
 import { base64StringToUint8Array, parseCredential } from './utils/parse';
 import { clearNotificationMessage, setNotificationMessage } from './utils/notification';
 
@@ -35,7 +35,7 @@ class Register extends LitElement {
         </form>
         ` : html`
           <p>Your recovery code is:</p>
-          <p><code class="${code}">${this._recoveryCode}</code><button @click="${this._copyRecoveryCodeToClipboard}" class="${iconButton}">📋</button></p>
+          <p class="${itemsRow}><code class="${code}">${this._recoveryCode}</code><button @click="${this._copyRecoveryCodeToClipboard}" class="${iconButton}">📋</button></p>
           <p>⚠️ Be sure to save it in a safe and secure place.</p>
         `}
       </div>`;
@@ -62,8 +62,8 @@ class Register extends LitElement {
         await startResponse.json();
 
       if (status === "OK") {
-        publicKeyCredentialCreationOptions.user.id = base64StringToUint8Array(publicKeyCredentialCreationOptions?.user?.id, true);
-        publicKeyCredentialCreationOptions.challenge = base64StringToUint8Array(publicKeyCredentialCreationOptions?.challenge);
+        publicKeyCredentialCreationOptions.user.id = base64StringToUint8Array(publicKeyCredentialCreationOptions.user.id, true);
+        publicKeyCredentialCreationOptions.challenge = base64StringToUint8Array(publicKeyCredentialCreationOptions.challenge);
 
         const credential = await navigator.credentials.create({
           publicKey: publicKeyCredentialCreationOptions,

@@ -25,7 +25,7 @@ class ThemeToggle extends HTMLElement {
   }
 
   get _mode() {
-    return document.documentElement.dataset.theme ?? "light";
+    return document.documentElement.dataset.theme || "light";
   }
 
   _update() {

@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { isLoggedIn } from '../utils/session';
+import { isLoggedIn } from "../utils/session";
 import { link, nav } from "../../public/css/component.module.css";
 
 class AuthNav extends LitElement {
@@ -23,14 +23,12 @@ class AuthNav extends LitElement {
     return html`
       <nav>
         <ul>
-          ${isLoggedIn() ?
-        html`
-            <li><a class="${link}" href="/dashboard">🎛️ Dashboard</a></li>
-        ` :
-        html`
-            <li><a class="${link}" href="/login">🔑 Login</a></li>
-            <li><a class="${link}" href="/register">🚪 Register</a></li>
-          `}
+          ${isLoggedIn()
+            ? html`<li><a class="${link}" href="/dashboard">🎛️ Dashboard</a></li>`
+            : html`
+                <li><a class="${link}" href="/login">🔑 Login</a></li>
+                <li><a class="${link}" href="/register">🚪 Register</a></li>
+              `}
           <li><a class="${link}" href="/stats">📈 Stats</a></li>
         </ul>
       </nav>

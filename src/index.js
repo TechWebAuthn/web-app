@@ -18,19 +18,19 @@ const routes = [
     name: "dashboard",
     path: "/dashboard",
     component: "auth-dashboard",
-    action: (_ctx, cmd) => isLoggedIn() ? import('./Dashboard') : cmd.redirect('/')
+    action: (_ctx, cmd) => (isLoggedIn() ? import("./Dashboard") : cmd.redirect("/")),
   },
   {
     name: "login",
     path: "/login",
     component: "auth-login",
-    action: (_ctx, cmd) => isLoggedIn() ? cmd.redirect('/dashboard') : import('./Login')
+    action: (_ctx, cmd) => (isLoggedIn() ? cmd.redirect("/dashboard") : import("./Login")),
   },
   {
     name: "register",
     path: "/register",
     component: "auth-register",
-    action: (_ctx, cmd) => isLoggedIn() ? cmd.redirect('/dashboard') : import('./Register')
+    action: (_ctx, cmd) => (isLoggedIn() ? cmd.redirect("/dashboard") : import("./Register")),
   },
   {
     name: "stats",

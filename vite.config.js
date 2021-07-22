@@ -14,7 +14,7 @@ export default defineConfig({
       includeAssets: ["icons/*.ico"],
       injectRegister: "inline",
       workbox: {
-        cleanupOutdatedCaches: true
+        cleanupOutdatedCaches: true,
       },
       manifest: {
         name: "WebAuth ❤️ WebRTC",

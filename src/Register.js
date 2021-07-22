@@ -1,7 +1,15 @@
 import { LitElement, html } from "lit";
-import { card, form, code, notification, iconButton, itemsRow, pageSubtitle } from "../public/css/component.module.css";
-import { base64StringToUint8Array, parseCredential } from './utils/parse';
-import { clearNotificationMessage, setNotificationMessage } from './utils/notification';
+import {
+  card,
+  form,
+  code,
+  notification,
+  iconButton,
+  itemsRow,
+  pageSubtitle,
+} from "../public/css/component.module.css";
+import { base64StringToUint8Array, parseCredential } from "./utils/parse";
+import { clearNotificationMessage, setNotificationMessage } from "./utils/notification";
 
 class Register extends LitElement {
   constructor() {
@@ -22,30 +30,40 @@ class Register extends LitElement {
   }
 
   render() {
-    return html`
-      <h2 class="${pageSubtitle}">Register</h2>
+    return html` <h2 class="${pageSubtitle}">Register</h2>
       <p id="notification" class="${notification}"></p>
       <div class="${card}" @submit=${this._startRegister}>
-        ${!this._registrationComplete ? html`
-          <form class="${form}">
-          <label for="username">
-            Username
-            <input type="text" id="username" name="username" required />
-          </label>
-          <button type="submit">Register</button>
-        </form>
-        ` : html`
-          <p>Your recovery code is:</p>
-          <p class="${itemsRow}><code class="${code}">${this._recoveryCode}</code><button @click="${this._copyRecoveryCodeToClipboard}" class="${iconButton}">📋</button></p>
-          <p>⚠️ Be sure to save it in a safe and secure place.</p>
-        `}
+        ${!this._registrationComplete
+          ? html`
+              <form class="${form}">
+                <label for="username">
+                  Username
+                  <input type="text" id="username" name="username" required />
+                </label>
+                <button type="submit">Register</button>
+              </form>
+            `
+          : html`
+              <p>Your recovery code is:</p>
+              <p class="${itemsRow}">
+                <code class="${code}">${this._recoveryCode}</code
+                ><button @click="${this._copyRecoveryCodeToClipboard}" class="${iconButton}">
+                  📋
+                </button>
+              </p>
+              <p>⚠️ Be sure to save it in a safe and secure place.</p>
+            `}
       </div>`;
   }
 
   async _startRegister(event) {
     event.preventDefault();
 
-    setNotificationMessage(document.getElementById('notification'), "Starting registration process", "info");
+    setNotificationMessage(
+      document.getElementById("notification"),
+      "Starting registration process",
+      "info"
+    );
 
     const formData = new FormData(event.target);
     const username = formData.get("username");
@@ -63,8 +81,13 @@ class Register extends LitElement {
         await startResponse.json();
 
       if (status === "OK") {
-        publicKeyCredentialCreationOptions.user.id = base64StringToUint8Array(publicKeyCredentialCreationOptions.user.id, true);
-        publicKeyCredentialCreationOptions.challenge = base64StringToUint8Array(publicKeyCredentialCreationOptions.challenge);
+        publicKeyCredentialCreationOptions.user.id = base64StringToUint8Array(
+          publicKeyCredentialCreationOptions.user.id,
+          true
+        );
+        publicKeyCredentialCreationOptions.challenge = base64StringToUint8Array(
+          publicKeyCredentialCreationOptions.challenge
+        );
 
         const credential = await navigator.credentials.create({
           publicKey: publicKeyCredentialCreationOptions,
@@ -73,7 +96,11 @@ class Register extends LitElement {
         this._completeRegister(registrationId, parseCredential(credential));
       }
     } catch (error) {
-      setNotificationMessage(document.getElementById('notification'), 'Something went wrong', "error");
+      setNotificationMessage(
+        document.getElementById("notification"),
+        "Something went wrong",
+        "error"
+      );
     }
   }
 
@@ -90,16 +117,28 @@ class Register extends LitElement {
       this._recoveryCode = await finishResponse.text();
       this._registrationComplete = true;
 
-      setNotificationMessage(document.getElementById('notification'), "Account successfuly created!", "success");
+      setNotificationMessage(
+        document.getElementById("notification"),
+        "Account successfuly created!",
+        "success"
+      );
     } catch (error) {
-      setNotificationMessage(document.getElementById('notification'), 'Something went wrong', "error");
+      setNotificationMessage(
+        document.getElementById("notification"),
+        "Something went wrong",
+        "error"
+      );
     }
   }
 
   async _copyRecoveryCodeToClipboard() {
     await navigator.clipboard.writeText(this._recoveryCode);
-    setNotificationMessage(document.getElementById('notification'), "Recovery code copied to clipboard", "info");
-    setTimeout(() => clearNotificationMessage(document.getElementById('notification')), 3000);
+    setNotificationMessage(
+      document.getElementById("notification"),
+      "Recovery code copied to clipboard",
+      "info"
+    );
+    setTimeout(() => clearNotificationMessage(document.getElementById("notification")), 3000);
   }
 }
 

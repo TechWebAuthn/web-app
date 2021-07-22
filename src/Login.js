@@ -18,7 +18,8 @@ class Login extends LitElement {
           </label>
           <button type="submit">Login</button>
         </form>
-      </div>`;
+      </div>
+    `;
   }
 }
 

@@ -3,8 +3,8 @@ import { notification, stats, card, pageSubtitle } from "../public/css/component
 
 const statsMap = {
   login: "Logged in",
-  register: "Registered"
-}
+  register: "Registered",
+};
 
 class Stats extends LitElement {
   constructor() {
@@ -38,11 +38,11 @@ class Stats extends LitElement {
       <div class="${card}">
         <dl class="${stats}">
           ${Object.keys(this.stats).map(
-      (key) => html`
+            (key) => html`
               <dt>${statsMap[key]}</dt>
               <dd>${this.stats[key]} <span>${this._statsDirection[key]}</span></dd>
             `
-    )}
+          )}
         </dl>
       </div>
     `;
@@ -79,7 +79,7 @@ class Stats extends LitElement {
   }
 
   _updateStatsDirection(oldData, newData, eventType) {
-    if (eventType === 'welcome') return;
+    if (eventType === "welcome") return;
 
     for (const stat in oldData) {
       this._statsDirection[stat] =

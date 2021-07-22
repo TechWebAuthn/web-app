@@ -11,9 +11,7 @@ class Dashboard extends LitElement {
       <h2 class="${pageSubtitle}">Dashboard</h2>
       <p id="notification" class="${notification}"></p>
       <div class="${card}">
-        <p>
-          Welcome back, username!
-        </p>
+        <p>Welcome back, username!</p>
       </div>
     `;
   }

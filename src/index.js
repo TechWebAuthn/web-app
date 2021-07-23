@@ -71,7 +71,7 @@ class AuthApp extends LitElement {
     return html`
       <a class="${homeLink}" href="/">🏠</a>
       <theme-toggle class="${themeToggle}"></theme-toggle>
-      <h1 class="${pageTitle}">WebAuth ❤️ WebRTC</h1>
+      <h1 class="${pageTitle}">WebAuthn ❤️ WebRTC</h1>
       <auth-nav .isLoggedIn="${this.isLoggedIn}"></auth-nav>
       <main class="${page}"></main>
     `;

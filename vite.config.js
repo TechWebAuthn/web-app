@@ -22,8 +22,8 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
       },
       manifest: {
-        name: "WebAuth ❤️ WebRTC",
-        short_name: "WAuth❤️WRTC",
+        name: "WebAuthn ❤️ WebRTC",
+        short_name: "WAuthn❤️WRTC",
         start_url: "/",
         display: "standalone",
         background_color: "#000",

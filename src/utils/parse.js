@@ -1,4 +1,6 @@
 export function base64UrlStringToUint8Array(base64UrlString) {
+  if (!base64UrlString) return null;
+
   const padding = "==".slice(0, (4 - (base64UrlString.length % 4)) % 4);
   const base64String = base64UrlString.replace(/-/g, "+").replace(/_/g, "/") + padding;
 
@@ -8,6 +10,8 @@ export function base64UrlStringToUint8Array(base64UrlString) {
 }
 
 export function arrayBufferToBase64UrlString(arrayBuffer) {
+  if (!arrayBuffer) return null;
+
   const characters = [];
   for (const char of new Uint8Array(arrayBuffer)) {
     characters.push(String.fromCharCode(char));

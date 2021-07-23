@@ -1,8 +1,9 @@
 import { LitElement, html } from "lit";
 import { card, form, notification, pageSubtitle } from "../public/css/component.module.css";
+import { request } from "./utils/network";
 import { setNotificationMessage } from "./utils/notification";
 import { base64UrlStringToUint8Array, parseLoginCredential } from "./utils/parse";
-import { setSession } from "./utils/session";
+import { hasValidSession, setSession } from "./utils/session";
 
 class Login extends LitElement {
   createRenderRoot() {
@@ -28,29 +29,18 @@ class Login extends LitElement {
   async _startLogin(event) {
     event.preventDefault();
 
-    setNotificationMessage(
-      document.getElementById("notification"),
-      "Starting registration process",
-      "info"
-    );
+    setNotificationMessage("Starting login process", "info");
 
     const formData = new FormData(event.target);
     const username = formData.get("username");
 
     try {
-      const startResponse = await fetch("/api/assertion/start", {
+      const startResponse = await request("/api/assertion/start", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: username,
       });
 
-      if (startResponse.status >= 400) {
-        throw new Error((await startResponse.json()).message);
-      }
-
-      const { assertionId, publicKeyCredentialRequestOptions } = await startResponse.json();
+      const { assertionId, publicKeyCredentialRequestOptions } = startResponse;
 
       const publicKey = {
         ...publicKeyCredentialRequestOptions,
@@ -68,31 +58,20 @@ class Login extends LitElement {
 
       this._completeLogin(assertionId, parseLoginCredential(credential));
     } catch (error) {
-      setNotificationMessage(
-        document.getElementById("notification"),
-        error.message || "Something went wrong",
-        "error"
-      );
+      setNotificationMessage(error.message, "error");
     }
   }
 
   async _completeLogin(assertionId, credential) {
     try {
-      const response = await fetch("/api/assertion/finish", {
+      await request("/api/assertion/finish", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ assertionId, credential }),
       });
 
-      setSession(await response.json());
+      await hasValidSession();
     } catch (error) {
-      setNotificationMessage(
-        document.getElementById("notification"),
-        "Something went wrong",
-        "error"
-      );
+      setNotificationMessage(error.message, "error");
     }
   }
 }

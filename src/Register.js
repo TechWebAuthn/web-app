@@ -7,21 +7,29 @@ import {
   iconButton,
   itemsRow,
   pageSubtitle,
+  details,
 } from "../public/css/component.module.css";
 import { base64UrlStringToUint8Array, parseRegisterCredential } from "./utils/parse";
 import { clearNotificationMessage, setNotificationMessage } from "./utils/notification";
+import { request } from "./utils/network";
 
 class Register extends LitElement {
   constructor() {
     super();
 
-    this._registrationComplete = false;
+    this._isCurrentFlowComplete = false;
+    this._isRegisterFlow = true;
+    this._isRecoveryFlow = false;
+    this._isAddFlow = false;
   }
 
   static get properties() {
     return {
-      _registrationComplete: Boolean,
-      _recoveryCode: String,
+      _isCurrentFlowComplete: Boolean,
+      _recoveryToken: String,
+      _isRegisterFlow: Boolean,
+      _isRecoveryFlow: Boolean,
+      _isAddFlow: Boolean,
     };
   }
 
@@ -29,64 +37,139 @@ class Register extends LitElement {
     return this;
   }
 
-  render() {
-    return html` <h2 class="${pageSubtitle}">Register</h2>
-      <p id="notification" class="${notification}"></p>
-      <div class="${card}">
-        ${!this._registrationComplete
-          ? html`
-              <form class="${form}" @submit="${this._startRegister}">
-                <label for="username">
-                  Username
-                  <input type="text" id="username" name="username" required />
-                </label>
-                <button type="submit">Register</button>
-              </form>
-            `
-          : html`
-              <p>Your recovery code is:</p>
-              <p class="${itemsRow}">
-                <code class="${code}">${this._recoveryCode}</code
-                ><button @click="${this._copyRecoveryCodeToClipboard}" class="${iconButton}">
-                  📋
-                </button>
-              </p>
-              <p>⚠️ Be sure to save it in a safe and secure place.</p>
-            `}
-      </div>`;
+  firstUpdated() {
+    this.querySelectorAll("summary").forEach((summary) =>
+      summary.addEventListener("click", this._setFlow.bind(this))
+    );
   }
 
-  async _startRegister(event) {
+  render() {
+    return html`
+      <h2 class="${pageSubtitle}">Register</h2>
+      <p id="notification" class="${notification}"></p>
+      <div class="${card}">
+        <details class="${details}" data-type="register" .open=${this._isRegisterFlow}>
+          <summary>Register a new account</summary>
+          ${this._isRegisterFlow && !this._isCurrentFlowComplete
+            ? html`
+                <form class="${form}" @submit="${this._startRelyingPartyFlow}">
+                  <label for="username">
+                    Username
+                    <input type="text" id="username" name="username" required />
+                  </label>
+                  <button type="submit">Register</button>
+                </form>
+              `
+            : html`
+                <p>Your recovery token is:</p>
+                <p class="${itemsRow}">
+                  <code class="${code}">${this._recoveryToken}</code
+                  ><button @click="${this._copyRecoveryTokenToClipboard}" class="${iconButton}">
+                    📋
+                  </button>
+                </p>
+                <p>⚠️ Be sure to save it in a safe and secure place.</p>
+              `}
+        </details>
+        <details class="${details}" data-type="recover" .open="${this._isRecoveryFlow}">
+          <summary>Recover account access</summary>
+          ${this._isRecoveryFlow && !this._isCurrentFlowComplete
+            ? html`
+                <form class="${form}" @submit="${this._startRelyingPartyFlow}">
+                  <label for="recoveryToken">
+                    Recovery token
+                    <input type="text" id="recoveryToken" name="recoveryToken" required />
+                  </label>
+                  <button type="submit">Recover</button>
+                </form>
+              `
+            : html`
+                <p>Your account has been successfuly recovered on this device!</p>
+                <p>Your recovery token is:</p>
+                <p class="${itemsRow}">
+                  <code class="${code}">${this._recoveryToken}</code
+                  ><button @click="${this._copyRecoveryTokenToClipboard}" class="${iconButton}">
+                    📋
+                  </button>
+                </p>
+                <p>⚠️ Be sure to save it in a safe and secure place.</p>
+              `}
+        </details>
+        <details class="${details}" data-type="add" .open="${this._isAddFlow}">
+          <summary>Add new device</summary>
+          ${this._isAddFlow && !this._isCurrentFlowComplete
+            ? html`
+                <form class="${form}" @submit="${this._startRelyingPartyFlow}">
+                  <label for="registrationAddToken">
+                    Registration add token
+                    <input
+                      type="text"
+                      id="registrationAddToken"
+                      name="registrationAddToken"
+                      required
+                    />
+                  </label>
+                  <button type="submit">Add new device</button>
+                </form>
+              `
+            : html`<p>This device has been successfuly added to an existing account!</p>`}
+        </details>
+      </div>
+    `;
+  }
+
+  _setFlow(event) {
     event.preventDefault();
 
-    setNotificationMessage(
-      document.getElementById("notification"),
-      "Starting registration process",
-      "info"
-    );
+    const details = event.target.closest("details");
+    if (details.open) return;
+
+    this._isCurrentFlowComplete = false;
+    this._isRegisterFlow = false;
+    this._isRecoveryFlow = false;
+    this._isAddFlow = false;
+
+    switch (details.dataset.type) {
+      case "register":
+        this._isRegisterFlow = true;
+        break;
+      case "recover":
+        this._isRecoveryFlow = true;
+        break;
+      case "add":
+        this._isAddFlow = true;
+        break;
+    }
+  }
+
+  async _startRelyingPartyFlow(event) {
+    event.preventDefault();
 
     const formData = new FormData(event.target);
-    const username = formData.get("username");
+    let body = {};
+
+    if (this._isRegisterFlow) {
+      setNotificationMessage("Starting registration process", "info");
+      body.username = formData.get("username");
+    }
+
+    if (this._isRecoveryFlow) {
+      setNotificationMessage("Starting recovery process", "info");
+      body.recoveryToken = formData.get("recoveryToken");
+    }
+
+    if (this._isAddFlow) {
+      setNotificationMessage("Starting add new device process", "info");
+      body.registrationAddToken = formData.get("registrationAddToken");
+    }
 
     try {
-      const startResponse = await fetch("/api/registration/start", {
+      const startResponse = await request("/api/registration/start", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username }),
+        body: JSON.stringify(body),
       });
 
-      const { status, registrationId, publicKeyCredentialCreationOptions } =
-        await startResponse.json();
-
-      if (status === "USERNAME_TAKEN") {
-        throw new Error("Username is already taken");
-      }
-
-      if (status === "TOKEN_INVALID") {
-        throw new Error("Token is invalid");
-      }
+      const { status, registrationId, publicKeyCredentialCreationOptions } = startResponse;
 
       if (status === "OK") {
         publicKeyCredentialCreationOptions.user.id = base64UrlStringToUint8Array(
@@ -95,57 +178,61 @@ class Register extends LitElement {
         publicKeyCredentialCreationOptions.challenge = base64UrlStringToUint8Array(
           publicKeyCredentialCreationOptions.challenge
         );
+        publicKeyCredentialCreationOptions.excludeCredentials = [
+          ...(publicKeyCredentialCreationOptions.excludeCredentials || []).map((excred) => {
+            const id = base64UrlStringToUint8Array(excred.id);
+            return {
+              ...excred,
+              id,
+            };
+          }),
+        ];
 
         const credential = await navigator.credentials.create({
           publicKey: publicKeyCredentialCreationOptions,
         });
 
-        this._completeRegister(registrationId, parseRegisterCredential(credential));
+        this._completeRelyingPartyFlow(registrationId, parseRegisterCredential(credential));
       }
     } catch (error) {
-      setNotificationMessage(
-        document.getElementById("notification"),
-        error.message || "Something went wrong",
-        "error"
-      );
+      setNotificationMessage(error.message, "error");
     }
   }
 
-  async _completeRegister(registrationId, credential) {
+  async _completeRelyingPartyFlow(registrationId, credential) {
+    let successMessage = "";
+
+    if (this._isRegisterFlow) {
+      successMessage = "Account successfuly created!";
+    }
+
+    if (this._isRecoveryFlow) {
+      successMessage = "Account successfuly recovered on this device!";
+    }
+
+    if (this._isAddFlow) {
+      successMessage = "Device successfuly added to an existing account!";
+    }
+
     try {
-      const finishResponse = await fetch("/api/registration/finish", {
+      const finishResponse = await request("/api/registration/finish", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ registrationId, credential }),
       });
 
-      this._recoveryCode = await finishResponse.text();
-      this._registrationComplete = true;
+      this._recoveryToken = finishResponse.recoveryToken;
+      this._isCurrentFlowComplete = true;
 
-      setNotificationMessage(
-        document.getElementById("notification"),
-        "Account successfuly created!",
-        "success"
-      );
+      setNotificationMessage(successMessage, "success");
     } catch (error) {
-      setNotificationMessage(
-        document.getElementById("notification"),
-        "Something went wrong",
-        "error"
-      );
+      setNotificationMessage(error.message, "error");
     }
   }
 
-  async _copyRecoveryCodeToClipboard() {
-    await navigator.clipboard.writeText(this._recoveryCode);
-    setNotificationMessage(
-      document.getElementById("notification"),
-      "Recovery code copied to clipboard",
-      "info"
-    );
-    setTimeout(() => clearNotificationMessage(document.getElementById("notification")), 3000);
+  async _copyRecoveryTokenToClipboard() {
+    await navigator.clipboard.writeText(this._recoveryToken);
+    setNotificationMessage("Recovery token copied to clipboard", "info");
+    setTimeout(clearNotificationMessage, 3000);
   }
 }
 

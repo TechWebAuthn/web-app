@@ -1,11 +1,12 @@
 import { Router } from "@vaadin/router";
+import { request } from "./network";
 
 export function isLoggedIn() {
   return window.localStorage.getItem("session") !== null;
 }
 
 export async function logout(event) {
-  event.preventDefault();
+  if (event) event.preventDefault();
 
   await fetch("/api/logout", {
     method: "POST",
@@ -27,5 +28,16 @@ export function getSession() {
     return JSON.parse(window.localStorage.getItem("session") || "{}");
   } catch {
     return {};
+  }
+}
+
+export async function hasValidSession() {
+  try {
+    const me = await request("/api/me");
+    setSession(me);
+    return true;
+  } catch (error) {
+    await logout();
+    return false;
   }
 }

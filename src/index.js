@@ -2,7 +2,7 @@ import { Router } from "@vaadin/router";
 import { LitElement, html } from "lit";
 import "./components/theme-toggle";
 import "./components/nav";
-import { isLoggedIn } from "./utils/session";
+import { hasValidSession, isLoggedIn } from "./utils/session";
 import { themeToggle, page, homeLink, pageTitle } from "../public/css/component.module.css";
 
 const router = new Router();
@@ -47,6 +47,7 @@ class AuthApp extends LitElement {
     super();
 
     this.isLoggedIn = isLoggedIn();
+    if (this.isLoggedIn) this._checkValidSession();
   }
 
   static get properties() {
@@ -74,6 +75,10 @@ class AuthApp extends LitElement {
       <auth-nav .isLoggedIn="${this.isLoggedIn}"></auth-nav>
       <main class="${page}"></main>
     `;
+  }
+
+  async _checkValidSession() {
+    this.isLoggedIn = await hasValidSession();
   }
 }
 

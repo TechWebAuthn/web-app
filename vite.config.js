@@ -7,6 +7,11 @@ export default defineConfig({
       localsConvention: "camelCaseOnly",
     },
   },
+  server: {
+    hmr: {
+      port: 443,
+    },
+  },
   plugins: [
     VitePWA({
       strategies: "generateSW",

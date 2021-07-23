@@ -9,8 +9,8 @@
   --canvas-info: #9cf;
   --canvas-error: #f99;
   --text-primary: #111;
-  --text-link: #37f;
-  --text-link-active: #f60;
+  --text-link: #e50;
+  --text-link-active: #37f;
   --button-canvas-primary: #37f;
   --button-canvas-secondary: #9ce;
   --button-canvas-danger: #f44;
@@ -29,8 +29,8 @@
   --canvas-info: #17b;
   --canvas-error: #922;
   --text-primary: #eee;
-  --text-link: #5af;
-  --text-link-active: #f80;
+  --text-link: #f80;
+  --text-link-active: #5af;
   --button-canvas-primary: #5af;
   --button-canvas-secondary: #57e;
   --button-canvas-danger: #d66;
@@ -47,8 +47,8 @@
     --canvas-info: #17b;
     --canvas-error: #922;
     --text-primary: #eee;
-    --text-link: #5af;
-    --text-link-active: #f80;
+    --text-link: #f80;
+    --text-link-active: #5af;
     --button-canvas-primary: #5af;
     --button-canvas-secondary: #57e;
     --button-canvas-danger: #d66;

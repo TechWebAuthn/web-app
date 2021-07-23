@@ -54,6 +54,7 @@ class Stats extends LitElement {
     });
     this._sseConnection.addEventListener("welcome", this._updateStats.bind(this));
     this._sseConnection.addEventListener("login", this._updateStats.bind(this));
+    this._sseConnection.addEventListener("logout", this._updateStats.bind(this));
     this._sseConnection.addEventListener("register", this._updateStats.bind(this));
     this._sseConnection.onopen = () =>
       this._updateStatusMessage("Connection established", "success");

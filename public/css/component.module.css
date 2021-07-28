@@ -159,6 +159,11 @@
   border-color: var(--button-canvas-danger);
 }
 
+.form button[data-size="small"] {
+  padding: 0.25rem 0.5rem;
+  margin: 0;
+}
+
 .notification {
   padding: 0.5rem 1rem;
   margin: 0;
@@ -203,6 +208,20 @@
   margin-block-end: 0.5rem;
   max-width: 100%;
   overflow: auto;
+  font-family: monospace;
+}
+
+.code-input {
+  font-size: 1.2rem;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: monospace;
+}
+
+.code[data-size="full"] {
+  width: 100%;
+  margin: 0;
+  justify-content: center;
 }
 
 .icon-button {
@@ -222,4 +241,73 @@
 .details summary {
   font-size: 1.2rem;
   padding: 1rem 0;
+}
+
+.highlight {
+  color: var(--text-link-active);
+}
+
+.device-list {
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.device-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background-color: var(--canvas-contrast);
+  padding-inline-start: 1rem;
+}
+
+.inline {
+  display: inline-flex;
+  margin: 0;
+}
+
+.loader {
+  display: inline-flex;
+  border-radius: 50%;
+  width: 4em;
+  height: 4em;
+  margin: 1rem;
+  position: relative;
+  border: 0.4em solid var(--canvas-contrast);
+  border-left-color: var(--button-canvas-primary);
+  transform: translateZ(0);
+  animation: spin 1.1s infinite linear;
+}
+
+.loader::-webkit-progress-bar {
+  display: none;
+}
+
+.loader::-moz-progress-bar {
+  display: none;
+}
+
+.loader:after {
+  border-radius: 50%;
+  width: 4em;
+  height: 4em;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Animations */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

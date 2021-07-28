@@ -1,4 +1,5 @@
 import { LitElement, html } from "lit";
+import Bowser from "bowser";
 import {
   card,
   form,
@@ -12,6 +13,7 @@ import {
 import { base64UrlStringToUint8Array, parseRegisterCredential } from "./utils/parse";
 import { clearNotificationMessage, setNotificationMessage } from "./utils/notification";
 import { request } from "./utils/network";
+import { WebRTCConnection, WebSocketConnection } from "./utils/webrtc";
 
 class Register extends LitElement {
   constructor() {
@@ -21,6 +23,10 @@ class Register extends LitElement {
     this._isRegisterFlow = true;
     this._isRecoveryFlow = false;
     this._isAddFlow = false;
+    this._addFlowCode = "";
+    this._addFlowUser = "";
+
+    this.RTC = null;
   }
 
   static get properties() {
@@ -30,6 +36,8 @@ class Register extends LitElement {
       _isRegisterFlow: Boolean,
       _isRecoveryFlow: Boolean,
       _isAddFlow: Boolean,
+      _addFlowCode: String,
+      _addFlowUser: String,
     };
   }
 
@@ -96,21 +104,26 @@ class Register extends LitElement {
               `}
         </details>
         <details class="${details}" data-type="add" .open="${this._isAddFlow}">
-          <summary>Add new device</summary>
+          <summary>Add device to existing account</summary>
           ${this._isAddFlow && !this._isCurrentFlowComplete
             ? html`
-                <form class="${form}" @submit="${this._startRelyingPartyFlow}">
-                  <label for="registrationAddToken">
-                    Registration add token
-                    <input
-                      type="text"
-                      id="registrationAddToken"
-                      name="registrationAddToken"
-                      required
-                    />
-                  </label>
-                  <button type="submit">Add new device</button>
-                </form>
+                ${!this._addFlowUser
+                  ? html`
+                      <form class="${form}" @submit="${this._startExternalConnection}">
+                        <button type="submit">Generate code</button>
+                        <p .hidden="${!this._addFlowCode}">
+                          <code data-size="full" class="${code}">${this._addFlowCode}</code>
+                        </p>
+                      </form>
+                    `
+                  : html`
+                      <form class="${form}" @submit="${this._startEnrollmentFlow}">
+                        <button>Add device to ${this._addFlowUser}'s account</button>
+                        <button data-type="danger" @click="${this._cancelEnrollmentFlow}">
+                          Cancel
+                        </button>
+                      </form>
+                    `}
               `
             : html`<p>This device has been successfuly added to an existing account!</p>`}
         </details>
@@ -145,8 +158,12 @@ class Register extends LitElement {
   async _startRelyingPartyFlow(event) {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
+    let formData;
     let body = {};
+
+    if (event.target instanceof HTMLFormElement) {
+      formData = new FormData(event.target);
+    }
 
     if (this._isRegisterFlow) {
       setNotificationMessage("Starting registration process", "info");
@@ -160,7 +177,7 @@ class Register extends LitElement {
 
     if (this._isAddFlow) {
       setNotificationMessage("Starting add new device process", "info");
-      body.registrationAddToken = formData.get("registrationAddToken");
+      body.registrationAddToken = event.detail.token;
     }
 
     try {
@@ -202,26 +219,32 @@ class Register extends LitElement {
   async _completeRelyingPartyFlow(registrationId, credential) {
     let successMessage = "";
 
-    if (this._isRegisterFlow) {
-      successMessage = "Account successfuly created!";
-    }
-
-    if (this._isRecoveryFlow) {
-      successMessage = "Account successfuly recovered on this device!";
-    }
-
-    if (this._isAddFlow) {
-      successMessage = "Device successfuly added to an existing account!";
-    }
-
     try {
+      const { parsedResult } = Bowser.getParser(window.navigator.userAgent);
+      const userAgent = `${parsedResult.browser.name} :: ${parsedResult.os.name} ${
+        parsedResult.os.versionName || parsedResult.os.version
+      }`;
+
       const finishResponse = await request("/api/registration/finish", {
         method: "POST",
-        body: JSON.stringify({ registrationId, credential }),
+        body: JSON.stringify({ registrationId, credential, userAgent }),
       });
 
       this._recoveryToken = finishResponse.recoveryToken;
       this._isCurrentFlowComplete = true;
+
+      if (this._isRegisterFlow) {
+        successMessage = "Account successfuly created!";
+      }
+
+      if (this._isRecoveryFlow) {
+        successMessage = "Account successfuly recovered on this device!";
+      }
+
+      if (this._isAddFlow) {
+        successMessage = "Device successfuly added to an existing account!";
+        this.RTC.dataChannel.send("event::complete");
+      }
 
       setNotificationMessage(successMessage, "success");
     } catch (error) {
@@ -233,6 +256,49 @@ class Register extends LitElement {
     await navigator.clipboard.writeText(this._recoveryToken);
     setNotificationMessage("Recovery token copied to clipboard", "info");
     setTimeout(clearNotificationMessage, 3000);
+  }
+
+  _startExternalConnection(event) {
+    event.preventDefault();
+
+    this.RTC?.close();
+    clearNotificationMessage();
+
+    this.RTC = new WebRTCConnection(new WebSocketConnection("/api/socket"));
+    this.RTC.createDataChannel();
+    this.RTC.oncode = (code) => {
+      this._addFlowCode = code;
+    };
+    this.RTC.onuser = async (user) => {
+      await this.RTC.createOffer();
+      setNotificationMessage(`User ${user} wants to claim this device`, "info");
+      this._addFlowUser = user;
+    };
+  }
+
+  _startEnrollmentFlow(event) {
+    event.preventDefault();
+
+    this.RTC.sendData("action::add");
+    this.RTC.ondatachannelmessage = (event) => {
+      const [type, data] = event.data.split("::");
+
+      if (type === "token") {
+        this._startRelyingPartyFlow(new CustomEvent("add-device", { detail: { token: data } }));
+      }
+    };
+    this.RTC.listenForData();
+  }
+
+  _cancelEnrollmentFlow(event) {
+    event.preventDefault();
+
+    this.RTC.sendData("action::cancel");
+
+    this.RTC?.close();
+    clearNotificationMessage();
+    this._addFlowCode = "";
+    this._addFlowUser = "";
   }
 }
 

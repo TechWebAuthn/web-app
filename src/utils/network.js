@@ -7,16 +7,21 @@ export async function request(url, options = {}) {
     };
 
     const response = await fetch(url, mergedOptions);
-    const parsedResponse = await response.json();
+
+    if (response.status > 500) {
+      throw new Error("Server is not responding");
+    }
 
     if (response.status >= 400) {
+      const parsedResponse = await response.json();
       const error = new Error(parsedResponse.message);
       error.name = "RequestError";
       error.data = parsedResponse || {};
+      error.code = response.status;
       throw error;
     }
 
-    return parsedResponse;
+    return response.body ? await response.json() : {};
   } catch (error) {
     throw new Error(getStatusErrorMessage(error));
   }

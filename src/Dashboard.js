@@ -5,6 +5,7 @@ import {
   notification,
   pageSubtitle,
   form,
+  details,
   highlight,
   deviceList,
   inline,
@@ -84,7 +85,7 @@ class Dashboard extends LitElement {
               </ul>
             `
           : ``}
-        <details>
+        <details class="${details}">
           <summary>Enroll new device</summary>
           ${!this._addDeviceInProgress
             ? html`

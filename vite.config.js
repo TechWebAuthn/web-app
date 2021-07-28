@@ -20,6 +20,7 @@ export default defineConfig({
       injectRegister: "inline",
       workbox: {
         cleanupOutdatedCaches: true,
+        skipWaiting: true,
       },
       manifest: {
         name: "WebAuthn ❤️ WebRTC",

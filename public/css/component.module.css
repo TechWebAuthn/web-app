@@ -112,7 +112,8 @@
 .card {
   padding: 2rem;
   margin: 1rem;
-  max-width: 100%;
+  max-width: 24rem;
+  width: 100%;
   background-color: var(--canvas-secondary);
   box-shadow: var(--drop-shadow);
 }
@@ -125,6 +126,7 @@
   display: flex;
   flex-direction: column;
   margin: 1rem 0;
+  gap: 1rem;
 }
 
 .form label {
@@ -139,6 +141,7 @@
   padding: 0.5rem 1rem;
   font-size: 1.2rem;
   max-width: 100%;
+  width: 100%;
   background-color: var(--canvas-primary);
   color: var(--text-primary);
   border: 2px solid var(--button-canvas-primary);
@@ -149,9 +152,12 @@
   padding: 0.5rem 1rem;
   width: 100%;
   border: 2px solid var(--button-canvas-primary);
-  margin-block-start: 1rem;
   background-color: var(--button-canvas-primary);
   color: var(--button-text-primary);
+}
+
+.form button:active {
+  filter: contrast(0.75) brightness(1.25);
 }
 
 .form button[data-type="danger"] {
@@ -161,10 +167,10 @@
 
 .form button[data-size="small"] {
   padding: 0.25rem 0.5rem;
-  margin: 0;
 }
 
 .notification {
+  max-width: 24rem;
   padding: 0.5rem 1rem;
   margin: 0;
   line-height: 1;
@@ -232,6 +238,10 @@
   background-color: var(--button-canvas-secondary);
 }
 
+.icon-button:active {
+  filter: contrast(0.75) brightness(1.25);
+}
+
 .items-row {
   display: inline-flex;
   align-items: baseline;
@@ -261,7 +271,16 @@
   justify-content: space-between;
   gap: 1rem;
   background-color: var(--canvas-contrast);
-  padding-inline-start: 1rem;
+  padding-inline-start: 0.5rem;
+}
+
+.device-list [data-type="icon"] {
+  width: 2rem;
+  text-align: center;
+}
+
+.device-list [data-type="label"] {
+  width: 100%;
 }
 
 .inline {
@@ -300,6 +319,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.row {
+  flex-direction: row;
+  gap: 1rem;
 }
 
 /* Animations */

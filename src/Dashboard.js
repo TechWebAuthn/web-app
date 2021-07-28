@@ -10,9 +10,10 @@ import {
   inline,
   loader,
   center,
+  row,
 } from "../public/css/component.module.css";
 import { request } from "./utils/network";
-import { clearNotificationMessage, setNotificationMessage } from "./utils/notification";
+import { setNotificationMessage } from "./utils/notification";
 import { logout, getSession } from "./utils/session";
 import { WebRTCConnection, WebSocketConnection } from "./utils/webrtc";
 
@@ -23,12 +24,15 @@ class Dashboard extends LitElement {
     this.RTC = null;
     this._myDevices = [];
     this._addDeviceInProgress = false;
+    this._isRemovingCurrentDevice = false;
+    this._deviceIdToRemove = null;
   }
 
   static get properties() {
     return {
       _myDevices: Array,
       _addDeviceInProgress: Boolean,
+      _isRemovingCurrentDevice: Boolean,
     };
   }
 
@@ -51,14 +55,27 @@ class Dashboard extends LitElement {
         ${this._myDevices.length
           ? html`
               <h4>Registered devices</h4>
+              ${this._isRemovingCurrentDevice
+                ? html`
+                    <p data-type="error" class="${notification}">
+                      You are about to remove the current device and will be imediately logged out!
+                    </p>
+                    <form class="${form} ${row}" @submit=${this._continueDeleteDevice}>
+                      <button name="continue">Continue</button>
+                      <button name="cancel" data-type="danger">Cancel</button>
+                    </form>
+                  `
+                : ``}
               <ul class="${deviceList}">
                 ${this._myDevices.map(
                   (device) =>
                     html`
                       <li>
-                        ${device.userAgent}
+                        <span data-type="icon">${this._getDeviceIcon(device.type)}</span>
+                        <span data-type="label">${device.description}</span>
                         <form @submit="${this._deleteDevice}" class="${form} ${inline}">
                           <input type="hidden" name="id" value=${device.id} />
+                          <input type="hidden" name="currentDevice" value=${device.currentDevice} />
                           <button data-type="danger" data-size="small">✖</button>
                         </form>
                       </li>
@@ -132,9 +149,27 @@ class Dashboard extends LitElement {
 
   async _getMyDevices() {
     try {
-      this._myDevices = await request("/api/devices");
+      const devices = await request("/api/devices");
+      this._myDevices = devices.map((device) => {
+        const [type, description] = device.userAgent.split(" || ");
+        console.log(type, description);
+        return {
+          ...device,
+          type,
+          description,
+        };
+      });
     } catch (error) {
-      console.info("Could not get devices");
+      setNotificationMessage("Could not retrieve devices", "error");
+    }
+  }
+
+  _getDeviceIcon(type) {
+    switch (type) {
+      case "mobile":
+        return "📱";
+      default:
+        return "🖥️";
     }
   }
 
@@ -142,22 +177,42 @@ class Dashboard extends LitElement {
     event.preventDefault();
 
     const formData = new FormData(event.target);
-    const id = formData.get("id");
+    const isCurrentDevice = formData.get("currentDevice") === "true";
+    this._deviceIdToRemove = formData.get("id");
 
-    try {
-      await request(`/api/devices/${id}`, { method: "DELETE" });
-      setNotificationMessage("Device successfuly removed from account", "success");
-      this._getMyDevices();
-    } catch (error) {
-      console.log(error);
-      setNotificationMessage("Could not remove device", "error");
+    if (isCurrentDevice) {
+      this._isRemovingCurrentDevice = true;
+    } else {
+      this._continueDeleteDevice();
     }
   }
 
-  async _copyRegistrationAddTokenToClipboard() {
-    await navigator.clipboard.writeText(this._registrationAddToken);
-    setNotificationMessage("Registration token copied to clipboard", "info");
-    setTimeout(clearNotificationMessage, 3000);
+  async _continueDeleteDevice(event) {
+    event?.preventDefault();
+
+    const action = event?.submitter?.name;
+
+    if (action === "cancel") {
+      this._deviceIdToRemove = null;
+      this._isRemovingCurrentDevice = false;
+      return;
+    }
+
+    if (!action || action === "continue") {
+      try {
+        await request(`/api/devices/${this._deviceIdToRemove}`, { method: "DELETE" });
+        setNotificationMessage("Device successfuly removed from account", "success");
+        if (this._isRemovingCurrentDevice) {
+          logout();
+        } else {
+          this._getMyDevices();
+        }
+      } catch (error) {
+        setNotificationMessage("Could not remove device", "error");
+      }
+    }
+
+    this._deviceIdToRemove = null;
   }
 }
 

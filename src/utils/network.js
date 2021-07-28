@@ -21,7 +21,7 @@ export async function request(url, options = {}) {
       throw error;
     }
 
-    return response.body ? await response.json() : {};
+    return response.headers.get("Content-Length") == 0 ? null : await response.json();
   } catch (error) {
     throw new Error(getStatusErrorMessage(error));
   }

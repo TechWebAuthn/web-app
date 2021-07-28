@@ -55,10 +55,10 @@ class Login extends LitElement {
       };
 
       const credential = await navigator.credentials.get({ publicKey });
-
+      setNotificationMessage("Validating credentials with server", "info");
       this._completeLogin(assertionId, parseLoginCredential(credential));
     } catch (error) {
-      setNotificationMessage(error.message, "error");
+      setNotificationMessage(error.message, "error", false);
     }
   }
 
@@ -71,7 +71,7 @@ class Login extends LitElement {
 
       await hasValidSession();
     } catch (error) {
-      setNotificationMessage(error.message, "error");
+      setNotificationMessage(error.message, "error", false);
     }
   }
 }

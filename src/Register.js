@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import Bowser from "bowser";
+import UAParser from "ua-parser-js";
 import {
   card,
   form,
@@ -10,7 +10,7 @@ import {
   pageSubtitle,
   details,
 } from "../public/css/component.module.css";
-import { base64UrlStringToUint8Array, parseRegisterCredential } from "./utils/parse";
+import { parsePublicKeyCredentialCreateOptions, parseRegisterCredential } from "./utils/parse";
 import { clearNotificationMessage, setNotificationMessage } from "./utils/notification";
 import { request } from "./utils/network";
 import { WebRTCConnection, WebSocketConnection } from "./utils/webrtc";
@@ -189,24 +189,8 @@ class Register extends LitElement {
       const { status, registrationId, publicKeyCredentialCreationOptions } = startResponse;
 
       if (status === "OK") {
-        publicKeyCredentialCreationOptions.user.id = base64UrlStringToUint8Array(
-          publicKeyCredentialCreationOptions.user.id
-        );
-        publicKeyCredentialCreationOptions.challenge = base64UrlStringToUint8Array(
-          publicKeyCredentialCreationOptions.challenge
-        );
-        publicKeyCredentialCreationOptions.excludeCredentials = [
-          ...(publicKeyCredentialCreationOptions.excludeCredentials || []).map((excred) => {
-            const id = base64UrlStringToUint8Array(excred.id);
-            return {
-              ...excred,
-              id,
-            };
-          }),
-        ];
-
         const credential = await navigator.credentials.create({
-          publicKey: publicKeyCredentialCreationOptions,
+          publicKey: parsePublicKeyCredentialCreateOptions(publicKeyCredentialCreationOptions),
         });
 
         this._completeRelyingPartyFlow(registrationId, parseRegisterCredential(credential));
@@ -220,9 +204,11 @@ class Register extends LitElement {
     let successMessage = "";
 
     try {
-      const { parsedResult } = Bowser.getParser(window.navigator.userAgent);
-      const userAgent = `${parsedResult.browser.name} :: ${parsedResult.os.name} ${
-        parsedResult.os.versionName || parsedResult.os.version
+      const parsedResult = new UAParser().getResult();
+      const userAgent = `${parsedResult.device.type} || ${
+        parsedResult.browser.name
+      } ${parsedResult.browser.version.split(".").shift()} :: ${parsedResult.os.name} ${
+        parsedResult.os.version
       }`;
 
       const finishResponse = await request("/api/registration/finish", {
@@ -255,7 +241,6 @@ class Register extends LitElement {
   async _copyRecoveryTokenToClipboard() {
     await navigator.clipboard.writeText(this._recoveryToken);
     setNotificationMessage("Recovery token copied to clipboard", "info");
-    setTimeout(clearNotificationMessage, 3000);
   }
 
   _startExternalConnection(event) {
@@ -271,7 +256,7 @@ class Register extends LitElement {
     };
     this.RTC.onuser = async (user) => {
       await this.RTC.createOffer();
-      setNotificationMessage(`User ${user} wants to claim this device`, "info");
+      setNotificationMessage(`User ${user} wants to claim this device`, "info", false);
       this._addFlowUser = user;
     };
   }

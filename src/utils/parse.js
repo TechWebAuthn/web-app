@@ -48,3 +48,25 @@ export function parseLoginCredential(credential) {
     type: credential.type,
   };
 }
+
+export function parsePublicKeyCredentialCreateOptions(pubKeyCreateOptions) {
+  const parsedPubKeyCreateOptions = pubKeyCreateOptions;
+
+  parsedPubKeyCreateOptions.user.id = base64UrlStringToUint8Array(
+    parsedPubKeyCreateOptions.user.id
+  );
+  parsedPubKeyCreateOptions.challenge = base64UrlStringToUint8Array(
+    parsedPubKeyCreateOptions.challenge
+  );
+  parsedPubKeyCreateOptions.excludeCredentials = [
+    ...(parsedPubKeyCreateOptions.excludeCredentials || []).map((excred) => {
+      const id = base64UrlStringToUint8Array(excred.id);
+      return {
+        ...excred,
+        id,
+      };
+    }),
+  ];
+
+  return parsedPubKeyCreateOptions;
+}

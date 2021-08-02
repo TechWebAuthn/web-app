@@ -2,8 +2,8 @@ import { LitElement, html } from "lit";
 import { card, form, notification, pageSubtitle } from "../public/css/component.module.css";
 import { request } from "./utils/network";
 import { setNotificationMessage } from "./utils/notification";
-import { base64UrlStringToUint8Array, parseLoginCredential } from "./utils/parse";
-import { hasValidSession, setSession } from "./utils/session";
+import { encodeLoginCredential, decodePublicKeyCredentialRequestOptions } from "./utils/parse";
+import { hasValidSession } from "./utils/session";
 
 class Login extends LitElement {
   createRenderRoot() {
@@ -42,21 +42,11 @@ class Login extends LitElement {
 
       const { assertionId, publicKeyCredentialRequestOptions } = startResponse;
 
-      const publicKey = {
-        ...publicKeyCredentialRequestOptions,
-        challenge: base64UrlStringToUint8Array(publicKeyCredentialRequestOptions.challenge),
-        allowCredentials: publicKeyCredentialRequestOptions.allowCredentials.map((cred) => {
-          const id = base64UrlStringToUint8Array(cred.id);
-          return {
-            ...cred,
-            id,
-          };
-        }),
-      };
-
-      const credential = await navigator.credentials.get({ publicKey });
+      const credential = await navigator.credentials.get({
+        publicKey: decodePublicKeyCredentialRequestOptions(publicKeyCredentialRequestOptions),
+      });
       setNotificationMessage("Validating credentials with server", "info");
-      this._completeLogin(assertionId, parseLoginCredential(credential));
+      this._completeLogin(assertionId, encodeLoginCredential(credential));
     } catch (error) {
       setNotificationMessage(error.message, "error", false);
     }

@@ -1,3 +1,7 @@
+/**
+ * @param {String} base64UrlString
+ * @returns {ArrayBuffer} Decoded ArrayBuffer value
+ */
 export function base64UrlStringToUint8Array(base64UrlString) {
   if (!base64UrlString) return null;
 
@@ -9,6 +13,10 @@ export function base64UrlStringToUint8Array(base64UrlString) {
   return Uint8Array.from(string, (c) => c.charCodeAt(0));
 }
 
+/**
+ * @param {ArrayBuffer} arrayBuffer
+ * @returns {String} Encoded Base64URLString value
+ */
 export function arrayBufferToBase64UrlString(arrayBuffer) {
   if (!arrayBuffer) return null;
 
@@ -21,22 +29,29 @@ export function arrayBufferToBase64UrlString(arrayBuffer) {
   return base64UrlString;
 }
 
-export function parseRegisterCredential(credential) {
+/**
+ * @param {Credential} credential
+ * @returns {Credential} Encoded Credential from ArrayBuffer to Base64URLString
+ */
+export function encodeRegisterCredential(credential) {
   return {
-    id: credential.id,
+    ...credential,
     rawId: arrayBufferToBase64UrlString(credential.rawId),
     response: {
       attestationObject: arrayBufferToBase64UrlString(credential.response.attestationObject),
       clientDataJSON: arrayBufferToBase64UrlString(credential.response.clientDataJSON),
     },
     clientExtensionResults: credential.getClientExtensionResults(),
-    type: credential.type,
   };
 }
 
-export function parseLoginCredential(credential) {
+/**
+ * @param {Credential} credential
+ * @returns {Credential} Encoded Credential from ArrayBuffer to Base64URLString
+ */
+export function encodeLoginCredential(credential) {
   return {
-    id: credential.id,
+    ...credential,
     rawId: arrayBufferToBase64UrlString(credential.rawId),
     response: {
       authenticatorData: arrayBufferToBase64UrlString(credential.response.authenticatorData),
@@ -45,28 +60,39 @@ export function parseLoginCredential(credential) {
       userHandle: arrayBufferToBase64UrlString(credential.response.userHandle),
     },
     clientExtensionResults: credential.getClientExtensionResults(),
-    type: credential.type,
   };
 }
 
-export function parsePublicKeyCredentialCreateOptions(pubKeyCreateOptions) {
-  const parsedPubKeyCreateOptions = pubKeyCreateOptions;
+/**
+ * @param {PublicKeyCredentialCreationOptions} pubKeyCreateOptions
+ * @returns {PublicKeyCredentialCreationOptions} Decoded PublicKeyCredentialCreationOptions from Base64URLString to ArrayBuffer
+ */
+export function decodePublicKeyCredentialCreateOptions(pubKeyCreateOptions) {
+  return {
+    ...pubKeyCreateOptions,
+    user: {
+      ...pubKeyCreateOptions.user,
+      id: base64UrlStringToUint8Array(pubKeyCreateOptions.user.id),
+    },
+    challenge: base64UrlStringToUint8Array(pubKeyCreateOptions.challenge),
+    excludeCredentials: (pubKeyCreateOptions.excludeCredentials || []).map((excred) => ({
+      ...excred,
+      id: base64UrlStringToUint8Array(excred.id),
+    })),
+  };
+}
 
-  parsedPubKeyCreateOptions.user.id = base64UrlStringToUint8Array(
-    parsedPubKeyCreateOptions.user.id
-  );
-  parsedPubKeyCreateOptions.challenge = base64UrlStringToUint8Array(
-    parsedPubKeyCreateOptions.challenge
-  );
-  parsedPubKeyCreateOptions.excludeCredentials = [
-    ...(parsedPubKeyCreateOptions.excludeCredentials || []).map((excred) => {
-      const id = base64UrlStringToUint8Array(excred.id);
-      return {
-        ...excred,
-        id,
-      };
-    }),
-  ];
-
-  return parsedPubKeyCreateOptions;
+/**
+ * @param {PublicKeyCredentialRequestOptions} pubKeyRequestOptions
+ * @returns {PublicKeyCredentialRequestOptions} Decoded PublicKeyCredentialRequestOptions from Base64URLString to ArrayBuffer
+ */
+export function decodePublicKeyCredentialRequestOptions(pubKeyRequestOptions) {
+  return {
+    ...pubKeyRequestOptions,
+    challenge: base64UrlStringToUint8Array(pubKeyRequestOptions.challenge),
+    allowCredentials: (pubKeyRequestOptions.allowCredentials || []).map((cred) => ({
+      ...cred,
+      id: base64UrlStringToUint8Array(cred.id),
+    })),
+  };
 }

@@ -10,7 +10,7 @@ import {
   pageSubtitle,
   details,
 } from "../public/css/component.module.css";
-import { parsePublicKeyCredentialCreateOptions, parseRegisterCredential } from "./utils/parse";
+import { decodePublicKeyCredentialCreateOptions, encodeRegisterCredential } from "./utils/parse";
 import { clearNotificationMessage, setNotificationMessage } from "./utils/notification";
 import { request } from "./utils/network";
 import { WebRTCConnection, WebSocketConnection } from "./utils/webrtc";
@@ -190,10 +190,10 @@ class Register extends LitElement {
 
       if (status === "OK") {
         const credential = await navigator.credentials.create({
-          publicKey: parsePublicKeyCredentialCreateOptions(publicKeyCredentialCreationOptions),
+          publicKey: decodePublicKeyCredentialCreateOptions(publicKeyCredentialCreationOptions),
         });
 
-        this._completeRelyingPartyFlow(registrationId, parseRegisterCredential(credential));
+        this._completeRelyingPartyFlow(registrationId, encodeRegisterCredential(credential));
       }
     } catch (error) {
       setNotificationMessage(error.message, "error");

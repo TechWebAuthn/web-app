@@ -1,0 +1,21 @@
+.inline {
+  display: inline-flex;
+  margin: 0;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.items-row {
+  display: inline-flex;
+  align-items: baseline;
+  max-width: 100%;
+}

@@ -1,67 +1,79 @@
-import { LitElement, html } from "lit";
-import { card, form, notification, pageSubtitle } from "../public/css/component.module.css";
-import { request } from "./utils/network";
+import { LitElement, html, css, unsafeCSS } from "lit";
 import { setNotificationMessage } from "./utils/notification";
-import { encodeLoginCredential, decodePublicKeyCredentialRequestOptions } from "./utils/parse";
 import { hasValidSession } from "./utils/session";
+import "./components/web-authn-login";
+
+import resets from "./styles/resets.css";
+import cards from "./styles/cards.css";
+import forms from "./styles/forms.css";
+import headings from "./styles/headings.css";
+import notifications from "./styles/notifications.css";
 
 class Login extends LitElement {
-  createRenderRoot() {
-    return this;
+  constructor() {
+    super();
+
+    this._onWebAuthnLoginEvent = this._onLoginEvent.bind(this);
+    this._setNotificationMessage = setNotificationMessage.bind(this);
+  }
+
+  static get styles() {
+    return [
+      unsafeCSS(resets),
+      unsafeCSS(cards),
+      unsafeCSS(forms),
+      unsafeCSS(headings),
+      unsafeCSS(notifications),
+      css`
+        web-authn-login::part(input) {
+          box-sizing: border-box;
+        }
+      `,
+    ];
   }
 
   render() {
     return html`
-      <h2 class="${pageSubtitle}">Login</h2>
-      <p id="notification" class="${notification}"></p>
-      <div class="${card}">
-        <form class="${form}" @submit="${this._startLogin}">
-          <label for="username">
-            Username
-            <input type="text" id="username" name="username" required />
-          </label>
-          <button type="submit">Login</button>
-        </form>
+      <h2 class="page-subtitle">Login</h2>
+      <p id="notification" class="notification"></p>
+      <div class="card">
+        <web-authn-login
+          class="form"
+          @assertion-start="${this._onWebAuthnLoginEvent}"
+          @assertion-respond="${this._onWebAuthnLoginEvent}"
+          @assertion-finished="${this._onWebAuthnLoginEvent}"
+          @assertion-error="${this._onWebAuthnLoginEvent}"
+        ></web-authn-login>
       </div>
     `;
   }
 
-  async _startLogin(event) {
-    event.preventDefault();
+  async _onLoginEvent(event) {
+    const { type } = event;
+    let message = event.detail?.message;
+    let notificationType = "info";
 
-    setNotificationMessage("Starting login process", "info");
-
-    const formData = new FormData(event.target);
-    const username = formData.get("username");
-
-    try {
-      const startResponse = await request("/api/assertion/start", {
-        method: "POST",
-        body: username,
-      });
-
-      const { assertionId, publicKeyCredentialRequestOptions } = startResponse;
-
-      const credential = await navigator.credentials.get({
-        publicKey: decodePublicKeyCredentialRequestOptions(publicKeyCredentialRequestOptions),
-      });
-      setNotificationMessage("Validating credentials with server", "info");
-      this._completeLogin(assertionId, encodeLoginCredential(credential));
-    } catch (error) {
-      setNotificationMessage(error.message, "error", false);
+    switch (type) {
+      case "assertion-start":
+        message = "Starting authentication process";
+        break;
+      case "assertion-respond":
+        message = "Validating credentials with server";
+        break;
+      case "assertion-finished":
+        message = "Authentication completed successfuly";
+        notificationType = "success";
+        break;
+      case "assertion-error":
+        message = message || "Authentication could not be completed successfully";
+        notificationType = "error";
+        break;
     }
-  }
 
-  async _completeLogin(assertionId, credential) {
-    try {
-      await request("/api/assertion/finish", {
-        method: "POST",
-        body: JSON.stringify({ assertionId, credential }),
-      });
+    this._setNotificationMessage(message, notificationType);
 
+    if (type === "assertion-finished") {
       await hasValidSession();
-    } catch (error) {
-      setNotificationMessage(error.message, "error", false);
     }
   }
 }

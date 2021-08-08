@@ -1,5 +1,6 @@
-import { LitElement, html } from "lit";
-import { link, nav } from "../../public/css/component.module.css";
+import { LitElement, html, unsafeCSS } from "lit";
+import links from "../styles/links.css";
+import navigations from "../styles/navigations.css";
 
 class AuthNav extends LitElement {
   static get properties() {
@@ -8,13 +9,12 @@ class AuthNav extends LitElement {
     };
   }
 
-  createRenderRoot() {
-    return this;
+  static get styles() {
+    return [unsafeCSS(links), unsafeCSS(navigations)];
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.classList.add(nav);
     window.addEventListener("popstate", () => {
       this._setActiveLink(window.location.pathname);
     });
@@ -26,15 +26,15 @@ class AuthNav extends LitElement {
 
   render() {
     return html`
-      <nav>
+      <nav class="nav">
         <ul>
           ${this.isLoggedIn
-            ? html`<li><a class="${link}" href="/dashboard">🎛️ Dashboard</a></li>`
+            ? html`<li><a class="link" href="/dashboard">🎛️ Dashboard</a></li>`
             : html`
-                <li><a class="${link}" href="/login">🔑 Login</a></li>
-                <li><a class="${link}" href="/register">🚪 Register</a></li>
+                <li><a class="link" href="/login">🔑 Login</a></li>
+                <li><a class="link" href="/register">🚪 Register</a></li>
               `}
-          <li><a class="${link}" href="/stats">📈 Stats</a></li>
+          <li><a class="link" href="/stats">📈 Stats</a></li>
         </ul>
       </nav>
     `;

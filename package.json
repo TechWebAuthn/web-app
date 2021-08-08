@@ -15,9 +15,9 @@
     "bowser": "^2.11.0",
     "lit": "^2.0.0-rc.2",
     "ua-parser-js": "^0.7.28",
-    "vite": "^2.4.2"
+    "vite": "^2.5.0-beta.0"
   },
   "devDependencies": {
-    "vite-plugin-pwa": "^0.8.1"
+    "vite-plugin-pwa": "^0.9.3"
   }
 }

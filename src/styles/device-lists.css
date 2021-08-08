@@ -1,0 +1,25 @@
+.device-list {
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.device-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background-color: var(--canvas-contrast);
+  padding-inline-start: 0.5rem;
+}
+
+.device-list [data-type="icon"] {
+  width: 2rem;
+  text-align: center;
+}
+
+.device-list [data-type="label"] {
+  width: 100%;
+}

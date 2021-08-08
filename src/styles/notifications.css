@@ -1,0 +1,24 @@
+.notification {
+  max-width: 24rem;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  line-height: 1;
+  background-color: var(--canvas-secondary);
+}
+
+.notification:empty {
+  visibility: hidden;
+  min-height: 2rem;
+}
+
+.notification[data-type="success"] {
+  background-color: var(--canvas-success);
+}
+
+.notification[data-type="info"] {
+  background-color: var(--canvas-info);
+}
+
+.notification[data-type="error"] {
+  background-color: var(--canvas-error);
+}

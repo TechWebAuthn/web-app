@@ -1,15 +1,18 @@
-import { LitElement, html } from "lit";
-import { card, pageSubtitle } from "../public/css/component.module.css";
+import { LitElement, html, unsafeCSS } from "lit";
+
+import resets from "./styles/resets.css";
+import cards from "./styles/cards.css";
+import headings from "./styles/headings.css";
 
 class Home extends LitElement {
-  createRenderRoot() {
-    return this;
+  static get styles() {
+    return [unsafeCSS(resets), unsafeCSS(cards), unsafeCSS(headings)];
   }
 
   render() {
     return html`
-      <h2 class="${pageSubtitle}">Welcome!</h2>
-      <div class="${card}">
+      <h2 class="page-subtitle">Welcome!</h2>
+      <div class="card">
         <p>
           This is a basic WebAuth application that makes use of WebRTC to enroll new devices easily,
           without the need for 3rd party apps or services.

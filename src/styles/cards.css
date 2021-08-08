@@ -1,0 +1,17 @@
+.card {
+  padding: 2rem;
+  margin: 1rem;
+  max-width: 24rem;
+  width: 100%;
+  background-color: var(--canvas-secondary);
+  box-shadow: var(--drop-shadow);
+}
+
+.card h3 {
+  margin-block-start: 0;
+  margin-block-end: 1rem;
+}
+
+.card h4 {
+  margin: 1rem 0;
+}

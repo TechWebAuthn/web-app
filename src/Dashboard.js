@@ -1,22 +1,22 @@
-import { LitElement, html } from "lit";
-import {
-  card,
-  codeInput,
-  notification,
-  pageSubtitle,
-  form,
-  details,
-  highlight,
-  deviceList,
-  inline,
-  loader,
-  center,
-  row,
-} from "../public/css/component.module.css";
+import { LitElement, html, unsafeCSS, css } from "lit";
+import { classMap } from 'lit/directives/class-map';
+import UAParser from "ua-parser-js";
 import { request } from "./utils/network";
 import { setNotificationMessage } from "./utils/notification";
 import { logout, getSession } from "./utils/session";
 import { WebRTCConnection, WebSocketConnection } from "./utils/webrtc";
+
+import resets from "./styles/resets.css";
+import cards from "./styles/cards.css";
+import notifications from "./styles/notifications.css";
+import forms from "./styles/forms.css";
+import headings from "./styles/headings.css";
+import codes from "./styles/codes.css";
+import details from "./styles/details.css";
+import highlights from "./styles/highlights.css";
+import layouts from "./styles/layouts.css";
+import deviceLists from "./styles/device-lists.css";
+import loaders from "./styles/loaders.css";
 
 class Dashboard extends LitElement {
   constructor() {
@@ -27,6 +27,7 @@ class Dashboard extends LitElement {
     this._addDeviceInProgress = false;
     this._isRemovingCurrentDevice = false;
     this._deviceIdToRemove = null;
+    this._setNotificationMessage = setNotificationMessage.bind(this);
   }
 
   static get properties() {
@@ -37,8 +38,25 @@ class Dashboard extends LitElement {
     };
   }
 
-  createRenderRoot() {
-    return this;
+  static get styles() {
+    return [
+      unsafeCSS(resets),
+      unsafeCSS(cards),
+      unsafeCSS(notifications),
+      unsafeCSS(forms),
+      unsafeCSS(headings),
+      unsafeCSS(codes),
+      unsafeCSS(details),
+      unsafeCSS(highlights),
+      unsafeCSS(layouts),
+      unsafeCSS(deviceLists),
+      unsafeCSS(loaders),
+      css`
+        .device-list .current {
+          background-color: var(--canvas-success);
+        }
+      `
+    ];
   }
 
   firstUpdated() {
@@ -49,32 +67,32 @@ class Dashboard extends LitElement {
     const { username } = getSession();
 
     return html`
-      <h2 class="${pageSubtitle}">Dashboard</h2>
-      <p id="notification" class="${notification}"></p>
-      <div class="${card}">
-        <h3>Welcome back, <strong class="${highlight}">${username}</strong>!</h3>
+      <h2 class="page-subtitle">Dashboard</h2>
+      <p id="notification" class="notification"></p>
+      <div class="card">
+        <h3>Welcome back, <strong class="highlight">${username}</strong>!</h3>
         ${this._myDevices.length
           ? html`
               <h4>Registered devices</h4>
               ${this._isRemovingCurrentDevice
                 ? html`
-                    <p data-type="error" class="${notification}">
+                    <p data-type="error" class="notification">
                       You are about to remove the current device and will be imediately logged out!
                     </p>
-                    <form class="${form} ${row}" @submit=${this._continueDeleteDevice}>
+                    <form class="form row" @submit=${this._continueDeleteDevice}>
                       <button name="continue">Continue</button>
                       <button name="cancel" data-type="danger">Cancel</button>
                     </form>
                   `
                 : ``}
-              <ul class="${deviceList}">
+              <ul class="device-list">
                 ${this._myDevices.map(
                   (device) =>
                     html`
-                      <li>
+                      <li class="${classMap({current: device.currentDevice})}">
                         <span data-type="icon">${this._getDeviceIcon(device.type)}</span>
                         <span data-type="label">${device.description}</span>
-                        <form @submit="${this._deleteDevice}" class="${form} ${inline}">
+                        <form @submit="${this._deleteDevice}" class="form inline">
                           <input type="hidden" name="id" value=${device.id} />
                           <input type="hidden" name="currentDevice" value=${device.currentDevice} />
                           <button data-type="danger" data-size="small">✖</button>
@@ -85,23 +103,23 @@ class Dashboard extends LitElement {
               </ul>
             `
           : ``}
-        <details class="${details}">
+        <details class="details">
           <summary>Enroll new device</summary>
           ${!this._addDeviceInProgress
             ? html`
-                <form class="${form}" @submit="${this._addNewDevice}">
+                <form class="form" @submit="${this._addNewDevice}">
                   <label for="code">Code</label>
-                  <input class="${codeInput}" id="code" name="code" type="text" required />
+                  <input class="code-input" id="code" name="code" type="text" required />
                   <button>Connect</button>
                 </form>
               `
             : html`
-                <div class="${center}">
-                  <progress class="${loader}" indefinite>Loading</progress>
+                <div class="center">
+                  <progress class="loader" indefinite>Loading</progress>
                 </div>
               `}
         </details>
-        <form class="${form}" @submit="${logout}">
+        <form class="form" @submit="${logout}">
           <button data-type="danger">Logout</button>
         </form>
       </div>
@@ -131,19 +149,19 @@ class Dashboard extends LitElement {
           const { registrationAddToken } = await request("/api/registration/add");
           this.RTC.sendData(`token::${registrationAddToken}`);
         } catch (error) {
-          setNotificationMessage(error.message, "error");
+          this._setNotificationMessage(error.message, "error");
         }
       }
 
       if (type === "action" && data === "cancel") {
         this._addDeviceInProgress = false;
-        setNotificationMessage("The other end cancelled the add device process", "error");
+        this._setNotificationMessage("The other end cancelled the add device process", "error");
       }
 
       if (type === "event" && data === "complete") {
         this._addDeviceInProgress = false;
         this._getMyDevices();
-        setNotificationMessage("A device was successfuly added to this account", "success");
+        this._setNotificationMessage("A device was successfuly added to this account", "success");
       }
     };
   }
@@ -152,16 +170,17 @@ class Dashboard extends LitElement {
     try {
       const devices = await request("/api/devices");
       this._myDevices = devices.map((device) => {
-        const [type, description] = device.userAgent.split(" || ");
-        console.log(type, description);
+        const parsedResult = new UAParser(device.userAgent).getResult();
         return {
           ...device,
-          type,
-          description,
+          type: parsedResult.device.type,
+          description: `${parsedResult.browser.name} ${parsedResult.browser.version.split(".").shift()} :: ${parsedResult.os.name} ${
+            parsedResult.os.version
+          }`,
         };
       });
     } catch (error) {
-      setNotificationMessage("Could not retrieve devices", "error");
+      this._setNotificationMessage("Could not retrieve devices", "error");
     }
   }
 
@@ -202,14 +221,14 @@ class Dashboard extends LitElement {
     if (!action || action === "continue") {
       try {
         await request(`/api/devices/${this._deviceIdToRemove}`, { method: "DELETE" });
-        setNotificationMessage("Device successfuly removed from account", "success");
+        this._setNotificationMessage("Device successfuly removed from account", "success");
         if (this._isRemovingCurrentDevice) {
           logout();
         } else {
           this._getMyDevices();
         }
       } catch (error) {
-        setNotificationMessage("Could not remove device", "error");
+        this._setNotificationMessage("Could not remove device", "error");
       }
     }
 

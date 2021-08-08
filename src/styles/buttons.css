@@ -1,0 +1,11 @@
+.icon-button {
+  border: none;
+  aspect-ratio: 1;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  background-color: var(--button-canvas-secondary);
+}
+
+.icon-button:active {
+  filter: contrast(0.75) brightness(1.25);
+}

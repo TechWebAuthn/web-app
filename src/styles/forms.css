@@ -1,0 +1,53 @@
+.form,
+.form::part(form) {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+  gap: 1rem;
+}
+
+.form::part(hidden) {
+  display: none;
+}
+
+.form label,
+.form::part(label) {
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.form input,
+.form::part(input) {
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  max-width: 100%;
+  width: 100%;
+  background-color: var(--canvas-primary);
+  color: var(--text-primary);
+  border: 2px solid var(--button-canvas-primary);
+}
+
+.form button,
+.form::part(button) {
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  border: 2px solid var(--button-canvas-primary);
+  background-color: var(--button-canvas-primary);
+  color: var(--button-text-primary);
+}
+
+.form button:active,
+.form::part(button):active {
+  filter: contrast(0.75) brightness(1.25);
+}
+
+.form button[data-type="danger"],
+.form::part(cancel-button) {
+  background-color: var(--button-canvas-danger);
+  border-color: var(--button-canvas-danger);
+}
+
+.form button[data-size="small"] {
+  padding: 0.25rem 0.5rem;
+}

@@ -1,5 +1,11 @@
-import { LitElement, html } from "lit";
-import { notification, stats, card, pageSubtitle } from "../public/css/component.module.css";
+import { LitElement, html, unsafeCSS } from "lit";
+import { setNotificationMessage } from "./utils/notification";
+
+import resets from "./styles/resets.css";
+import cards from "./styles/cards.css";
+import headings from "./styles/headings.css";
+import stats from "./styles/stats.css";
+import notifications from "./styles/notifications.css";
 
 const statsMap = {
   login: "Logged in",
@@ -11,6 +17,7 @@ class Stats extends LitElement {
     super();
     this.stats = { login: 0, register: 0 };
     this._statsDirection = { login: "⏳", register: "⏳" };
+    this._setNotificationMessage = setNotificationMessage.bind(this);
   }
 
   static get properties() {
@@ -19,8 +26,14 @@ class Stats extends LitElement {
     };
   }
 
-  createRenderRoot() {
-    return this;
+  static get styles() {
+    return [
+      unsafeCSS(resets),
+      unsafeCSS(cards),
+      unsafeCSS(headings),
+      unsafeCSS(stats),
+      unsafeCSS(notifications),
+    ];
   }
 
   firstUpdated() {
@@ -33,10 +46,10 @@ class Stats extends LitElement {
 
   render() {
     return html`
-      <h2 class="${pageSubtitle}">Stats</h2>
-      <p id="status" class="${notification}"></p>
-      <div class="${card}">
-        <dl class="${stats}">
+      <h2 class="page-subtitle">Stats</h2>
+      <p id="notification" class="notification"></p>
+      <div class="card">
+        <dl class="stats">
           ${Object.keys(this.stats).map(
             (key) => html`
               <dt>${statsMap[key]}</dt>
@@ -57,10 +70,11 @@ class Stats extends LitElement {
     this._sseConnection.addEventListener("logout", this._updateStats.bind(this));
     this._sseConnection.addEventListener("register", this._updateStats.bind(this));
     this._sseConnection.onopen = () =>
-      this._updateStatusMessage("Connection established", "success");
-    this._sseConnection.onclose = () => this._updateStatusMessage("Connection closed", "info");
+      this._setNotificationMessage("Connection established", "success", false);
+    this._sseConnection.onclose = () =>
+      this._setNotificationMessage("Connection closed", "info", false);
     this._sseConnection.onerror = () =>
-      this._updateStatusMessage("Connection could not be established", "error");
+      this._setNotificationMessage("Connection could not be established", "error", false);
   }
 
   _updateStats(event) {
@@ -69,14 +83,8 @@ class Stats extends LitElement {
       this._updateStatsDirection({ ...this.stats }, newData, event.type);
       this.stats = { ...this.stats, ...newData };
     } catch (e) {
-      this._updateStatusMessage("Something went wrong", "error");
+      this._setNotificationMessage("Something went wrong", "error");
     }
-  }
-
-  _updateStatusMessage(message, type) {
-    const messageContainer = document.getElementById("status");
-    messageContainer.textContent = message;
-    messageContainer.dataset.type = type;
   }
 
   _updateStatsDirection(oldData, newData, eventType) {

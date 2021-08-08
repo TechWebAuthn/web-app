@@ -30,12 +30,13 @@ export function arrayBufferToBase64UrlString(arrayBuffer) {
 }
 
 /**
- * @param {Credential} credential
+ * @param {Credential} credential PublicKeyCredential instance
  * @returns {Credential} Encoded Credential from ArrayBuffer to Base64URLString
  */
 export function encodeRegisterCredential(credential) {
   return {
-    ...credential,
+    id: credential.id,
+    type: credential.type,
     rawId: arrayBufferToBase64UrlString(credential.rawId),
     response: {
       attestationObject: arrayBufferToBase64UrlString(credential.response.attestationObject),
@@ -46,12 +47,13 @@ export function encodeRegisterCredential(credential) {
 }
 
 /**
- * @param {Credential} credential
+ * @param {Credential} credential PublicKeyCredential instance
  * @returns {Credential} Encoded Credential from ArrayBuffer to Base64URLString
  */
 export function encodeLoginCredential(credential) {
   return {
-    ...credential,
+    id: credential.id,
+    type: credential.type,
     rawId: arrayBufferToBase64UrlString(credential.rawId),
     response: {
       authenticatorData: arrayBufferToBase64UrlString(credential.response.authenticatorData),

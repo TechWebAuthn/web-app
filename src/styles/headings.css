@@ -1,0 +1,11 @@
+.page-title {
+  text-align: center;
+  margin: 0 4rem;
+  padding-block-start: 1rem;
+  padding-block-end: 1rem;
+}
+
+.page-subtitle {
+  font-size: 2rem;
+  margin: 1.75rem 0 0.5rem;
+}

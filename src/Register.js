@@ -1,19 +1,22 @@
-import { LitElement, html } from "lit";
-import UAParser from "ua-parser-js";
-import {
-  card,
-  form,
-  code,
-  notification,
-  iconButton,
-  itemsRow,
-  pageSubtitle,
-  details,
-} from "../public/css/component.module.css";
+import { LitElement, html, unsafeCSS, css } from "lit";
 import { decodePublicKeyCredentialCreateOptions, encodeRegisterCredential } from "./utils/parse";
 import { clearNotificationMessage, setNotificationMessage } from "./utils/notification";
 import { request } from "./utils/network";
 import { WebRTCConnection, WebSocketConnection } from "./utils/webrtc";
+import "./components/web-authn-register";
+import "./components/web-authn-recover";
+import "./components/web-authn-enroll";
+
+import resets from "./styles/resets.css";
+import cards from "./styles/cards.css";
+import forms from "./styles/forms.css";
+import codes from "./styles/codes.css";
+import notifications from "./styles/notifications.css";
+import headings from "./styles/headings.css";
+import details from "./styles/details.css";
+import buttons from "./styles/buttons.css";
+import layouts from "./styles/layouts.css";
+import loaders from "./styles/loaders.css";
 
 class Register extends LitElement {
   constructor() {
@@ -23,10 +26,12 @@ class Register extends LitElement {
     this._isRegisterFlow = true;
     this._isRecoveryFlow = false;
     this._isAddFlow = false;
-    this._addFlowCode = "";
-    this._addFlowUser = "";
 
     this.RTC = null;
+
+    this._onWebAuthnRegisterEvent = this._onRegisterEvent.bind(this);
+    this._onWebAuthnRecoverEvent = this._onRecoverEvent.bind(this);
+    this._setNotificationMessage = setNotificationMessage.bind(this);
   }
 
   static get properties() {
@@ -36,96 +41,103 @@ class Register extends LitElement {
       _isRegisterFlow: Boolean,
       _isRecoveryFlow: Boolean,
       _isAddFlow: Boolean,
-      _addFlowCode: String,
-      _addFlowUser: String,
+      _showAddFlowLoader: Boolean,
     };
   }
 
-  createRenderRoot() {
-    return this;
+  static get styles() {
+    return [
+      unsafeCSS(resets),
+      unsafeCSS(cards),
+      unsafeCSS(forms),
+      unsafeCSS(codes),
+      unsafeCSS(notifications),
+      unsafeCSS(headings),
+      unsafeCSS(details),
+      unsafeCSS(buttons),
+      unsafeCSS(layouts),
+      unsafeCSS(loaders),
+      css`
+        web-authn-register::part(input),
+        web-authn-recover::part(input),
+        web-authn-enroll::part(code) {
+          box-sizing: border-box;
+        }
+      `,
+    ];
   }
 
   firstUpdated() {
-    this.querySelectorAll("summary").forEach((summary) =>
-      summary.addEventListener("click", this._setFlow.bind(this))
-    );
+    this.shadowRoot
+      .querySelectorAll("summary")
+      .forEach((summary) => summary.addEventListener("click", this._setFlow.bind(this)));
   }
 
   render() {
     return html`
-      <h2 class="${pageSubtitle}">Register</h2>
-      <p id="notification" class="${notification}"></p>
-      <div class="${card}">
-        <details class="${details}" data-type="register" .open=${this._isRegisterFlow}>
+      <h2 class="page-subtitle">Register</h2>
+      <p id="notification" class="notification"></p>
+      <div class="card">
+        <details class="details" data-type="register" .open=${this._isRegisterFlow}>
           <summary>Register a new account</summary>
           ${this._isRegisterFlow && !this._isCurrentFlowComplete
             ? html`
-                <form class="${form}" @submit="${this._startRelyingPartyFlow}">
-                  <label for="username">
-                    Username
-                    <input type="text" id="username" name="username" required />
-                  </label>
-                  <button type="submit">Register</button>
-                </form>
+                <web-authn-register
+                  class="form"
+                  @registration-start="${this._onWebAuthnRegisterEvent}"
+                  @registration-respond="${this._onWebAuthnRegisterEvent}"
+                  @registration-finished="${this._onWebAuthnRegisterEvent}"
+                  @registration-error="${this._onWebAuthnRegisterEvent}"
+                ></web-authn-register>
               `
             : html`
                 <p>Your recovery token is:</p>
-                <p class="${itemsRow}">
-                  <code class="${code}">${this._recoveryToken}</code
-                  ><button @click="${this._copyRecoveryTokenToClipboard}" class="${iconButton}">
-                    📋
-                  </button>
+                <p class="items-row">
+                  <code class="code">${this._recoveryToken}</code
+                  ><button @click="${this._copyRecoveryTokenToClipboard}" class="icon-button">📋</button>
                 </p>
                 <p>⚠️ Be sure to save it in a safe and secure place.</p>
               `}
         </details>
-        <details class="${details}" data-type="recover" .open="${this._isRecoveryFlow}">
+        <details class="details" data-type="recover" .open="${this._isRecoveryFlow}">
           <summary>Recover account access</summary>
           ${this._isRecoveryFlow && !this._isCurrentFlowComplete
             ? html`
-                <form class="${form}" @submit="${this._startRelyingPartyFlow}">
-                  <label for="recoveryToken">
-                    Recovery token
-                    <input type="text" id="recoveryToken" name="recoveryToken" required />
-                  </label>
-                  <button type="submit">Recover</button>
-                </form>
+                <web-authn-recover
+                  class="form"
+                  @recovery-start="${this._onRecoverEvent}"
+                  @recovery-respond="${this._onRecoverEvent}"
+                  @recovery-finished="${this._onRecoverEvent}"
+                  @recovery-error="${this._onRecoverEvent}"
+                ></web-authn-recover>
               `
             : html`
                 <p>Your account has been successfuly recovered on this device!</p>
-                <p>Your recovery token is:</p>
-                <p class="${itemsRow}">
-                  <code class="${code}">${this._recoveryToken}</code
-                  ><button @click="${this._copyRecoveryTokenToClipboard}" class="${iconButton}">
-                    📋
-                  </button>
+                <p>Your new recovery token is:</p>
+                <p class="items-row">
+                  <code class="code">${this._recoveryToken}</code
+                  ><button @click="${this._copyRecoveryTokenToClipboard}" class="icon-button">📋</button>
                 </p>
                 <p>⚠️ Be sure to save it in a safe and secure place.</p>
               `}
         </details>
-        <details class="${details}" data-type="add" .open="${this._isAddFlow}">
+        <details class="details" data-type="add" .open="${this._isAddFlow}">
           <summary>Add device to existing account</summary>
           ${this._isAddFlow && !this._isCurrentFlowComplete
-            ? html`
-                ${!this._addFlowUser
-                  ? html`
-                      <form class="${form}" @submit="${this._startExternalConnection}">
-                        <button type="submit">Generate code</button>
-                        <p .hidden="${!this._addFlowCode}">
-                          <code data-size="full" class="${code}">${this._addFlowCode}</code>
-                        </p>
-                      </form>
-                    `
-                  : html`
-                      <form class="${form}" @submit="${this._startEnrollmentFlow}">
-                        <button>Add device to ${this._addFlowUser}'s account</button>
-                        <button data-type="danger" @click="${this._cancelEnrollmentFlow}">
-                          Cancel
-                        </button>
-                      </form>
-                    `}
-              `
-            : html`<p>This device has been successfuly added to an existing account!</p>`}
+            ? !this._showAddFlowLoader
+              ? html`
+                  <web-authn-enroll
+                    class="form"
+                    @enrollment-request-code="${this._startExternalConnection}"
+                    @enrollment-start="${this._onEnrollmentEvent}"
+                    @enrollment-respond="${this._onEnrollmentEvent}"
+                    @enrollment-finished="${this._onEnrollmentEvent}"
+                    @enrollment-error="${this._onEnrollmentEvent}"
+                    @enrollment-canceled="${this._cancelEnrollmentFlow}"
+                  ></web-authn-enroll>
+                `
+              : html`<div class="center"><progress class="loader" indeterminate></progress></div>`
+            : html` <p>Your device has been successfuly added to another account!</p> `}
         </details>
       </div>
     `;
@@ -155,121 +167,130 @@ class Register extends LitElement {
     }
   }
 
-  async _startRelyingPartyFlow(event) {
-    event.preventDefault();
+  async _onRegisterEvent(event) {
+    const { type } = event;
+    let message = event.detail?.message;
+    let notificationType = "info";
 
-    let formData;
-    let body = {};
-
-    if (event.target instanceof HTMLFormElement) {
-      formData = new FormData(event.target);
+    switch (type) {
+      case "registration-start":
+        message = "Starting registration process";
+        break;
+      case "registration-respond":
+        message = "Validating credentials with server";
+        break;
+      case "registration-finished":
+        message = "Registration completed successfuly";
+        notificationType = "success";
+        this._recoveryToken = event.detail?.recoveryToken;
+        this._isCurrentFlowComplete = true;
+        break;
+      case "registration-error":
+        if (message === "USERNAME_TAKEN") {
+          message = "Username is already taken";
+        } else {
+          message = "Registration could not be successfully completed";
+        }
+        notificationType = "error";
+        break;
     }
 
-    if (this._isRegisterFlow) {
-      setNotificationMessage("Starting registration process", "info");
-      body.username = formData.get("username");
-    }
-
-    if (this._isRecoveryFlow) {
-      setNotificationMessage("Starting recovery process", "info");
-      body.recoveryToken = formData.get("recoveryToken");
-    }
-
-    if (this._isAddFlow) {
-      setNotificationMessage("Starting add new device process", "info");
-      body.registrationAddToken = event.detail.token;
-    }
-
-    try {
-      const startResponse = await request("/api/registration/start", {
-        method: "POST",
-        body: JSON.stringify(body),
-      });
-
-      const { status, registrationId, publicKeyCredentialCreationOptions } = startResponse;
-
-      if (status === "OK") {
-        const credential = await navigator.credentials.create({
-          publicKey: decodePublicKeyCredentialCreateOptions(publicKeyCredentialCreationOptions),
-        });
-
-        this._completeRelyingPartyFlow(registrationId, encodeRegisterCredential(credential));
-      }
-    } catch (error) {
-      setNotificationMessage(error.message, "error");
-    }
+    this._setNotificationMessage(message, notificationType);
   }
 
-  async _completeRelyingPartyFlow(registrationId, credential) {
-    let successMessage = "";
+  async _onRecoverEvent(event) {
+    const { type } = event;
+    let message = event.detail?.message;
+    let notificationType = "info";
 
-    try {
-      const parsedResult = new UAParser().getResult();
-      const userAgent = `${parsedResult.device.type} || ${
-        parsedResult.browser.name
-      } ${parsedResult.browser.version.split(".").shift()} :: ${parsedResult.os.name} ${
-        parsedResult.os.version
-      }`;
-
-      const finishResponse = await request("/api/registration/finish", {
-        method: "POST",
-        body: JSON.stringify({ registrationId, credential, userAgent }),
-      });
-
-      this._recoveryToken = finishResponse.recoveryToken;
-      this._isCurrentFlowComplete = true;
-
-      if (this._isRegisterFlow) {
-        successMessage = "Account successfuly created!";
-      }
-
-      if (this._isRecoveryFlow) {
-        successMessage = "Account successfuly recovered on this device!";
-      }
-
-      if (this._isAddFlow) {
-        successMessage = "Device successfuly added to an existing account!";
-        this.RTC.dataChannel.send("event::complete");
-      }
-
-      setNotificationMessage(successMessage, "success");
-    } catch (error) {
-      setNotificationMessage(error.message, "error");
+    switch (type) {
+      case "recovery-start":
+        message = "Starting recovery process";
+        break;
+      case "recovery-respond":
+        message = "Validating credentials with server";
+        break;
+      case "recovery-finished":
+        message = "Recovery completed successfuly";
+        notificationType = "success";
+        this._recoveryToken = event.detail?.recoveryToken;
+        this._isCurrentFlowComplete = true;
+        break;
+      case "recovery-error":
+        message = message || "Recovery could not be successfully completed";
+        notificationType = "error";
+        break;
     }
+
+    this._setNotificationMessage(message, notificationType);
+  }
+
+  async _onEnrollmentEvent(event) {
+    const { type } = event;
+    let message = event.detail?.message;
+    let notificationType = "info";
+
+    switch (type) {
+      case "enrollment-request-code":
+        message = "Generating enrollment code";
+        this._startExternalConnection();
+      case "enrollment-start":
+        message = "Starting enrollment process";
+        this._startEnrollmentFlow();
+        break;
+      case "enrollment-respond":
+        message = "Validating credentials with server";
+        break;
+      case "enrollment-finished":
+        message = "Enrollment completed successfuly";
+        notificationType = "success";
+        this._isCurrentFlowComplete = true;
+        this.RTC.dataChannel.send("event::complete");
+        this._showAddFlowLoader = false;
+        break;
+      case "enrollment-error":
+        message = message || "Enrollment could not be successfully completed";
+        notificationType = "error";
+        this._showAddFlowLoader = false;
+        break;
+    }
+
+    this._setNotificationMessage(message, notificationType);
   }
 
   async _copyRecoveryTokenToClipboard() {
     await navigator.clipboard.writeText(this._recoveryToken);
-    setNotificationMessage("Recovery token copied to clipboard", "info");
+    this._setNotificationMessage("Recovery token copied to clipboard", "info");
   }
 
-  _startExternalConnection(event) {
-    event.preventDefault();
-
+  _startExternalConnection() {
     this.RTC?.close();
     clearNotificationMessage();
+    const enrollmentComponent = this.shadowRoot.querySelector("web-authn-enroll");
 
     this.RTC = new WebRTCConnection(new WebSocketConnection("/api/socket"));
     this.RTC.createDataChannel();
     this.RTC.oncode = (code) => {
-      this._addFlowCode = code;
+      enrollmentComponent.peerCode = code;
     };
     this.RTC.onuser = async (user) => {
       await this.RTC.createOffer();
-      setNotificationMessage(`User ${user} wants to claim this device`, "info", false);
-      this._addFlowUser = user;
+      this._setNotificationMessage(`User ${user} wants to claim this device`, "info", false);
+      enrollmentComponent.confirmButtonText = `Add device to ${user}'s account`;
+      enrollmentComponent.dispatchEvent(new CustomEvent("enrollment-confirm-code"));
     };
   }
 
-  _startEnrollmentFlow(event) {
-    event.preventDefault();
+  _startEnrollmentFlow() {
+    const enrollmentComponent = this.shadowRoot.querySelector("web-authn-enroll");
+    this._showAddFlowLoader = true;
 
     this.RTC.sendData("action::add");
     this.RTC.ondatachannelmessage = (event) => {
       const [type, data] = event.data.split("::");
 
       if (type === "token") {
-        this._startRelyingPartyFlow(new CustomEvent("add-device", { detail: { token: data } }));
+        enrollmentComponent.registrationAddToken = data;
       }
     };
     this.RTC.listenForData();
@@ -279,11 +300,8 @@ class Register extends LitElement {
     event.preventDefault();
 
     this.RTC.sendData("action::cancel");
-
     this.RTC?.close();
-    clearNotificationMessage();
-    this._addFlowCode = "";
-    this._addFlowUser = "";
+    clearNotificationMessage(this.shadowRoot.getElementById("notification"));
   }
 }
 

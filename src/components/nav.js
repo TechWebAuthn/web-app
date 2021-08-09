@@ -41,7 +41,7 @@ class AuthNav extends LitElement {
   }
 
   _setActiveLink(path) {
-    const links = this.querySelectorAll("a[href]");
+    const links = this.shadowRoot.querySelectorAll("a[href]");
     links.forEach((link) => {
       if (new URL(link.href).pathname === path) link.dataset.active = "";
       else delete link.dataset.active;

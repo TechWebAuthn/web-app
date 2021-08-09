@@ -43,8 +43,8 @@ export class WebRTCConnection {
     signaling,
     options = {
       iceServers: [
-        { url: "stun:stun.services.mozilla.com" },
-        { url: "turn:145.239.89.145", username: "auth", credential: "s3cre7" },
+        { urls: "stun:stun.services.mozilla.com" },
+        { urls: "turn:145.239.89.145", username: "auth", credential: "s3cre7" },
       ],
     }
   ) {
@@ -122,7 +122,7 @@ export class WebRTCConnection {
       });
       this.peerConnection.setLocalDescription(offer);
     } catch (error) {
-      console.log("RTC Offer", error);
+      console.info("RTC Offer", error);
     }
   }
 
@@ -138,7 +138,7 @@ export class WebRTCConnection {
         data: answer,
       });
     } catch (error) {
-      console.log("RTC Answer", error);
+      console.info("RTC Answer", error);
     }
   }
 

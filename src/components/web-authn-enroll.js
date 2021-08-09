@@ -7,6 +7,7 @@ export class WebAuthnEnroll extends HTMLElement {
     this._onRequestFormSubmitListener = this._onRequestFormSubmit.bind(this);
     this._onConfirmFormSubmitListener = this._onConfirmFormSubmit.bind(this);
     this._onConfirmFormResetListener = this._onConfirmFormReset.bind(this);
+    this._onAcceptUserAgreementListener = this._onAcceptUserAgreement.bind(this);
     this._onConfirmCodeListener = this._onConfirmCode.bind(this);
     this.enrollmentStartUrl = "/api/registration/start";
     this.enrollmentFinishUrl = "/api/registration/finish";
@@ -20,7 +21,14 @@ export class WebAuthnEnroll extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["request-button-text", "confirm-button-text", "cancel-button-text", "peer-code", "registration-add-token"];
+    return [
+      "request-button-text",
+      "confirm-button-text",
+      "agreement-text",
+      "cancel-button-text",
+      "peer-code",
+      "registration-add-token",
+    ];
   }
 
   connectedCallback() {
@@ -28,14 +36,16 @@ export class WebAuthnEnroll extends HTMLElement {
     this.root.querySelector("#request-form").addEventListener("submit", this._onRequestFormSubmitListener);
     this.root.querySelector("#confirm-form").addEventListener("submit", this._onConfirmFormSubmitListener);
     this.root.querySelector("#confirm-form").addEventListener("reset", this._onConfirmFormResetListener);
-    this.addEventListener("enrollment-confirm-code", this._onConfirmCodeListener);
+    this.root.querySelector("#user-agreement").addEventListener("change", this._onAcceptUserAgreementListener);
+    this.addEventListener("enrollment-code-confirmed", this._onConfirmCodeListener);
   }
 
   disconnectedCallback() {
     this.root.querySelector("#request-form").removeEventListener("submit", this._onRequestFormSubmitListener);
     this.root.querySelector("#confirm-form").removeEventListener("submit", this._onConfirmFormSubmitListener);
     this.root.querySelector("#confirm-form").removeEventListener("reset", this._onConfirmFormResetListener);
-    this.removeEventListener("enrollment-confirm-code", this._onConfirmCodeListener);
+    this.root.querySelector("#user-agreement").removeEventListener("change", this._onAcceptUserAgreementListener);
+    this.removeEventListener("enrollment-code-confirmed", this._onConfirmCodeListener);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -45,6 +55,7 @@ export class WebAuthnEnroll extends HTMLElement {
     const requestButton = this.root.querySelector("#request-form button");
     const confirmButton = this.root.querySelector("#confirm-form button[type=submit]");
     const cancelButton = this.root.querySelector("#confirm-form button[type=reset]");
+    const agreementLabel = this.root.querySelector("#confirm-form label span");
     const code = this.root.querySelector("code");
 
     switch (name) {
@@ -56,6 +67,9 @@ export class WebAuthnEnroll extends HTMLElement {
         break;
       case "cancel-button-text":
         cancelButton.textContent = newValue || this.cancelButtonText;
+        break;
+      case "agreement-text":
+        agreementLabel.textContent = newValue || this.agreementText;
         break;
       case "peer-code":
         code.textContent = newValue;
@@ -75,6 +89,10 @@ export class WebAuthnEnroll extends HTMLElement {
           <code part="code hidden" hidden>${this.peerCode}</code>
         </form>
         <form id="confirm-form" part="form hidden" hidden>
+          <label part="label" for="user-agreement">
+            <input part="checkbox" id="user-agreement" type="checkbox" required>
+            <span>${this.agreementText}</span>
+          </label>
           <button part="button confirm-button" type="submit">${this.confirmButtonText}</button>
           <button part="button cancel-button" type="reset">${this.cancelButtonText}</button>
         </form>
@@ -101,7 +119,7 @@ export class WebAuthnEnroll extends HTMLElement {
   }
 
   get confirmButtonText() {
-    return this.getAttribute("confirm-button-text") || "Add device to another account";
+    return this.getAttribute("confirm-button-text") || "Add device";
   }
 
   set confirmButtonText(value) {
@@ -114,6 +132,14 @@ export class WebAuthnEnroll extends HTMLElement {
 
   set cancelButtonText(value) {
     this.setAttribute("cancel-button-text", value);
+  }
+
+  get agreementText() {
+    return this.getAttribute("agreement-text") || "I understand that this device will be added to another account";
+  }
+
+  set agreementText(value) {
+    this.setAttribute("agreement-text", value);
   }
 
   get peerCode() {
@@ -164,11 +190,10 @@ export class WebAuthnEnroll extends HTMLElement {
 
   _onRequestFormSubmit(event) {
     event.preventDefault();
-    this.dispatchEvent(new CustomEvent("enrollment-request-code"));
+    this.dispatchEvent(new CustomEvent("enrollment-code-requested"));
   }
 
   _onConfirmCode() {
-    this.dispatchEvent(new CustomEvent("enrollment-code-received"));
     this.root.querySelector("#request-form").hidden = true;
     this.root.querySelector("#request-form").part.add("hidden");
     this.root.querySelector("#confirm-form").hidden = false;
@@ -185,13 +210,23 @@ export class WebAuthnEnroll extends HTMLElement {
     this.root.querySelector("#confirm-form").part.add("hidden");
   }
 
-  _onConfirmFormSubmit(event) {
-    event.preventDefault();
-    this.dispatchEvent(new CustomEvent("enrollment-start"));
+  _onAcceptUserAgreement(event) {
+    if (event.target.checked) {
+      this.dispatchEvent(new CustomEvent("enrollment-agreement-accepted"));
+    } else {
+      this.dispatchEvent(new CustomEvent("enrollment-agreement-declined"));
+    }
   }
 
-  async _onRegistrationAddToken() {
+  _onRegistrationAddToken() {
+    this.dispatchEvent(new CustomEvent("enrollment-registration-token-received"));
+  }
+
+  async _onConfirmFormSubmit(event) {
+    event.preventDefault();
     if (!this.registrationAddToken) return;
+
+    this.dispatchEvent(new CustomEvent("enrollment-start"));
 
     try {
       const startResponse = await fetch(this.enrollmentStartUrl, {

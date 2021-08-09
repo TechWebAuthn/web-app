@@ -41,7 +41,8 @@
     margin: 0;
     width: 100%;
     justify-content: space-evenly;
-    gap: 1px;
+    gap: 0;
+    box-shadow: var(--drop-shadow-upwards);
   }
 
   .nav li,
@@ -53,13 +54,5 @@
     background-color: var(--canvas-secondary);
     text-align: center;
     font-size: 4vw;
-  }
-
-  .nav a:not([data-active]) {
-    box-shadow: var(--drop-shadow-upwards);
-  }
-
-  .nav a[data-active] {
-    background-color: var(--canvas-primary);
   }
 }

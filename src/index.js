@@ -67,6 +67,7 @@ class AuthApp extends LitElement {
           display: flex;
           flex-direction: column;
           align-items: center;
+          padding-block-end: 4rem;
         }
 
         theme-toggle {

@@ -1,10 +1,11 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
-import { classMap } from 'lit/directives/class-map';
+import { classMap } from "lit/directives/class-map";
 import UAParser from "ua-parser-js";
 import { request } from "./utils/network";
 import { setNotificationMessage } from "./utils/notification";
 import { logout, getSession } from "./utils/session";
 import { WebRTCConnection, WebSocketConnection } from "./utils/webrtc";
+import "./components/web-authn-connect";
 
 import resets from "./styles/resets.css";
 import cards from "./styles/cards.css";
@@ -52,10 +53,21 @@ class Dashboard extends LitElement {
       unsafeCSS(deviceLists),
       unsafeCSS(loaders),
       css`
+        [hidden] {
+          display: none;
+        }
+
         .device-list .current {
           background-color: var(--canvas-success);
         }
-      `
+
+        web-authn-connect::part(input) {
+          box-sizing: border-box;
+          text-align: center;
+          font-family: monospace;
+          text-transform: uppercase;
+        }
+      `,
     ];
   }
 
@@ -89,7 +101,7 @@ class Dashboard extends LitElement {
                 ${this._myDevices.map(
                   (device) =>
                     html`
-                      <li class="${classMap({current: device.currentDevice})}">
+                      <li class="${classMap({ current: device.currentDevice })}">
                         <span data-type="icon">${this._getDeviceIcon(device.type)}</span>
                         <span data-type="label">${device.description}</span>
                         <form @submit="${this._deleteDevice}" class="form inline">
@@ -105,19 +117,16 @@ class Dashboard extends LitElement {
           : ``}
         <details class="details">
           <summary>Enroll new device</summary>
-          ${!this._addDeviceInProgress
-            ? html`
-                <form class="form" @submit="${this._addNewDevice}">
-                  <label for="code">Code</label>
-                  <input class="code-input" id="code" name="code" type="text" required />
-                  <button>Connect</button>
-                </form>
-              `
-            : html`
-                <div class="center">
-                  <progress class="loader" indefinite>Loading</progress>
-                </div>
-              `}
+          <web-authn-connect
+            ?hidden=${this._addDeviceInProgress}
+            class="form"
+            @connection-start="${this._onConnectEvent}"
+            @connection-finished="${this._onConnectEvent}"
+            @connection-error="${this._onConnectEvent}"
+          ></web-authn-connect>
+          <div class="center" ?hidden=${!this._addDeviceInProgress}>
+            <progress class="loader" indefinite>Loading</progress>
+          </div>
         </details>
         <form class="form" @submit="${logout}">
           <button data-type="danger">Logout</button>
@@ -126,14 +135,34 @@ class Dashboard extends LitElement {
     `;
   }
 
-  async _addNewDevice(event) {
-    event.preventDefault();
+  async _onConnectEvent(event) {
+    const { type } = event;
+    let message = event.detail?.message;
+    let notificationType = "info";
 
+    switch (type) {
+      case "connection-start":
+        message = "Starting connection to peer";
+        this._initiateConnectionToPeer(event.detail?.code);
+        break;
+      case "connection-finished":
+        message = "Sending registration add token";
+        this.RTC.sendData(`token::${event.detail?.registrationAddToken}`);
+        break;
+      case "connection-error":
+        message = message || "Connection could not be successfully completed";
+        notificationType = "error";
+        break;
+    }
+
+    this._setNotificationMessage(message, notificationType);
+  }
+
+  async _initiateConnectionToPeer(peerCode = "") {
     this.RTC?.close();
 
-    const formData = new FormData(event.target);
-    const rawCode = formData.get("code");
-    const code = rawCode.toUpperCase();
+    const webAuthnConnect = this.shadowRoot.querySelector("web-authn-connect");
+    const code = peerCode.toUpperCase();
 
     this._addDeviceInProgress = true;
 
@@ -145,12 +174,7 @@ class Dashboard extends LitElement {
       const [type, data] = event.data.split("::");
 
       if (type === "action" && data === "add") {
-        try {
-          const { registrationAddToken } = await request("/api/registration/add");
-          this.RTC.sendData(`token::${registrationAddToken}`);
-        } catch (error) {
-          this._setNotificationMessage(error.message, "error");
-        }
+        webAuthnConnect.dispatchEvent(new CustomEvent("connection-request-registration-token"));
       }
 
       if (type === "action" && data === "cancel") {
@@ -161,6 +185,7 @@ class Dashboard extends LitElement {
       if (type === "event" && data === "complete") {
         this._addDeviceInProgress = false;
         this._getMyDevices();
+        this.shadowRoot.querySelector("details").open = false;
         this._setNotificationMessage("A device was successfuly added to this account", "success");
       }
     };
@@ -174,9 +199,9 @@ class Dashboard extends LitElement {
         return {
           ...device,
           type: parsedResult.device.type,
-          description: `${parsedResult.browser.name} ${parsedResult.browser.version.split(".").shift()} :: ${parsedResult.os.name} ${
-            parsedResult.os.version
-          }`,
+          description: `${parsedResult.browser.name} ${parsedResult.browser.version.split(".").shift()} :: ${
+            parsedResult.os.name
+          } ${parsedResult.os.version}`,
         };
       });
     } catch (error) {

@@ -128,12 +128,13 @@ class Register extends LitElement {
               ? html`
                   <web-authn-enroll
                     class="form"
-                    @enrollment-request-code="${this._startExternalConnection}"
+                    @enrollment-code-requested="${this._onEnrollmentEvent}"
+                    @enrollment-agreement-accepted="${this._onEnrollmentEvent}"
                     @enrollment-start="${this._onEnrollmentEvent}"
                     @enrollment-respond="${this._onEnrollmentEvent}"
                     @enrollment-finished="${this._onEnrollmentEvent}"
                     @enrollment-error="${this._onEnrollmentEvent}"
-                    @enrollment-canceled="${this._cancelEnrollmentFlow}"
+                    @enrollment-canceled="${this._onEnrollmentEvent}"
                   ></web-authn-enroll>
                 `
               : html`<div class="center"><progress class="loader" indeterminate></progress></div>`
@@ -231,12 +232,16 @@ class Register extends LitElement {
     let notificationType = "info";
 
     switch (type) {
-      case "enrollment-request-code":
+      case "enrollment-code-requested":
         message = "Generating enrollment code";
         this._startExternalConnection();
+        break;
+      case "enrollment-agreement-accepted":
+        this._requestRegistrationAddToken();
+        break;
       case "enrollment-start":
         message = "Starting enrollment process";
-        this._startEnrollmentFlow();
+        this._showAddFlowLoader = true;
         break;
       case "enrollment-respond":
         message = "Validating credentials with server";
@@ -248,10 +253,15 @@ class Register extends LitElement {
         this.RTC.dataChannel.send("event::complete");
         this._showAddFlowLoader = false;
         break;
+      case "enrollment-canceled":
+        message = message || "Enrollment has been canceled";
+        notificationType = "error";
+        this._cancelEnrollmentFlow();
+        break;
       case "enrollment-error":
         message = message || "Enrollment could not be successfully completed";
         notificationType = "error";
-        this._showAddFlowLoader = false;
+        this._cancelEnrollmentFlow();
         break;
     }
 
@@ -276,14 +286,13 @@ class Register extends LitElement {
     this.RTC.onuser = async (user) => {
       await this.RTC.createOffer();
       this._setNotificationMessage(`User ${user} wants to claim this device`, "info", false);
-      enrollmentComponent.confirmButtonText = `Add device to ${user}'s account`;
-      enrollmentComponent.dispatchEvent(new CustomEvent("enrollment-confirm-code"));
+      enrollmentComponent.agreementText = `I understand that this device will be added to ${user}'s account`;
+      enrollmentComponent.dispatchEvent(new CustomEvent("enrollment-code-confirmed"));
     };
   }
 
-  _startEnrollmentFlow() {
+  _requestRegistrationAddToken() {
     const enrollmentComponent = this.shadowRoot.querySelector("web-authn-enroll");
-    this._showAddFlowLoader = true;
 
     this.RTC.sendData("action::add");
     this.RTC.ondatachannelmessage = (event) => {
@@ -296,12 +305,9 @@ class Register extends LitElement {
     this.RTC.listenForData();
   }
 
-  _cancelEnrollmentFlow(event) {
-    event.preventDefault();
-
+  _cancelEnrollmentFlow() {
     this.RTC.sendData("action::cancel");
     this.RTC?.close();
-    clearNotificationMessage(this.shadowRoot.getElementById("notification"));
   }
 }
 

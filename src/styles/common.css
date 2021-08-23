@@ -9,14 +9,17 @@
   --canvas-info: #9cf;
   --canvas-error: #f99;
   --text-primary: #111;
-  --text-link: #f80;
-  --text-link-active: #37f;
-  --button-canvas-primary: #37f;
+  --text-link: #25d;
+  --text-link-active: #c15;
+  --button-canvas-primary: #25d;
   --button-canvas-secondary: #9ce;
   --button-canvas-danger: #f44;
   --button-text-primary: #fafafa;
   --drop-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   --drop-shadow-upwards: 0 -0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  --brand-color: #ff6200;
+  --presentation-background: #fff;
+  --presentation-light-gray: #eaeaea;
 }
 
 /* Dark color theme variables */
@@ -29,12 +32,15 @@
   --canvas-info: #17b;
   --canvas-error: #922;
   --text-primary: #eee;
-  --text-link: #f80;
-  --text-link-active: #5af;
+  --text-link: #5af;
+  --text-link-active: #f59;
   --button-canvas-primary: #5af;
   --button-canvas-secondary: #57e;
   --button-canvas-danger: #d66;
   --button-text-primary: #000;
+  --brand-color: #fff;
+  --presentation-background: #000;
+  --presentation-light-gray: #333;
 }
 
 @media screen and (prefers-color-scheme: dark) {
@@ -48,12 +54,15 @@
     --canvas-info: #17b;
     --canvas-error: #922;
     --text-primary: #eee;
-    --text-link: #f80;
-    --text-link-active: #5af;
+    --text-link: #5af;
+    --text-link-active: #f59;
     --button-canvas-primary: #5af;
     --button-canvas-secondary: #57e;
     --button-canvas-danger: #d66;
     --button-text-primary: #000;
+    --brand-color: #fff;
+    --presentation-background: #000;
+    --presentation-light-gray: #333;
   }
 }
 
@@ -66,8 +75,8 @@
 body,
 html {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
-    "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif;
   background-color: var(--canvas-primary);
   color: var(--text-primary);
   min-height: 100vh;

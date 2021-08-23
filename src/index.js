@@ -3,8 +3,9 @@ import { LitElement, html, unsafeCSS, css } from "lit";
 import "./components/theme-toggle";
 import "./components/nav";
 import { hasValidSession, isLoggedIn } from "./utils/session";
-import links from "./styles/links.css";
-import headings from "./styles/headings.css";
+import links from "./styles/links.css?inline";
+import headings from "./styles/headings.css?inline";
+import { routes as presentationRoutes } from "./Presentation";
 
 const router = new Router();
 
@@ -37,7 +38,14 @@ const routes = [
     name: "stats",
     path: "/stats",
     component: "auth-stats",
-    action: () => import("./Stats.js"),
+    action: () => import("./Stats"),
+  },
+  {
+    name: "presentation",
+    path: "/presentation",
+    component: "presentation-app",
+    action: () => import("./Presentation"),
+    children: presentationRoutes,
   },
 ];
 
@@ -49,11 +57,17 @@ class AuthApp extends LitElement {
 
     this.isLoggedIn = isLoggedIn();
     if (this.isLoggedIn) this._checkValidSession();
+
+    this.isInPresentationMode = window.location.pathname.startsWith("/presentation");
+    window.addEventListener("vaadin-router-location-changed", () => {
+      this.isInPresentationMode = window.location.pathname.startsWith("/presentation");
+    });
   }
 
   static get properties() {
     return {
       isLoggedIn: Boolean,
+      isInPresentationMode: Boolean,
     };
   }
 
@@ -62,7 +76,7 @@ class AuthApp extends LitElement {
       unsafeCSS(links),
       unsafeCSS(headings),
       css`
-        main > * {
+        main > *:not(presentation-app) {
           padding: 1rem;
           display: flex;
           flex-direction: column;
@@ -92,15 +106,22 @@ class AuthApp extends LitElement {
     router.setOutlet(this.shadowRoot.querySelector("main"));
     window.addEventListener("session-changed", (event) => {
       this.isLoggedIn = event.detail.isLoggedIn;
+      if (!this.isInPresentationMode) {
+        Router.go("/dashboard");
+      }
     });
   }
 
   render() {
     return html`
-      <a class="home-link" href="/">🏠</a>
+      ${!this.isInPresentationMode
+        ? html`
+            <a class="home-link" href="/">🏠</a>
+            <h1 class="page-title">WebAuthn ❤️ WebRTC</h1>
+            <auth-nav .isLoggedIn="${this.isLoggedIn}"></auth-nav>
+          `
+        : ""}
       <theme-toggle></theme-toggle>
-      <h1 class="page-title">WebAuthn ❤️ WebRTC</h1>
-      <auth-nav .isLoggedIn="${this.isLoggedIn}"></auth-nav>
       <main></main>
     `;
   }

@@ -1,13 +1,13 @@
 import { LitElement, html, css, unsafeCSS } from "lit";
 import { setNotificationMessage } from "./utils/notification";
 import { hasValidSession } from "./utils/session";
-import "./components/web-authn-login";
+import "web-authn-components/login";
 
-import resets from "./styles/resets.css";
-import cards from "./styles/cards.css";
-import forms from "./styles/forms.css";
-import headings from "./styles/headings.css";
-import notifications from "./styles/notifications.css";
+import resets from "./styles/resets.css?inline";
+import cards from "./styles/cards.css?inline";
+import forms from "./styles/forms.css?inline";
+import headings from "./styles/headings.css?inline";
+import notifications from "./styles/notifications.css?inline";
 
 class Login extends LitElement {
   constructor() {

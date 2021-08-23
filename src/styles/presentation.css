@@ -1,0 +1,41 @@
+@import url(//db.onlinewebfonts.com/c/69c633b2a4e41e8101c6f4f149655d5e?family=ING+Me);
+@import url(//db.onlinewebfonts.com/c/5724ce1882e134bfbb68a761b8e85b51?family=ING+Me);
+
+:host {
+  font-family: "ING Me";
+  box-sizing: border-box;
+  display: flex;
+  min-height: 100vh;
+  height: 100%;
+  width: 100%;
+  background-color: var(--presentation-background);
+}
+
+::slotted(*) {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 2rem;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 2rem;
+  height: 8rem;
+}
+
+footer svg {
+  width: 4rem;
+}
+
+@media screen and (max-width: 720px) {
+  ::slotted(*) {
+    font-size: 1.25em;
+  }
+}

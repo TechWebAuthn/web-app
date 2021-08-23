@@ -1,22 +1,20 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
-import { decodePublicKeyCredentialCreateOptions, encodeRegisterCredential } from "./utils/parse";
 import { clearNotificationMessage, setNotificationMessage } from "./utils/notification";
-import { request } from "./utils/network";
 import { WebRTCConnection, WebSocketConnection } from "./utils/webrtc";
-import "./components/web-authn-register";
-import "./components/web-authn-recover";
-import "./components/web-authn-enroll";
+import "web-authn-components/register";
+import "web-authn-components/recover";
+import "web-authn-components/enroll";
 
-import resets from "./styles/resets.css";
-import cards from "./styles/cards.css";
-import forms from "./styles/forms.css";
-import codes from "./styles/codes.css";
-import notifications from "./styles/notifications.css";
-import headings from "./styles/headings.css";
-import details from "./styles/details.css";
-import buttons from "./styles/buttons.css";
-import layouts from "./styles/layouts.css";
-import loaders from "./styles/loaders.css";
+import resets from "./styles/resets.css?inline";
+import cards from "./styles/cards.css?inline";
+import forms from "./styles/forms.css?inline";
+import codes from "./styles/codes.css?inline";
+import notifications from "./styles/notifications.css?inline";
+import headings from "./styles/headings.css?inline";
+import details from "./styles/details.css?inline";
+import buttons from "./styles/buttons.css?inline";
+import layouts from "./styles/layouts.css?inline";
+import loaders from "./styles/loaders.css?inline";
 
 class Register extends LitElement {
   constructor() {

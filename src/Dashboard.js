@@ -1,23 +1,24 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
 import { classMap } from "lit/directives/class-map";
-import UAParser from "ua-parser-js";
+import UAParser from "ua-parser-js/dist/ua-parser.min";
 import { request } from "./utils/network";
 import { setNotificationMessage } from "./utils/notification";
 import { logout, getSession } from "./utils/session";
 import { WebRTCConnection, WebSocketConnection } from "./utils/webrtc";
-import "./components/web-authn-connect";
+import "ua-parser-js/dist/ua-parser.min";
+import "web-authn-components/connect";
 
-import resets from "./styles/resets.css";
-import cards from "./styles/cards.css";
-import notifications from "./styles/notifications.css";
-import forms from "./styles/forms.css";
-import headings from "./styles/headings.css";
-import codes from "./styles/codes.css";
-import details from "./styles/details.css";
-import highlights from "./styles/highlights.css";
-import layouts from "./styles/layouts.css";
-import deviceLists from "./styles/device-lists.css";
-import loaders from "./styles/loaders.css";
+import resets from "./styles/resets.css?inline";
+import cards from "./styles/cards.css?inline";
+import notifications from "./styles/notifications.css?inline";
+import forms from "./styles/forms.css?inline";
+import headings from "./styles/headings.css?inline";
+import codes from "./styles/codes.css?inline";
+import details from "./styles/details.css?inline";
+import highlights from "./styles/highlights.css?inline";
+import layouts from "./styles/layouts.css?inline";
+import deviceLists from "./styles/device-lists.css?inline";
+import loaders from "./styles/loaders.css?inline";
 
 class Dashboard extends LitElement {
   constructor() {

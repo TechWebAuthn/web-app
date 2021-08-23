@@ -1,11 +1,11 @@
 import { LitElement, html, unsafeCSS } from "lit";
 import { setNotificationMessage } from "./utils/notification";
 
-import resets from "./styles/resets.css";
-import cards from "./styles/cards.css";
-import headings from "./styles/headings.css";
-import stats from "./styles/stats.css";
-import notifications from "./styles/notifications.css";
+import resets from "./styles/resets.css?inline";
+import cards from "./styles/cards.css?inline";
+import headings from "./styles/headings.css?inline";
+import stats from "./styles/stats.css?inline";
+import notifications from "./styles/notifications.css?inline";
 
 const statsMap = {
   login: "Logged in",
@@ -27,13 +27,7 @@ class Stats extends LitElement {
   }
 
   static get styles() {
-    return [
-      unsafeCSS(resets),
-      unsafeCSS(cards),
-      unsafeCSS(headings),
-      unsafeCSS(stats),
-      unsafeCSS(notifications),
-    ];
+    return [unsafeCSS(resets), unsafeCSS(cards), unsafeCSS(headings), unsafeCSS(stats), unsafeCSS(notifications)];
   }
 
   firstUpdated() {
@@ -69,10 +63,8 @@ class Stats extends LitElement {
     this._sseConnection.addEventListener("login", this._updateStats.bind(this));
     this._sseConnection.addEventListener("logout", this._updateStats.bind(this));
     this._sseConnection.addEventListener("register", this._updateStats.bind(this));
-    this._sseConnection.onopen = () =>
-      this._setNotificationMessage("Connection established", "success", false);
-    this._sseConnection.onclose = () =>
-      this._setNotificationMessage("Connection closed", "info", false);
+    this._sseConnection.onopen = () => this._setNotificationMessage("Connection established", "success", false);
+    this._sseConnection.onclose = () => this._setNotificationMessage("Connection closed", "info", false);
     this._sseConnection.onerror = () =>
       this._setNotificationMessage("Connection could not be established", "error", false);
   }
@@ -91,8 +83,7 @@ class Stats extends LitElement {
     if (eventType === "welcome") return;
 
     for (const stat in oldData) {
-      this._statsDirection[stat] =
-        newData[stat] > oldData[stat] ? "⬆️" : newData[stat] < oldData[stat] ? "⬇️" : "⏳";
+      this._statsDirection[stat] = newData[stat] > oldData[stat] ? "⬆️" : newData[stat] < oldData[stat] ? "⬇️" : "⏳";
     }
   }
 }

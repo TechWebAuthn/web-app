@@ -1,6 +1,6 @@
 import { LitElement, html, unsafeCSS } from "lit";
-import links from "../styles/links.css";
-import navigations from "../styles/navigations.css";
+import links from "../styles/links.css?inline";
+import navigations from "../styles/navigations.css?inline";
 
 class AuthNav extends LitElement {
   static get properties() {

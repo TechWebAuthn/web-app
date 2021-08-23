@@ -2,11 +2,6 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
-  css: {
-    modules: {
-      localsConvention: "camelCaseOnly",
-    },
-  },
   server: {
     hmr: {
       port: 443,

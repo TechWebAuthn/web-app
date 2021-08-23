@@ -25,10 +25,12 @@ class ThemeToggle extends HTMLElement {
     event.preventDefault();
 
     document.documentElement.dataset.theme = this._mode === "light" ? "dark" : "light";
-    document.head.querySelector("meta[name=theme-color]").content =
-      this._mode === "dark" ? "#000" : "#e9e9e9";
+    document.head.querySelector("meta[name=theme-color]").content = this._mode === "dark" ? "#000" : "#e9e9e9";
     this.querySelector("button").textContent = this._labelMap[this._mode];
     window.localStorage.setItem("theme", document.documentElement.dataset.theme);
+    window.dispatchEvent(
+      new CustomEvent("theme-changed", { detail: { theme: this._mode, bubbles: true, composed: true } })
+    );
   }
 }
 

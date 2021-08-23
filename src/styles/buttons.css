@@ -4,6 +4,7 @@
   font-size: 1.2rem;
   line-height: 1.2;
   background-color: var(--button-canvas-secondary);
+  padding: 0.5rem;
 }
 
 .icon-button:active {

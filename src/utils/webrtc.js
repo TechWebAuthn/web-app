@@ -42,10 +42,7 @@ export class WebRTCConnection {
   constructor(
     signaling,
     options = {
-      iceServers: [
-        { urls: "stun:stun.services.mozilla.com" },
-        { urls: "turn:145.239.89.145", username: "auth", credential: "s3cre7" },
-      ],
+      iceServers: [{ urls: "stun:stun.services.mozilla.com" }],
     }
   ) {
     this.signaling = signaling;

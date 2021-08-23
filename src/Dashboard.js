@@ -4,9 +4,8 @@ import UAParser from "ua-parser-js/dist/ua-parser.min";
 import { request } from "./utils/network";
 import { setNotificationMessage } from "./utils/notification";
 import { logout, getSession } from "./utils/session";
-import { WebRTCConnection, WebSocketConnection } from "./utils/webrtc";
 import "ua-parser-js/dist/ua-parser.min";
-import "web-authn-components/connect";
+import "web-authn-components/rtc/enrollment-provider";
 
 import resets from "./styles/resets.css?inline";
 import cards from "./styles/cards.css?inline";
@@ -24,12 +23,20 @@ class Dashboard extends LitElement {
   constructor() {
     super();
 
-    this.RTC = null;
     this._myDevices = [];
     this._addDeviceInProgress = false;
     this._isRemovingCurrentDevice = false;
     this._deviceIdToRemove = null;
     this._setNotificationMessage = setNotificationMessage.bind(this);
+
+    this.rtcIceServers = [
+      { urls: "stun:stun.services.mozilla.com" },
+      {
+        urls: import.meta.env.VITE_TURN_URL,
+        username: import.meta.env.VITE_TURN_USERNAME,
+        credential: import.meta.env.VITE_TURN_CREDENTIAL,
+      },
+    ];
   }
 
   static get properties() {
@@ -62,7 +69,7 @@ class Dashboard extends LitElement {
           background-color: var(--canvas-success);
         }
 
-        web-authn-connect::part(input) {
+        web-authn-rtc-enrollment-provider::part(input) {
           box-sizing: border-box;
           text-align: center;
           font-family: monospace;
@@ -118,13 +125,13 @@ class Dashboard extends LitElement {
           : ``}
         <details class="details">
           <summary>Enroll new device</summary>
-          <web-authn-connect
+          <web-authn-rtc-enrollment-provider
             ?hidden=${this._addDeviceInProgress}
             class="form"
-            @connection-start="${this._onConnectEvent}"
-            @connection-finished="${this._onConnectEvent}"
-            @connection-error="${this._onConnectEvent}"
-          ></web-authn-connect>
+            @enrollment-started="${this._onConnectEvent}"
+            @enrollment-completed="${this._onConnectEvent}"
+            @enrollment-error="${this._onConnectEvent}"
+          ></web-authn-rtc-enrollment-provider>
           <div class="center" ?hidden=${!this._addDeviceInProgress}>
             <progress class="loader" indefinite>Loading</progress>
           </div>
@@ -142,54 +149,23 @@ class Dashboard extends LitElement {
     let notificationType = "info";
 
     switch (type) {
-      case "connection-start":
+      case "enrollment-started":
         message = "Starting connection to peer";
-        this._initiateConnectionToPeer(event.detail?.code);
+        this._addDeviceInProgress = true;
         break;
-      case "connection-finished":
+      case "enrollment-completed":
         message = "Sending registration add token";
-        this.RTC.sendData(`token::${event.detail?.registrationAddToken}`);
+        this.shadowRoot.querySelector("details").open = false;
+        this._addDeviceInProgress = false;
         break;
-      case "connection-error":
+      case "enrollment-error":
         message = message || "Connection could not be successfully completed";
         notificationType = "error";
+        this._addDeviceInProgress = false;
         break;
     }
 
     this._setNotificationMessage(message, notificationType);
-  }
-
-  async _initiateConnectionToPeer(peerCode = "") {
-    this.RTC?.close();
-
-    const webAuthnConnect = this.shadowRoot.querySelector("web-authn-connect");
-    const code = peerCode.toUpperCase();
-
-    this._addDeviceInProgress = true;
-
-    this.RTC = new WebRTCConnection(new WebSocketConnection("/api/socket"));
-    this.RTC.listenForData();
-    this.RTC.signaling.send({ code });
-
-    this.RTC.ondatachannelmessage = async (event) => {
-      const [type, data] = event.data.split("::");
-
-      if (type === "action" && data === "add") {
-        webAuthnConnect.dispatchEvent(new CustomEvent("connection-request-registration-token"));
-      }
-
-      if (type === "action" && data === "cancel") {
-        this._addDeviceInProgress = false;
-        this._setNotificationMessage("The other end cancelled the add device process", "error");
-      }
-
-      if (type === "event" && data === "complete") {
-        this._addDeviceInProgress = false;
-        this._getMyDevices();
-        this.shadowRoot.querySelector("details").open = false;
-        this._setNotificationMessage("A device was successfuly added to this account", "success");
-      }
-    };
   }
 
   async _getMyDevices() {

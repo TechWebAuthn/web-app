@@ -39,10 +39,10 @@ class Login extends LitElement {
       <div class="card">
         <web-authn-login
           class="form"
-          @assertion-start="${this._onWebAuthnLoginEvent}"
-          @assertion-respond="${this._onWebAuthnLoginEvent}"
-          @assertion-finished="${this._onWebAuthnLoginEvent}"
-          @assertion-error="${this._onWebAuthnLoginEvent}"
+          @login-started="${this._onWebAuthnLoginEvent}"
+          @login-retrieved="${this._onWebAuthnLoginEvent}"
+          @login-finished="${this._onWebAuthnLoginEvent}"
+          @login-error="${this._onWebAuthnLoginEvent}"
         ></web-authn-login>
       </div>
     `;
@@ -54,17 +54,17 @@ class Login extends LitElement {
     let notificationType = "info";
 
     switch (type) {
-      case "assertion-start":
+      case "login-started":
         message = "Starting authentication process";
         break;
-      case "assertion-respond":
+      case "login-retrieved":
         message = "Validating credentials with server";
         break;
-      case "assertion-finished":
+      case "login-finished":
         message = "Authentication completed successfuly";
         notificationType = "success";
         break;
-      case "assertion-error":
+      case "login-error":
         message = message || "Authentication could not be completed successfully";
         notificationType = "error";
         break;
@@ -72,7 +72,7 @@ class Login extends LitElement {
 
     this._setNotificationMessage(message, notificationType);
 
-    if (type === "assertion-finished") {
+    if (type === "login-finished") {
       await hasValidSession();
     }
   }

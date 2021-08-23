@@ -1,9 +1,8 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
 import { clearNotificationMessage, setNotificationMessage } from "./utils/notification";
-import { WebRTCConnection, WebSocketConnection } from "./utils/webrtc";
-import "web-authn-components/register";
-import "web-authn-components/recover";
-import "web-authn-components/enroll";
+import "web-authn-components/registration";
+import "web-authn-components/recovery";
+import "web-authn-components/rtc/enrollment-requester";
 
 import resets from "./styles/resets.css?inline";
 import cards from "./styles/cards.css?inline";
@@ -25,11 +24,18 @@ class Register extends LitElement {
     this._isRecoveryFlow = false;
     this._isAddFlow = false;
 
-    this.RTC = null;
-
     this._onWebAuthnRegisterEvent = this._onRegisterEvent.bind(this);
     this._onWebAuthnRecoverEvent = this._onRecoverEvent.bind(this);
     this._setNotificationMessage = setNotificationMessage.bind(this);
+
+    this.rtcIceServers = [
+      { urls: "stun:stun.services.mozilla.com" },
+      {
+        urls: import.meta.env.VITE_TURN_URL,
+        username: import.meta.env.VITE_TURN_USERNAME,
+        credential: import.meta.env.VITE_TURN_CREDENTIAL,
+      },
+    ];
   }
 
   static get properties() {
@@ -56,9 +62,9 @@ class Register extends LitElement {
       unsafeCSS(layouts),
       unsafeCSS(loaders),
       css`
-        web-authn-register::part(input),
-        web-authn-recover::part(input),
-        web-authn-enroll::part(code) {
+        web-authn-registration::part(input),
+        web-authn-recovery::part(input),
+        web-authn-rtc-enrollment-requester::part(code) {
           box-sizing: border-box;
         }
       `,
@@ -80,13 +86,13 @@ class Register extends LitElement {
           <summary>Register a new account</summary>
           ${this._isRegisterFlow && !this._isCurrentFlowComplete
             ? html`
-                <web-authn-register
+                <web-authn-registration
                   class="form"
-                  @registration-start="${this._onWebAuthnRegisterEvent}"
-                  @registration-respond="${this._onWebAuthnRegisterEvent}"
+                  @registration-started="${this._onWebAuthnRegisterEvent}"
+                  @registration-created="${this._onWebAuthnRegisterEvent}"
                   @registration-finished="${this._onWebAuthnRegisterEvent}"
                   @registration-error="${this._onWebAuthnRegisterEvent}"
-                ></web-authn-register>
+                ></web-authn-registrati>
               `
             : html`
                 <p>Your recovery token is:</p>
@@ -101,13 +107,13 @@ class Register extends LitElement {
           <summary>Recover account access</summary>
           ${this._isRecoveryFlow && !this._isCurrentFlowComplete
             ? html`
-                <web-authn-recover
+                <web-authn-recovery
                   class="form"
-                  @recovery-start="${this._onRecoverEvent}"
-                  @recovery-respond="${this._onRecoverEvent}"
+                  @recovery-started="${this._onRecoverEvent}"
+                  @recovery-created="${this._onRecoverEvent}"
                   @recovery-finished="${this._onRecoverEvent}"
                   @recovery-error="${this._onRecoverEvent}"
-                ></web-authn-recover>
+                ></web-authn-recovery>
               `
             : html`
                 <p>Your account has been successfuly recovered on this device!</p>
@@ -124,16 +130,16 @@ class Register extends LitElement {
           ${this._isAddFlow && !this._isCurrentFlowComplete
             ? !this._showAddFlowLoader
               ? html`
-                  <web-authn-enroll
+                  <web-authn-rtc-enrollment-requester
                     class="form"
                     @enrollment-code-requested="${this._onEnrollmentEvent}"
-                    @enrollment-agreement-accepted="${this._onEnrollmentEvent}"
-                    @enrollment-start="${this._onEnrollmentEvent}"
-                    @enrollment-respond="${this._onEnrollmentEvent}"
-                    @enrollment-finished="${this._onEnrollmentEvent}"
+                    @enrollment-started="${this._onEnrollmentEvent}"
+                    @enrollment-created="${this._onEnrollmentEvent}"
+                    @enrollment-completed="${this._onEnrollmentEvent}"
                     @enrollment-error="${this._onEnrollmentEvent}"
                     @enrollment-canceled="${this._onEnrollmentEvent}"
-                  ></web-authn-enroll>
+                    .rtcIceServers="${this.rtcIceServers}"
+                  ></web-authn-rtc-enrollment-requester>
                 `
               : html`<div class="center"><progress class="loader" indeterminate></progress></div>`
             : html` <p>Your device has been successfuly added to another account!</p> `}
@@ -172,10 +178,10 @@ class Register extends LitElement {
     let notificationType = "info";
 
     switch (type) {
-      case "registration-start":
+      case "registration-started":
         message = "Starting registration process";
         break;
-      case "registration-respond":
+      case "registration-created":
         message = "Validating credentials with server";
         break;
       case "registration-finished":
@@ -203,10 +209,10 @@ class Register extends LitElement {
     let notificationType = "info";
 
     switch (type) {
-      case "recovery-start":
+      case "recovery-started":
         message = "Starting recovery process";
         break;
-      case "recovery-respond":
+      case "recovery-created":
         message = "Validating credentials with server";
         break;
       case "recovery-finished":
@@ -232,34 +238,28 @@ class Register extends LitElement {
     switch (type) {
       case "enrollment-code-requested":
         message = "Generating enrollment code";
-        this._startExternalConnection();
+        clearNotificationMessage(this.shadowRoot.querySelector("#notification"));
         break;
-      case "enrollment-agreement-accepted":
-        this._requestRegistrationAddToken();
-        break;
-      case "enrollment-start":
+      case "enrollment-started":
         message = "Starting enrollment process";
         this._showAddFlowLoader = true;
         break;
-      case "enrollment-respond":
+      case "enrollment-created":
         message = "Validating credentials with server";
         break;
-      case "enrollment-finished":
+      case "enrollment-completed":
         message = "Enrollment completed successfuly";
         notificationType = "success";
         this._isCurrentFlowComplete = true;
-        this.RTC.dataChannel.send("event::complete");
         this._showAddFlowLoader = false;
         break;
       case "enrollment-canceled":
         message = message || "Enrollment has been canceled";
         notificationType = "error";
-        this._cancelEnrollmentFlow();
         break;
       case "enrollment-error":
         message = message || "Enrollment could not be successfully completed";
         notificationType = "error";
-        this._cancelEnrollmentFlow();
         break;
     }
 
@@ -269,43 +269,6 @@ class Register extends LitElement {
   async _copyRecoveryTokenToClipboard() {
     await navigator.clipboard.writeText(this._recoveryToken);
     this._setNotificationMessage("Recovery token copied to clipboard", "info");
-  }
-
-  _startExternalConnection() {
-    this.RTC?.close();
-    clearNotificationMessage();
-    const enrollmentComponent = this.shadowRoot.querySelector("web-authn-enroll");
-
-    this.RTC = new WebRTCConnection(new WebSocketConnection("/api/socket"));
-    this.RTC.createDataChannel();
-    this.RTC.oncode = (code) => {
-      enrollmentComponent.peerCode = code;
-    };
-    this.RTC.onuser = async (user) => {
-      await this.RTC.createOffer();
-      this._setNotificationMessage(`User ${user} wants to claim this device`, "info", false);
-      enrollmentComponent.agreementText = `I understand that this device will be added to ${user}'s account`;
-      enrollmentComponent.dispatchEvent(new CustomEvent("enrollment-code-confirmed"));
-    };
-  }
-
-  _requestRegistrationAddToken() {
-    const enrollmentComponent = this.shadowRoot.querySelector("web-authn-enroll");
-
-    this.RTC.sendData("action::add");
-    this.RTC.ondatachannelmessage = (event) => {
-      const [type, data] = event.data.split("::");
-
-      if (type === "token") {
-        enrollmentComponent.registrationAddToken = data;
-      }
-    };
-    this.RTC.listenForData();
-  }
-
-  _cancelEnrollmentFlow() {
-    this.RTC.sendData("action::cancel");
-    this.RTC?.close();
   }
 }
 

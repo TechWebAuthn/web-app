@@ -1,18 +1,28 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
 import slides from "../styles/slides.css?inline";
 import { setNotificationMessage, clearNotificationMessage } from "../utils/notification";
-import { WebRTCConnection, WebSocketConnection } from "../utils/webrtc";
-import "web-authn-components/enroll";
+import "web-authn-components/rtc/enrollment-requester";
 import forms from "../styles/forms.css";
 import cards from "../styles/cards.css";
 import codes from "../styles/codes.css";
 import notifications from "../styles/notifications.css";
+import loaders from "../styles/loaders.css";
 
 class WebAuthnAddNew extends LitElement {
   constructor() {
     super();
 
     this._setNotificationMessage = setNotificationMessage.bind(this);
+    this._isFlowComplete = false;
+    this._showLoader = false;
+    this.rtcIceServers = [
+      { urls: "stun:stun.services.mozilla.com" },
+      {
+        urls: import.meta.env.VITE_TURN_URL,
+        username: import.meta.env.VITE_TURN_USERNAME,
+        credential: import.meta.env.VITE_TURN_CREDENTIAL,
+      },
+    ];
   }
 
   static get styles() {
@@ -21,9 +31,10 @@ class WebAuthnAddNew extends LitElement {
       unsafeCSS(cards),
       unsafeCSS(codes),
       unsafeCSS(notifications),
+      unsafeCSS(loaders),
       unsafeCSS(slides),
       css`
-        web-authn-enroll::part(code) {
+        web-authn-rtc-enrollment-requester::part(code) {
           box-sizing: border-box;
         }
       `,
@@ -40,16 +51,22 @@ class WebAuthnAddNew extends LitElement {
             <h2>Recover account</h2>
             <p id="notification" class="notification"></p>
             <div class="card">
-              <web-authn-enroll
-                class="form"
-                @enrollment-code-requested="${this._onEnrollmentEvent}"
-                @enrollment-agreement-accepted="${this._onEnrollmentEvent}"
-                @enrollment-start="${this._onEnrollmentEvent}"
-                @enrollment-respond="${this._onEnrollmentEvent}"
-                @enrollment-finished="${this._onEnrollmentEvent}"
-                @enrollment-error="${this._onEnrollmentEvent}"
-                @enrollment-canceled="${this._onEnrollmentEvent}"
-              ></web-authn-enroll>
+              ${!this._isFlowComplete
+                ? !this._showLoader
+                  ? html`
+                      <web-authn-rtc-enrollment-requester
+                        class="form"
+                        @enrollment-code-requested="${this._onEnrollmentEvent}"
+                        @enrollment-started="${this._onEnrollmentEvent}"
+                        @enrollment-created="${this._onEnrollmentEvent}"
+                        @enrollment-completed="${this._onEnrollmentEvent}"
+                        @enrollment-error="${this._onEnrollmentEvent}"
+                        @enrollment-canceled="${this._onEnrollmentEvent}"
+                        .rtcIceServers="${this.rtcIceServers}"
+                      ></web-authn-rtc-enrollment-requester>
+                    `
+                  : html`<div class="center"><progress class="loader" indeterminate></progress></div>`
+                : html` <p>Your device has been successfuly added to another account!</p> `}
             </div>
           </output>
         </aside>
@@ -73,34 +90,30 @@ class WebAuthnAddNew extends LitElement {
     switch (type) {
       case "enrollment-code-requested":
         message = "Generating enrollment code";
-        this._startExternalConnection();
+        clearNotificationMessage(this.shadowRoot.querySelector("#notification"));
         break;
-      case "enrollment-agreement-accepted":
-        this._requestRegistrationAddToken();
-        break;
-      case "enrollment-start":
+      case "enrollment-started":
         message = "Starting enrollment process";
-        this._showAddFlowLoader = true;
+        this._showLoader = true;
         break;
-      case "enrollment-respond":
+      case "enrollment-created":
         message = "Validating credentials with server";
         break;
-      case "enrollment-finished":
+      case "enrollment-completed":
         message = "Enrollment completed successfuly";
         notificationType = "success";
-        this._isCurrentFlowComplete = true;
-        this.RTC.dataChannel.send("event::complete");
-        this._showAddFlowLoader = false;
+        this._isFlowComplete = true;
+        this._showLoader = false;
         break;
       case "enrollment-canceled":
         message = message || "Enrollment has been canceled";
         notificationType = "error";
-        this._cancelEnrollmentFlow();
+        this._showLoader = true;
         break;
       case "enrollment-error":
         message = message || "Enrollment could not be successfully completed";
         notificationType = "error";
-        this._cancelEnrollmentFlow();
+        this._showLoader = true;
         break;
     }
 

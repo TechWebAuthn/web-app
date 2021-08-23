@@ -24,7 +24,7 @@ article {
 }
 
 aside {
-  flex: 1;
+  flex: 0;
   min-width: 35vmax;
 }
 
@@ -57,6 +57,7 @@ figure a {
 
 blockquote {
   position: relative;
+  flex: 2;
   font-size: 1.75em;
   max-width: 60rem;
   padding: 1em 1em 1em 2em;

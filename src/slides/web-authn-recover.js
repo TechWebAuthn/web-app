@@ -1,7 +1,7 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
 import slides from "../styles/slides.css?inline";
 import { setNotificationMessage } from "../utils/notification";
-import "web-authn-components/recover";
+import "web-authn-components/recovery";
 import forms from "../styles/forms.css";
 import cards from "../styles/cards.css";
 import notifications from "../styles/notifications.css";
@@ -20,7 +20,7 @@ class WebAuthnRecover extends LitElement {
       unsafeCSS(notifications),
       unsafeCSS(slides),
       css`
-        web-authn-recover::part(input) {
+        web-authn-recovery::part(input) {
           box-sizing: border-box;
         }
       `,
@@ -37,13 +37,13 @@ class WebAuthnRecover extends LitElement {
             <h2>Recover account</h2>
             <p id="notification" class="notification"></p>
             <div class="card">
-              <web-authn-recover
+              <web-authn-recovery
                 class="form"
-                @recovery-start="${this._onRecoverEvent}"
-                @recovery-respond="${this._onRecoverEvent}"
+                @recovery-started="${this._onRecoverEvent}"
+                @recovery-created="${this._onRecoverEvent}"
                 @recovery-finished="${this._onRecoverEvent}"
                 @recovery-error="${this._onRecoverEvent}"
-              ></web-authn-recover>
+              ></web-authn-recovery>
             </div>
           </output>
         </aside>
@@ -65,10 +65,10 @@ class WebAuthnRecover extends LitElement {
     let notificationType = "info";
 
     switch (type) {
-      case "recovery-start":
+      case "recovery-started":
         message = "Starting recovery process";
         break;
-      case "recovery-respond":
+      case "recovery-created":
         message = "Validating credentials with server";
         break;
       case "recovery-finished":

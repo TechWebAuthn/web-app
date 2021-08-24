@@ -1,7 +1,7 @@
 {
   "name": "auth",
   "version": "1.0.0",
-  "description": "WebAuth and WebRTC",
+  "description": "WebAuthn and WebRTC",
   "main": "index.js",
   "scripts": {
     "dev": "vite",

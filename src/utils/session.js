@@ -18,6 +18,7 @@ export async function logout(event) {
 }
 
 export function setSession(object) {
+  Router.go(window.location.pathname);
   window.dispatchEvent(new CustomEvent("session-changed", { detail: { isLoggedIn: true } }));
   window.localStorage.setItem("session", JSON.stringify(object));
 }

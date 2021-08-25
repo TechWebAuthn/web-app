@@ -14,8 +14,23 @@
   gap: 1rem;
 }
 
+.column {
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .items-row {
   display: inline-flex;
   align-items: baseline;
   max-width: 100%;
+}
+
+.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  max-width: unset;
+  margin: 0;
 }

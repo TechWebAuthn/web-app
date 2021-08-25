@@ -140,6 +140,21 @@ class Dashboard extends LitElement {
           <button data-type="danger">Logout</button>
         </form>
       </div>
+      <div class="card">
+        <form class="form" @submit="${this._onFeedbackSubmit}">
+          <label for="feedback">Feedback</label>
+          <input
+            placeholder="How was the presentation?"
+            id="feedback"
+            name="feedback"
+            type="text"
+            required
+            pattern="^[\\w\\d\\s-]+$"
+          />
+          <small>Letters, numbers, spaces and - are allowed</small>
+          <button type="submit">Send</button>
+        </form>
+      </div>
     `;
   }
 
@@ -235,6 +250,22 @@ class Dashboard extends LitElement {
     }
 
     this._deviceIdToRemove = null;
+  }
+
+  async _onFeedbackSubmit(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const params = new URLSearchParams(`words=${formData.get("feedback")}`);
+
+    try {
+      await request(`/api/feedback?${params.toString()}`, { method: "PUT" });
+      form.reset();
+      this._setNotificationMessage("Feedback was successfully sent", "success");
+    } catch (error) {
+      this._setNotificationMessage("Could not send feedback", "error");
+    }
   }
 }
 

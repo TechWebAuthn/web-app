@@ -34,6 +34,36 @@ export const routes = [
     action: () => import("./slides/authentication-challenges"),
   },
   {
+    name: "web-authn-intro-1",
+    path: "/web-authn-intro-1",
+    component: "presentation-web-authn-intro-1",
+    action: () => import("./slides/web-authn-intro-1"),
+  },
+  {
+    name: "web-authn-asymmetric-intro",
+    path: "/web-authn-asymmetric-intro",
+    component: "presentation-web-authn-asymmetric-intro",
+    action: () => import("./slides/web-authn-asymmetric-intro"),
+  },
+  {
+    name: "web-authn-intro-2",
+    path: "/web-authn-intro-2",
+    component: "presentation-web-authn-intro-2",
+    action: () => import("./slides/web-authn-intro-2"),
+  },
+  {
+    name: "web-authn-register",
+    path: "/web-authn-register",
+    component: "presentation-web-authn-register",
+    action: () => import("./slides/web-authn-register"),
+  },
+  {
+    name: "web-authn-authentication",
+    path: "/web-authn-authentication",
+    component: "presentation-web-authn-authentication",
+    action: () => import("./slides/web-authn-authentication"),
+  },
+  {
     name: "web-authn-recover",
     path: "/web-authn-recover",
     component: "presentation-web-authn-recover",

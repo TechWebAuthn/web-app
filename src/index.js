@@ -106,9 +106,6 @@ class AuthApp extends LitElement {
     router.setOutlet(this.shadowRoot.querySelector("main"));
     window.addEventListener("session-changed", (event) => {
       this.isLoggedIn = event.detail.isLoggedIn;
-      if (!this.isInPresentationMode) {
-        Router.go("/dashboard");
-      }
     });
   }
 

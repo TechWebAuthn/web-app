@@ -51,3 +51,11 @@
 .form button[data-size="small"] {
   padding: 0.25rem 0.5rem;
 }
+
+.form small {
+  margin-block-start: -1rem;
+}
+
+.form small::before {
+  content: "Hint: ";
+}

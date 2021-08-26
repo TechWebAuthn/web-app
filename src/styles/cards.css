@@ -1,4 +1,5 @@
 .card {
+  position: relative;
   padding: 2rem;
   margin: 1rem;
   max-width: 24rem;
@@ -14,4 +15,24 @@
 
 .card h4 {
   margin: 1rem 0;
+}
+
+.card.large {
+  max-width: 64rem;
+}
+
+.card.expandable button.expand {
+  position: absolute;
+  padding: 0.5em;
+  top: 0px;
+  right: 0px;
+  font-size: 1.5em;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  width: 2em;
+}
+
+.card.expandable button.expand:active {
+  color: var(--text-link-active);
 }

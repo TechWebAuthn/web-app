@@ -7,20 +7,25 @@
   display: flex;
   gap: 4rem;
   box-sizing: border-box;
+  min-height: 0;
+  align-items: stretch;
 }
 
 h1 {
   font-size: 2.25em;
   line-height: 1;
   color: var(--brand-color);
-  margin-block-start: 0;
-  margin-block-end: 2rem;
   width: 100%;
+  margin: 0;
 }
 
 article {
   width: 100%;
   flex-wrap: wrap;
+}
+
+article > * {
+  max-height: 100%;
 }
 
 aside {
@@ -167,21 +172,12 @@ blockquote::before {
   margin: 0 1rem;
 }
 
-/* Spacing and sizing */
-
-.mis2 {
-  margin-inline-start: 2em;
-}
-
-.jcs {
-  justify-content: start;
-}
-
 .fit-content {
   max-width: fit-content;
   max-height: fit-content;
   padding: 0 1rem;
   min-width: auto;
+  display: flex;
 }
 
 /* Mac OS settings */

@@ -149,7 +149,9 @@ class Dashboard extends LitElement {
             name="feedback"
             type="text"
             required
-            pattern="^[\\w\\d\\s-]+$"
+            minlength="2"
+            maxlength="32"
+            pattern="^(?!.*(<|>|;|,|'|&quot;)).*$"
           />
           <small>Letters, numbers, spaces and - are allowed</small>
           <button type="submit">Send</button>

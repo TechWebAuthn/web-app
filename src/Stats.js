@@ -1,8 +1,5 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
 import { setNotificationMessage } from "./utils/notification";
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4plugins_wordCloud from "@amcharts/amcharts4/plugins/wordCloud";
-import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 import resets from "./styles/resets.css?inline";
 import cards from "./styles/cards.css?inline";
@@ -10,11 +7,16 @@ import headings from "./styles/headings.css?inline";
 import stats from "./styles/stats.css?inline";
 import notifications from "./styles/notifications.css?inline";
 import layouts from "./styles/layouts.css?inline";
+import loaders from "./styles/loaders.css?inline";
 
 const statsMap = {
   login: "Logged in",
   register: "Registered",
 };
+
+let am4core;
+let am4plugins_wordCloud;
+let am4themes_animated;
 
 class Stats extends LitElement {
   constructor() {
@@ -22,11 +24,14 @@ class Stats extends LitElement {
     this.stats = { login: 0, register: 0 };
     this._statsDirection = { login: "⏳", register: "⏳" };
     this._setNotificationMessage = setNotificationMessage.bind(this);
+    this._chartsLoaded = false;
+    this._feedbackLoaded = false;
   }
 
   static get properties() {
     return {
       stats: Object,
+      _feedbackLoaded: Boolean,
     };
   }
 
@@ -38,6 +43,7 @@ class Stats extends LitElement {
       unsafeCSS(stats),
       unsafeCSS(notifications),
       unsafeCSS(layouts),
+      unsafeCSS(loaders),
       css`
         #feedback {
           width: 100%;
@@ -79,6 +85,7 @@ class Stats extends LitElement {
         <button @click="${this._toggleFullscreen}" class="expand">&#x26F6;</button>
         <h3>Feedback</h3>
         <div id="feedback"></div>
+        <progress ?hidden="${this._feedbackLoaded}" class="loader" indeterminate></progress>
       </div>
     `;
   }
@@ -88,6 +95,7 @@ class Stats extends LitElement {
       withCredentials: true,
     });
     this._statsSSEConnection.addEventListener("welcome", this._updateStats.bind(this));
+    this._statsSSEConnection.addEventListener("login", this._updateStats.bind(this));
     this._statsSSEConnection.addEventListener("logout", this._updateStats.bind(this));
     this._statsSSEConnection.addEventListener("register", this._updateStats.bind(this));
     this._statsSSEConnection.onopen = () => this._setNotificationMessage("Connection established", "success", false);
@@ -114,24 +122,32 @@ class Stats extends LitElement {
     }
   }
 
-  _getFeedback() {
-    this._drawWordCloud();
+  async _getFeedback() {
+    const series = await this._drawWordCloud();
     this._feedbackSSEConnection = new EventSource("/api/feedback", {
       withCredentials: true,
     });
-    this._feedbackSSEConnection.addEventListener("message", (event) => console.log(event));
+    this._feedbackSSEConnection.addEventListener("feedback", (event) => this._updateWordCloud(event, series));
     this._feedbackSSEConnection.onerror = () =>
       this._setNotificationMessage("Could not retrieve feedback", "error", false);
+    this._feedbackLoaded = true;
   }
 
-  _drawWordCloud() {
+  async _drawWordCloud() {
+    if (!this._chartsLoaded) {
+      am4core = await import("@amcharts/amcharts4/core");
+      am4plugins_wordCloud = await import("@amcharts/amcharts4/plugins/wordCloud");
+      am4themes_animated = (await import("@amcharts/amcharts4/themes/animated")).default;
+      this._chartsLoaded = true;
+    }
+
     am4core.useTheme(am4themes_animated);
 
     const chart = am4core.create(this.shadowRoot.querySelector("#feedback"), am4plugins_wordCloud.WordCloud);
-    window.chart = chart;
     const series = chart.series.push(new am4plugins_wordCloud.WordCloudSeries());
 
     chart.responsive.enabled = true;
+    series.data = [];
     series.accuracy = 4;
     series.step = 15;
     series.rotationThreshold = 0.7;
@@ -139,52 +155,30 @@ class Stats extends LitElement {
     series.minWordLength = 2;
     series.labels.template.margin(8, 8, 8, 8);
     series.maxFontSize = am4core.percent(30);
-    series.dataFields.word = "tag";
-    series.dataFields.value = "weight";
-
-    series.data = [
-      {
-        tag: "cool",
-        weight: 60,
-      },
-      {
-        tag: "awesome",
-        weight: 80,
-      },
-      {
-        tag: "loved it",
-        weight: 90,
-      },
-      {
-        tag: "good job",
-        weight: 25,
-      },
-      {
-        tag: "nice",
-        weight: 30,
-      },
-      {
-        tag: "great",
-        weight: 45,
-      },
-      {
-        tag: "liked it",
-        weight: 160,
-      },
-      {
-        tag: "so and so",
-        weight: 20,
-      },
-      {
-        tag: "new stuff",
-        weight: 78,
-      },
-    ];
-
+    series.dataFields.word = "word";
+    series.dataFields.value = "count";
     series.colors = new am4core.ColorSet();
     series.colors.passOptions = {}; // makes it loop
     series.angles = [0, -90];
     series.fontWeight = "700";
+
+    return series;
+  }
+
+  _updateWordCloud(event, series) {
+    const { data } = event;
+    const parsedData = JSON.parse(data);
+    const newData = [...series.data];
+    Object.entries(parsedData).forEach(([key, value]) => {
+      const index = newData.findIndex((feedback) => feedback.word === key);
+
+      if (index >= 0) {
+        newData[index].count = value;
+      } else {
+        newData.push({ word: key, count: value });
+      }
+    });
+    series.data = [...newData];
   }
 
   _toggleFullscreen(event) {

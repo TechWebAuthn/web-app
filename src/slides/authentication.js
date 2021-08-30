@@ -1,8 +1,9 @@
-import { LitElement, html, unsafeCSS } from "lit";
+import { html, unsafeCSS } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import resets from "../styles/resets.css?inline";
 import slides from "../styles/slides.css?inline";
 
-class Authentication extends LitElement {
+class Authentication extends PresentationPageTemplate {
   static get styles() {
     return [unsafeCSS(resets), unsafeCSS(slides)];
   }
@@ -24,6 +25,15 @@ class Authentication extends LitElement {
         </aside>
         <blockquote>Authentication is the <b>act of validating that users are whom they claim to be</b>.</blockquote>
       </article>
+    `;
+  }
+
+  get _prompterMessage() {
+    return `
+      Authentication - Introduction
+
+      Some general notes about authentication
+      Explain why authentication is needed
     `;
   }
 }

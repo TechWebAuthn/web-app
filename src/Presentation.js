@@ -1,4 +1,5 @@
 import { LitElement, html, unsafeCSS } from "lit";
+import { connectToBroadcastChannel } from "./utils/network";
 import { Router } from "@vaadin/router";
 import resets from "./styles/resets.css?inline";
 import presentation from "./styles/presentation.css?inline";
@@ -119,6 +120,8 @@ class PresentationApp extends LitElement {
 
   disconnectedCallback() {
     window.removeEventListener("keyup", this._navigationListener);
+    this._broadcastChannel = connectToBroadcastChannel("presentation");
+    this._broadcastChannel.close();
     super.disconnectedCallback();
   }
 

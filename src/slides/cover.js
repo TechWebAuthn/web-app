@@ -1,7 +1,8 @@
-import { LitElement, html, unsafeCSS } from "lit";
+import { html, unsafeCSS } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import slides from "../styles/slides.css?inline";
 
-class Cover extends LitElement {
+class Cover extends PresentationPageTemplate {
   static get styles() {
     return [unsafeCSS(slides)];
   }
@@ -15,6 +16,14 @@ class Cover extends LitElement {
           <h3>Cluj, September 20th, 2021</h3>
         </section>
       </article>
+    `;
+  }
+
+  get _prompterMessage() {
+    return `
+      Going password-less with Web Authentication
+
+      Title slide of the presentation
     `;
   }
 }

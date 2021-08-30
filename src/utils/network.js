@@ -1,3 +1,5 @@
+const BroadcastChannels = {};
+
 export async function request(url, options = {}) {
   try {
     const mergedOptions = {
@@ -44,4 +46,14 @@ export function getStatusErrorMessage(error) {
     default:
       return "Something went wrong";
   }
+}
+
+export function connectToBroadcastChannel(channelName = "app") {
+  const channel = BroadcastChannels[channelName] || new BroadcastChannel(channelName);
+
+  if (!BroadcastChannels[channelName]) {
+    BroadcastChannels[channelName] = channel;
+  }
+
+  return channel;
 }

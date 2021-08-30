@@ -1,7 +1,8 @@
-import { LitElement, html, unsafeCSS } from "lit";
+import { html, unsafeCSS } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import slides from "../styles/slides.css?inline";
 
-class AuthenticationHow extends LitElement {
+class AuthenticationHow extends PresentationPageTemplate {
   static get styles() {
     return [unsafeCSS(slides)];
   }

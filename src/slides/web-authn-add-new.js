@@ -1,12 +1,13 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
-import slides from "../styles/slides.css?inline";
 import { setNotificationMessage, clearNotificationMessage } from "../utils/notification";
 import "web-authn-components/rtc/enrollment-requester";
+import "../components/logs";
 import forms from "../styles/forms.css";
 import cards from "../styles/cards.css";
 import codes from "../styles/codes.css";
 import notifications from "../styles/notifications.css";
 import loaders from "../styles/loaders.css";
+import slides from "../styles/slides.css?inline";
 
 class WebAuthnAddNew extends LitElement {
   constructor() {
@@ -70,13 +71,16 @@ class WebAuthnAddNew extends LitElement {
             </div>
           </output>
         </aside>
-        <section>
-          <h2>How to add a new device</h2>
-          <ul>
-            <li>Step 1...</li>
-            <li>Step 2...</li>
-            <li>Step 3...</li>
-          </ul>
+        <section class="column">
+          <auth-logs></auth-logs>
+        </section>
+        <section class="column">
+          <figure>
+            <img src="/images/webauthn-enroll.png" alt="WebAuthn Add New Device" />
+            <figcaption>
+              <a href="https://www.freepik.com/vectors/user">User vector created by stories</a>
+            </figcaption>
+          </figure>
         </section>
       </article>
     `;

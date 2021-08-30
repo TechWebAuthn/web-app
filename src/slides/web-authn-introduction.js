@@ -9,7 +9,7 @@ import notifications from "../styles/notifications.css";
 
 import svgFile from "../../public/images/web-authn-actors.svg?raw";
 
-class WebAuthnIntro1 extends LitElement {
+class WebAuthnIntroduction extends LitElement {
   constructor() {
     super();
 
@@ -57,4 +57,4 @@ class WebAuthnIntro1 extends LitElement {
   }
 }
 
-customElements.define("presentation-web-authn-intro-1", WebAuthnIntro1);
+customElements.define("presentation-web-authn-introduction", WebAuthnIntroduction);

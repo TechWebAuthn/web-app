@@ -1,10 +1,11 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
-import slides from "../styles/slides.css?inline";
 import { setNotificationMessage } from "../utils/notification";
 import "web-authn-components/recovery";
+import "../components/logs";
 import forms from "../styles/forms.css";
 import cards from "../styles/cards.css";
 import notifications from "../styles/notifications.css";
+import slides from "../styles/slides.css?inline";
 
 class WebAuthnRecover extends LitElement {
   constructor() {
@@ -47,13 +48,16 @@ class WebAuthnRecover extends LitElement {
             </div>
           </output>
         </aside>
-        <section>
-          <h2>Recovery steps</h2>
-          <ul>
-            <li>Step 1...</li>
-            <li>Step 2...</li>
-            <li>Step 3...</li>
-          </ul>
+        <section class="column">
+          <auth-logs></auth-logs>
+        </section>
+        <section class="column">
+          <figure>
+            <img src="/images/webauthn-recover.png" alt="WebAuthn Recover Account Access" />
+            <figcaption>
+              <a href="https://www.freepik.com/vectors/website">Website vector created by stories</a>
+            </figcaption>
+          </figure>
         </section>
       </article>
     `;

@@ -6,7 +6,7 @@ import cards from "../styles/cards.css?inline";
 import notifications from "../styles/notifications.css?inline";
 import layouts from "../styles/layouts.css?inline";
 
-class WebAuthnIntro2 extends LitElement {
+class WebAuthnCeremonies extends LitElement {
   constructor() {
     super();
 
@@ -88,4 +88,4 @@ class WebAuthnIntro2 extends LitElement {
   }
 }
 
-customElements.define("presentation-web-authn-intro-2", WebAuthnIntro2);
+customElements.define("presentation-web-authn-ceremonies", WebAuthnCeremonies);

@@ -7,7 +7,7 @@ import cards from "../styles/cards.css?inline";
 import notifications from "../styles/notifications.css?inline";
 import layouts from "../styles/layouts.css?inline";
 
-class WebAuthnAsymmetricIntro extends LitElement {
+class WebAuthnAsymmetricCryptography extends LitElement {
   constructor() {
     super();
 
@@ -59,4 +59,4 @@ class WebAuthnAsymmetricIntro extends LitElement {
   }
 }
 
-customElements.define("presentation-web-authn-asymmetric-intro", WebAuthnAsymmetricIntro);
+customElements.define("presentation-web-authn-asymmetric-cryptography", WebAuthnAsymmetricCryptography);

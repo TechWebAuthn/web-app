@@ -1,7 +1,7 @@
 import { css, html, LitElement, unsafeCSS } from "lit";
 import { setNotificationMessage } from "../utils/notification";
 import "web-authn-components/registration";
-import "../components/Logs";
+import "../components/logs";
 import forms from "../styles/forms.css?inline";
 import cards from "../styles/cards.css?inline";
 import notifications from "../styles/notifications.css?inline";

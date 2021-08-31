@@ -153,7 +153,7 @@ class Dashboard extends LitElement {
             maxlength="32"
             pattern="^(?!.*(<|>|;|,|'|&quot;)).*$"
           />
-          <small>Letters, numbers, spaces and - are allowed</small>
+          <small>Try to use single words</small>
           <button type="submit">Send</button>
         </form>
       </div>

@@ -28,6 +28,8 @@ class AuthenticationHow extends PresentationPageTemplate {
             <li>Something you know</li>
             <li>Something you have</li>
             <li>Something you are</li>
+            <li>Somwhere you are</li>
+            <li>Something you do</li>
           </ul>
         </section>
         <section>
@@ -41,6 +43,20 @@ class AuthenticationHow extends PresentationPageTemplate {
           </ul>
         </section>
       </article>
+    `;
+  }
+
+  get _prompterMessage() {
+    return `
+      # Authentication - How does it work?
+
+      An authentication factor is a special category of security credential that is used to verify the identity of a user.
+
+      - Something you know: passwords
+      - Something you have: TOTP, smart card, physical token
+      - Something you are:  biometrics (face, fingerprint)
+      - Somewhere you are:  geolocation
+      - Something you do:   picture password
     `;
   }
 }

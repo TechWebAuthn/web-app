@@ -21,7 +21,7 @@ class Cover extends PresentationPageTemplate {
 
   get _prompterMessage() {
     return `
-      Going password-less with Web Authentication
+      # Going password-less with Web Authentication
 
       Title slide of the presentation
     `;

@@ -1,4 +1,6 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
+import { unsafeHTML } from "lit/directives/unsafe-html";
+import marked from "marked";
 import { connectToBroadcastChannel } from "./utils/network";
 
 import resets from "./styles/resets.css?inline";
@@ -8,12 +10,14 @@ class Prompter extends LitElement {
     super();
     this._broadcastChannel = connectToBroadcastChannel("presentation");
     this._broadcastChannel.onmessage = this._parseMessage.bind(this);
+    this._slideName = "...";
+    this._slideText = "...";
   }
 
   static get properties() {
     return {
       _slideName: String,
-      _slideTexts: Array,
+      _slideText: String,
     };
   }
 
@@ -27,12 +31,22 @@ class Prompter extends LitElement {
           height: 100vh;
         }
 
+        :host > * {
+          max-width: 55ch;
+          margin-inline-start: auto;
+          margin-inline-end: auto;
+        }
+
         div {
           flex: 1;
           display: flex;
           flex-direction: column;
           justify-content: center;
           font-size: 1.2em;
+        }
+
+        p {
+          margin-block-end: 2em;
         }
       `,
     ];
@@ -45,14 +59,14 @@ class Prompter extends LitElement {
   render() {
     return html`
       <h1>${this._slideName}</h1>
-      <div>${this._slideTexts?.map((text) => html`<p>${text}</p>`)}</div>
+      <div>${unsafeHTML(marked(this._slideText))}</div>
     `;
   }
 
   _parseMessage({ data }) {
-    const [name, text] = data?.split("\n\n").map((d) => d.trim());
-    this._slideName = name;
-    this._slideTexts = text?.split("\n").map((t) => t.trim()) || [];
+    const { name, text } = data?.match(/(?<name>^\s+\n?[#]+.+\n)(?<text>[\s\S]+$)/)?.groups || {};
+    this._slideName = name?.replace(/(#)+/, "")?.trim() || this._slideName;
+    this._slideText = text?.replace(/^(?!\n)\s+/gm, "").trim() || this._slideText;
   }
 }
 

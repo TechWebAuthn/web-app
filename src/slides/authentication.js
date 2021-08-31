@@ -30,10 +30,11 @@ class Authentication extends PresentationPageTemplate {
 
   get _prompterMessage() {
     return `
-      Authentication - Introduction
+      # Authentication - Introduction
 
-      Some general notes about authentication
-      Explain why authentication is needed
+      The word "authentication" has its origins in the Greek words: "authentikos" (real, genuine) and "authentes" (author).
+
+      On screen, we can see a concise explanation for what authentication entails.
     `;
   }
 }

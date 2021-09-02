@@ -1,4 +1,4 @@
-import {css, html, LitElement, unsafeCSS} from "lit";
+import {html, LitElement, unsafeCSS} from "lit";
 import slides from "../styles/slides.css?inline";
 import {setNotificationMessage} from "../utils/notification";
 import forms from "../styles/forms.css";
@@ -18,17 +18,12 @@ class WebAuthnResources extends LitElement {
             unsafeCSS(cards),
             unsafeCSS(notifications),
             unsafeCSS(slides),
-            css`
-        web-authn-recovery::part(input) {
-          box-sizing: border-box;
-        }
-      `,
         ];
     }
+
     static get scopedElements() {
         return {
             ...super.scopedElements,
-            'auth-logs': Logs,
         };
     }
 
@@ -38,9 +33,10 @@ class WebAuthnResources extends LitElement {
             <article>
                 <aside>
                     <figure>
-                        <img src="/images/webauthn-intro-1.png" alt="WebAuthn Resources" />
+                        <img src="/images/webauthn-intro-1.png" alt="WebAuthn Resources"/>
                         <figcaption>
-                            <a href='https://www.freepik.com/vectors/infographic'>Infographic vector created by vectorjuice - www.freepik.com</a>
+                            <a href='https://www.freepik.com/vectors/infographic'>Infographic vector created by
+                                vectorjuice - www.freepik.com</a>
                         </figcaption>
                     </figure>
                 </aside>
@@ -49,7 +45,7 @@ class WebAuthnResources extends LitElement {
                     <ul>
                         <li>https://github.com/TechWebAuthn</li>
                         <li>twitter.com/BogdanArvinte</li>
-                        <li>mihaita-tinta.medium.com </li>
+                        <li>mihaita-tinta.medium.com</li>
                     </ul>
                 </section>
             </article>

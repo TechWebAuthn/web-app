@@ -91,6 +91,12 @@ class WebAuthnCeremonies extends PresentationPageTemplate {
   get _prompterMessage() {
     return `
       # Web Authn - Ceremonies
+      WebAuthentication defines several ceremonies to allow creation and usage of the public key based credentials.
+The registration ceremony allows the RP to link a new set of credentials to a possibly new user account
+The login ceremony represents the actual authentication process to validate the user identity
+To prevent an account lock out the user can use a recovery key.
+
+And finally we are adding a device enrollment process with different variations to enhance the current WebAuthentication proposal and make it easier for the end user to add more devices to his account.
     `;
   }
 }

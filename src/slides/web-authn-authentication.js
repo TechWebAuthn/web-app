@@ -122,6 +122,9 @@ class WebAuthnAuthentication extends PresentationPageTemplate {
   get _prompterMessage() {
     return `
       # Web Authn - Authentication
+      - this is somehow similar because it involves also 2 steps: getting the challenge and validating the signed challenge
+      - we will use the username we previously registered.
+      - check the logs
     `;
   }
 }

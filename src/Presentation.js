@@ -1,5 +1,6 @@
 import { LitElement, html, unsafeCSS } from "lit";
 import { connectToBroadcastChannel } from "./utils/network";
+import "./utils/puck";
 import { Router } from "@vaadin/router";
 import resets from "./styles/resets.css?inline";
 import presentation from "./styles/presentation.css?inline";
@@ -90,7 +91,7 @@ class PresentationApp extends LitElement {
 
     this.isDarkTheme = window.localStorage.getItem("theme") === "dark";
     window.addEventListener("theme-changed", ({ detail: { theme } }) => (this.isDarkTheme = theme === "dark"));
-    this._navigationListener = this._onNavigation.bind(this);
+    this._keyupListener = this._onKeyup.bind(this);
   }
 
   static get properties() {
@@ -105,7 +106,9 @@ class PresentationApp extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    window.addEventListener("keyup", this._navigationListener);
+    this._broadcastChannel = connectToBroadcastChannel("presentation");
+    this.onfullscreenchange = this._onFullscreen.bind(this);
+    window.addEventListener("keyup", this._keyupListener);
   }
 
   render() {
@@ -119,23 +122,102 @@ class PresentationApp extends LitElement {
   }
 
   disconnectedCallback() {
-    window.removeEventListener("keyup", this._navigationListener);
-    this._broadcastChannel = connectToBroadcastChannel("presentation");
+    window.removeEventListener("keyup", this._keyupListener);
+
     this._broadcastChannel.close();
     super.disconnectedCallback();
   }
 
-  _onNavigation(event) {
-    const { key } = event;
-    if (!["ArrowLeft", "ArrowRight"].includes(key)) return;
+  _onKeyup(event) {
+    const { key, altKey, ctrlKey } = event;
+
+    if (!["ArrowLeft", "ArrowRight", "F11", "p"].includes(key)) return;
     const currentSlide = this.location.pathname.replace("/presentation", "");
     const routeIndex = routes.findIndex((r) => r.path === currentSlide);
+
     if (key === "ArrowLeft" && routeIndex > 0) {
       Router.go(`/presentation${routes[routeIndex - 1].path}`);
     }
+
     if (key === "ArrowRight" && routeIndex < routes.length - 1) {
       Router.go(`/presentation${routes[routeIndex + 1].path}`);
     }
+
+    if (key === "F11" && !document.fullscreenElement) {
+      this.requestFullscreen();
+    }
+
+    if (key === "p" && altKey && ctrlKey) {
+      this._connectPuckJS();
+    }
+  }
+
+  _onFullscreen() {
+    if (document.fullscreenElement) {
+      console.log(this._broadcastChannel);
+      this._broadcastChannel?.postMessage("entered-fullscreen");
+    } else {
+      this._broadcastChannel?.postMessage("exited-fullscreen");
+    }
+  }
+
+  _connectPuckJS() {
+    Puck.connect((connection) => {
+      if (!connection) {
+        return alert("Could not connect to device!");
+      }
+
+      connection.write(`
+        reset();
+        let ledTimeout;
+
+        function press() {
+          if (ledTimeout) {
+            clearTimeout(ledTimeout);
+          }
+
+          const data = {};
+          const movement = Puck.accel();
+          if (movement.acc.z < 0) {
+            LED1.set();
+            LED2.reset();
+            data.d = 'prev';
+          } else {
+            LED2.set();
+            LED1.reset();
+            data.d = 'next'
+          }
+
+          Bluetooth.write(JSON.stringify(data));
+
+          ledTimeout = setTimeout(() => {
+            LED1.reset();
+            LED2.reset();
+          }, 100);
+        }
+
+        setWatch(press, BTN, { repeat: true, debounce: 100 });
+      `);
+
+      connection.on("data", (data) => {
+        if (!data || !data.startsWith("{")) {
+          return;
+        }
+
+        const keyMap = {
+          next: "ArrowRight",
+          prev: "ArrowLeft",
+        };
+
+        try {
+          const { d } = JSON.parse(data);
+
+          window.dispatchEvent(new KeyboardEvent("keyup", { key: keyMap[d] }));
+        } catch (e) {
+          return;
+        }
+      });
+    });
   }
 }
 

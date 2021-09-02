@@ -12,12 +12,16 @@ class Prompter extends LitElement {
     this._broadcastChannel.onmessage = this._parseMessage.bind(this);
     this._slideName = "...";
     this._slideText = "...";
+    this._slideTimer = 0;
+    this._timerInterval = null;
+    import("https://puck-js.com/puck.js");
   }
 
   static get properties() {
     return {
       _slideName: String,
       _slideText: String,
+      _slideTimer: Number,
     };
   }
 
@@ -48,6 +52,10 @@ class Prompter extends LitElement {
         p {
           margin-block-end: 2em;
         }
+
+        output {
+          font-size: 2em;
+        }
       `,
     ];
   }
@@ -60,13 +68,35 @@ class Prompter extends LitElement {
     return html`
       <h1>${this._slideName}</h1>
       <div>${unsafeHTML(marked(this._slideText))}</div>
+      <output>${this._formatedTimer}</output>
     `;
   }
 
   _parseMessage({ data }) {
+    if (data.endsWith("fullscreen")) {
+      if (data === "entered-fullscreen") {
+        this._timerInterval = setInterval(this._countUp.bind(this), 1000);
+      } else {
+        clearInterval(this._timerInterval);
+        this._slideTimer = 0;
+      }
+      return;
+    }
+
     const { name, text } = data?.match(/(?<name>^\s+\n?[#]+.+\n)(?<text>[\s\S]+$)/)?.groups || {};
     this._slideName = name?.replace(/(#)+/, "")?.trim() || this._slideName;
     this._slideText = text?.replace(/^(?!\n)\s+/gm, "").trim() || this._slideText;
+  }
+
+  _countUp() {
+    this._slideTimer += 1;
+  }
+
+  get _formatedTimer() {
+    return new Date(this._slideTimer * 1000)
+      .toISOString()
+      .match(/(?<=T)(.+)(?=\.)/)
+      .pop();
   }
 }
 

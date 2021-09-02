@@ -131,10 +131,14 @@ There are 3 steps involved:
 - the user provides the username (and that's an optional field in webauthn)
 - the browser asks the RP to create an account for that username. In response, the RP sends its information
 like rpId, origin, user info and a challenge. This data is being used by the authenticator to create a new set of credentials.
-The RP info will scope the credentials to this RP. This means that everytime someone tries to login with this credential it has to be the initial RP described by this info.
 From our previous slide, we said that a message encrypted with a private key guarantees the identity of the sender.
 Here that message represents the challenge and its value it's something with zero meaning. 
 - the final step here is for the browser to sends the signed challenge coming from the authenticator to the RP and the public key based credential for future references
+
+The authenticator will scope the credentials to this RP based on this info.
+This means that the authenticator limits access for RPs to the credentials created for them.
+Additionally everytime the RP receives a signed challenge it also validates the challenge was created from a whitelisted origin.
+With this mechanism in place, a phishing attack won't work even the user doesn't notice he is being scammed
     `;
   }
 }

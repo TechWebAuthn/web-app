@@ -137,7 +137,7 @@ class Register extends LitElement {
                     @enrollment-created="${this._onEnrollmentEvent}"
                     @enrollment-completed="${this._onEnrollmentEvent}"
                     @enrollment-error="${this._onEnrollmentEvent}"
-                    @enrollment-canceled="${this._onEnrollmentEvent}"
+                    @enrollment-cancelled="${this._onEnrollmentEvent}"
                     .rtcIceServers="${this.rtcIceServers}"
                   ></web-authn-rtc-enrollment-requester>
                 `
@@ -253,8 +253,8 @@ class Register extends LitElement {
         this._isCurrentFlowComplete = true;
         this._showAddFlowLoader = false;
         break;
-      case "enrollment-canceled":
-        message = message || "Enrollment has been canceled";
+      case "enrollment-cancelled":
+        message = message || "Enrollment has been cancelled";
         notificationType = "error";
         break;
       case "enrollment-error":

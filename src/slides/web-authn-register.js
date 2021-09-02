@@ -121,6 +121,11 @@ class WebAuthnRegister extends PresentationPageTemplate {
     this._setNotificationMessage(message, notificationType);
   }
 
+  async _copyRecoveryTokenToClipboard() {
+    await navigator.clipboard.writeText(this._recoveryToken);
+    this._setNotificationMessage("Recovery token copied to clipboard", "info");
+  }
+
   get _prompterMessage() {
     return `
       # Web Authn - Register

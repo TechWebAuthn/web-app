@@ -50,7 +50,7 @@ class WebAuthnAddNew extends PresentationPageTemplate {
       <article>
         <aside class="fit-content">
           <output class="device">
-            <h2>Recover account</h2>
+            <h2>Add new device</h2>
             <p id="notification" class="notification"></p>
             <div class="card">
               ${!this._isFlowComplete
@@ -63,7 +63,7 @@ class WebAuthnAddNew extends PresentationPageTemplate {
                         @enrollment-created="${this._onEnrollmentEvent}"
                         @enrollment-completed="${this._onEnrollmentEvent}"
                         @enrollment-error="${this._onEnrollmentEvent}"
-                        @enrollment-canceled="${this._onEnrollmentEvent}"
+                        @enrollment-cancelled="${this._onEnrollmentEvent}"
                         .rtcIceServers="${this.rtcIceServers}"
                       ></web-authn-rtc-enrollment-requester>
                     `
@@ -110,8 +110,8 @@ class WebAuthnAddNew extends PresentationPageTemplate {
         this._isFlowComplete = true;
         this._showLoader = false;
         break;
-      case "enrollment-canceled":
-        message = message || "Enrollment has been canceled";
+      case "enrollment-cancelled":
+        message = message || "Enrollment has been cancelled";
         notificationType = "error";
         this._showLoader = true;
         break;
@@ -123,43 +123,6 @@ class WebAuthnAddNew extends PresentationPageTemplate {
     }
 
     this._setNotificationMessage(message, notificationType);
-  }
-
-  _startExternalConnection() {
-    this.RTC?.close();
-    clearNotificationMessage(this.shadowRoot.querySelector("#notification"));
-    const enrollmentComponent = this.shadowRoot.querySelector("web-authn-enroll");
-
-    this.RTC = new WebRTCConnection(new WebSocketConnection("/api/socket"));
-    this.RTC.createDataChannel();
-    this.RTC.oncode = (code) => {
-      enrollmentComponent.peerCode = code;
-    };
-    this.RTC.onuser = async (user) => {
-      await this.RTC.createOffer();
-      this._setNotificationMessage(`User ${user} wants to claim this device`, "info", false);
-      enrollmentComponent.agreementText = `I understand that this device will be added to ${user}'s account`;
-      enrollmentComponent.dispatchEvent(new CustomEvent("enrollment-code-confirmed"));
-    };
-  }
-
-  _requestRegistrationAddToken() {
-    const enrollmentComponent = this.shadowRoot.querySelector("web-authn-enroll");
-
-    this.RTC.sendData("action::add");
-    this.RTC.ondatachannelmessage = (event) => {
-      const [type, data] = event.data.split("::");
-
-      if (type === "token") {
-        enrollmentComponent.registrationAddToken = data;
-      }
-    };
-    this.RTC.listenForData();
-  }
-
-  _cancelEnrollmentFlow() {
-    this.RTC.sendData("action::cancel");
-    this.RTC?.close();
   }
 
   get _prompterMessage() {

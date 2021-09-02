@@ -95,6 +95,12 @@ export const routes = [
     component: "presentation-web-authn-resources",
     action: () => import("./slides/web-authn-resources"),
   },
+  {
+    name: "feedback",
+    path: "/feedback",
+    component: "presentation-feedback",
+    action: () => import("./slides/feedback"),
+  },
 ];
 
 class PresentationApp extends LitElement {

@@ -130,7 +130,9 @@ class Dashboard extends LitElement {
             class="form"
             @enrollment-started="${this._onConnectEvent}"
             @enrollment-completed="${this._onConnectEvent}"
+            @enrollment-cancelled="${this._onConnectEvent}"
             @enrollment-error="${this._onConnectEvent}"
+            .rtcIceServers=${this.rtcIceServers}
           ></web-authn-rtc-enrollment-provider>
           <div class="center" ?hidden=${!this._addDeviceInProgress}>
             <progress class="loader" indefinite>Loading</progress>
@@ -173,6 +175,12 @@ class Dashboard extends LitElement {
       case "enrollment-completed":
         message = "Sending registration add token";
         this.shadowRoot.querySelector("details").open = false;
+        this._getMyDevices();
+        this._addDeviceInProgress = false;
+        break;
+      case "enrollment-cancelled":
+        message = "Enrollment has been cancelled";
+        notificationType = "error";
         this._addDeviceInProgress = false;
         break;
       case "enrollment-error":

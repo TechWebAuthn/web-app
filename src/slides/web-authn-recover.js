@@ -1,4 +1,5 @@
-import { LitElement, html, unsafeCSS, css } from "lit";
+import { html, unsafeCSS, css } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
 import "web-authn-components/recovery";
 import "../components/logs";
@@ -7,7 +8,7 @@ import cards from "../styles/cards.css";
 import notifications from "../styles/notifications.css";
 import slides from "../styles/slides.css?inline";
 
-class WebAuthnRecover extends LitElement {
+class WebAuthnRecover extends PresentationPageTemplate {
   constructor() {
     super();
 
@@ -88,6 +89,12 @@ class WebAuthnRecover extends LitElement {
     }
 
     this._setNotificationMessage(message, notificationType);
+  }
+
+  get _prompterMessage() {
+    return `
+      # Web Authn - Recover account access
+    `;
   }
 }
 

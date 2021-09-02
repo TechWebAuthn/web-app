@@ -1,8 +1,9 @@
-import { LitElement, html, unsafeCSS } from "lit";
+import { html, unsafeCSS } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import resets from "../styles/resets.css?inline";
 import slides from "../styles/slides.css?inline";
 
-class WebAuthnSupport extends LitElement {
+class WebAuthnSupport extends PresentationPageTemplate {
   static get styles() {
     return [unsafeCSS(resets), unsafeCSS(slides)];
   }
@@ -29,6 +30,12 @@ class WebAuthnSupport extends LitElement {
           </figure>
         </section>
       </article>
+    `;
+  }
+
+  get _prompterMessage() {
+    return `
+      # Web Authn - Add a new device
     `;
   }
 }

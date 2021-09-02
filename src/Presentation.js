@@ -18,6 +18,12 @@ export const routes = [
     action: () => import("./slides/cover"),
   },
   {
+    name: "agenda",
+    path: "/agenda",
+    component: "presentation-agenda",
+    action: () => import("./slides/agenda"),
+  },
+  {
     name: "authentication",
     path: "/authentication",
     component: "presentation-authentication",

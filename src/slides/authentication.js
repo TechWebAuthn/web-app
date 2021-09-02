@@ -34,7 +34,7 @@ class Authentication extends PresentationPageTemplate {
 
       The word "authentication" has its origins in the Greek words: "authentikos" (real, genuine) and "authentes" (author).
 
-      On screen, we can see a concise explanation for what authentication entails.
+      In short, users must prove that they are the real authors of the associated account.
     `;
   }
 }

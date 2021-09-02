@@ -16,9 +16,7 @@ class AuthenticationHow extends PresentationPageTemplate {
           <figure>
             <img src="/images/authentication-how.png" alt="Authentication method" />
             <figcaption>
-              <a href="https://www.freepik.com/vectors/computer"
-                >Computer vector created by stories - www.freepik.com</a
-              >
+              <a href="https://www.freepik.com/vectors/computer">Computer vector created by stories</a>
             </figcaption>
           </figure>
         </aside>
@@ -56,7 +54,7 @@ class AuthenticationHow extends PresentationPageTemplate {
       - Something you have: TOTP, smart card, physical token
       - Something you are:  biometrics (face, fingerprint)
       - Somewhere you are:  geolocation
-      - Something you do:   picture password
+      - Something you do:   behavior
     `;
   }
 }

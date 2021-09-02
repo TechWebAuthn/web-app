@@ -3,7 +3,7 @@
 }
 
 :host > * {
-  padding: 1rem;
+  padding: 2rem;
   display: flex;
   gap: 4rem;
   box-sizing: border-box;
@@ -29,7 +29,6 @@ article > * {
 }
 
 aside {
-  flex: 0;
   min-width: 35vmax;
 }
 

@@ -1,13 +1,14 @@
-import { css, html, LitElement, unsafeCSS } from "lit";
-import slides from "../styles/slides.css?inline";
+import { css, html, unsafeCSS } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
 import "web-authn-components/recovery";
 import forms from "../styles/forms.css?inline";
 import cards from "../styles/cards.css?inline";
 import notifications from "../styles/notifications.css?inline";
 import layouts from "../styles/layouts.css?inline";
+import slides from "../styles/slides.css?inline";
 
-class WebAuthnAsymmetricCryptography extends LitElement {
+class WebAuthnAsymmetricCryptography extends PresentationPageTemplate {
   constructor() {
     super();
 
@@ -55,6 +56,12 @@ class WebAuthnAsymmetricCryptography extends LitElement {
           </ul>
         </section>
       </article>
+    `;
+  }
+
+  get _prompterMessage() {
+    return `
+      # Web Authn - Asymmetric cryptography
     `;
   }
 }

@@ -1,7 +1,8 @@
-import { LitElement, html, unsafeCSS } from "lit";
+import { html, unsafeCSS } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import slides from "../styles/slides.css?inline";
 
-class AuthenticationChallenges extends LitElement {
+class AuthenticationChallenges extends PresentationPageTemplate {
   static get styles() {
     return [unsafeCSS(slides)];
   }
@@ -32,6 +33,16 @@ class AuthenticationChallenges extends LitElement {
           </ul>
         </section>
       </article>
+    `;
+  }
+
+  get _prompterMessage() {
+    return `
+      # Authentication - Challenges
+
+      Recent studies show that between 60%-80% of data breaches are caused by credential theft.
+
+      Brute-force attacks, phising, password reuse and bad server-side implementations are only some of the causes that lead to credential theft.
     `;
   }
 }

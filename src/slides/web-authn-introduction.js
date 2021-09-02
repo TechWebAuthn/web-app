@@ -1,5 +1,6 @@
-import { css, html, LitElement, unsafeCSS } from "lit";
+import { css, html, unsafeCSS } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html";
+import PresentationPageTemplate from "./presentation-page-template";
 import slides from "../styles/slides.css?inline";
 import { setNotificationMessage } from "../utils/notification";
 import "web-authn-components/recovery";
@@ -9,7 +10,7 @@ import notifications from "../styles/notifications.css";
 
 import svgFile from "../../public/images/web-authn-actors.svg?raw";
 
-class WebAuthnIntroduction extends LitElement {
+class WebAuthnIntroduction extends PresentationPageTemplate {
   constructor() {
     super();
 
@@ -53,6 +54,12 @@ class WebAuthnIntroduction extends LitElement {
           ${unsafeHTML(svgFile)}
         </section>
       </article>
+    `;
+  }
+
+  get _prompterMessage() {
+    return `
+      # Web Authn - Introduction
     `;
   }
 }

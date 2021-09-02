@@ -1,4 +1,5 @@
-import { LitElement, html, unsafeCSS, css } from "lit";
+import { html, unsafeCSS, css } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage, clearNotificationMessage } from "../utils/notification";
 import "web-authn-components/rtc/enrollment-requester";
 import "../components/logs";
@@ -9,7 +10,7 @@ import notifications from "../styles/notifications.css";
 import loaders from "../styles/loaders.css";
 import slides from "../styles/slides.css?inline";
 
-class WebAuthnAddNew extends LitElement {
+class WebAuthnAddNew extends PresentationPageTemplate {
   constructor() {
     super();
 
@@ -159,6 +160,12 @@ class WebAuthnAddNew extends LitElement {
   _cancelEnrollmentFlow() {
     this.RTC.sendData("action::cancel");
     this.RTC?.close();
+  }
+
+  get _prompterMessage() {
+    return `
+      # Web Authn - Add a new device
+    `;
   }
 }
 

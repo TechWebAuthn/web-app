@@ -1,4 +1,5 @@
-import { css, html, LitElement, unsafeCSS } from "lit";
+import { css, html, unsafeCSS } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
 import "web-authn-components/registration";
 import "../components/logs";
@@ -10,7 +11,7 @@ import codes from "../styles/codes.css?inline";
 import buttons from "../styles/buttons.css?inline";
 import slides from "../styles/slides.css?inline";
 
-class WebAuthnRegister extends LitElement {
+class WebAuthnRegister extends PresentationPageTemplate {
   constructor() {
     super();
 
@@ -118,6 +119,12 @@ class WebAuthnRegister extends LitElement {
     }
 
     this._setNotificationMessage(message, notificationType);
+  }
+
+  get _prompterMessage() {
+    return `
+      # Web Authn - Register
+    `;
   }
 }
 

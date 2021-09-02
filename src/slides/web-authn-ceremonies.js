@@ -1,12 +1,13 @@
-import { css, html, LitElement, unsafeCSS } from "lit";
-import slides from "../styles/slides.css?inline";
+import { css, html, unsafeCSS } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
 import forms from "../styles/forms.css?inline";
 import cards from "../styles/cards.css?inline";
 import notifications from "../styles/notifications.css?inline";
 import layouts from "../styles/layouts.css?inline";
+import slides from "../styles/slides.css?inline";
 
-class WebAuthnCeremonies extends LitElement {
+class WebAuthnCeremonies extends PresentationPageTemplate {
   constructor() {
     super();
 
@@ -84,6 +85,12 @@ class WebAuthnCeremonies extends LitElement {
           <p>Enrolling a new device to your existing account.</p>
         </section>
       </article>
+    `;
+  }
+
+  get _prompterMessage() {
+    return `
+      # Web Authn - Ceremonies
     `;
   }
 }

@@ -1,4 +1,5 @@
-import { css, html, LitElement, unsafeCSS } from "lit";
+import { css, html, unsafeCSS } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
 import { request } from "../utils/network";
 import "web-authn-components/login";
@@ -7,9 +8,8 @@ import forms from "../styles/forms.css";
 import cards from "../styles/cards.css";
 import notifications from "../styles/notifications.css";
 import slides from "../styles/slides.css?inline";
-import { hasValidSession } from "../utils/session";
 
-class WebAuthnAuthentication extends LitElement {
+class WebAuthnAuthentication extends PresentationPageTemplate {
   constructor() {
     super();
 
@@ -117,6 +117,12 @@ class WebAuthnAuthentication extends LitElement {
     });
 
     this._isLoggedIn = false;
+  }
+
+  get _prompterMessage() {
+    return `
+      # Web Authn - Authentication
+    `;
   }
 }
 

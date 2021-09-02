@@ -11,7 +11,7 @@ class Cover extends PresentationPageTemplate {
     return html`
       <article class="cover-title">
         <h1>Going password-less with Web Authentication</h1>
-        <h2>Mihaita Tinta & Bogdan Arvinte</h2>
+        <h2>Mihăiță (Miță) Tinta & Bogdan (mArv) Arvinte</h2>
         <section>
           <h3>Cluj, September 20th, 2021</h3>
         </section>
@@ -23,7 +23,9 @@ class Cover extends PresentationPageTemplate {
     return `
       # Going password-less with Web Authentication
 
-      Title slide of the presentation
+      Miță and mArv introduction
+
+      Opening statement about the presentation
     `;
   }
 }

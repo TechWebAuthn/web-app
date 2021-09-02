@@ -62,6 +62,14 @@ class WebAuthnAsymmetricCryptography extends PresentationPageTemplate {
   get _prompterMessage() {
     return `
       # Web Authn - Asymmetric cryptography
+      Before we go any further, we have to align on what public key based credentials are.
+In asymmetric cryptography, we have the public key/private key pair. While anybody can use the public key, the access to the private key should be controlled. 
+Based on this restriction if we encrypt the message with a public key, we get a secured transmission because only one having the private key can see the original message.
+If we encrypt the message with the private key, anybody can see the original message. This is still useful because only one having the private key can create that valid message.
+So everybody can validate the message was actually signed by the one having the private key. In this way we validate the identity of the sender and this is the main cryptography principle used in webauthn.
+
+Because the private key never leaves the authenticator, we are sure the message was signed by the right user.
+So we are using strong credentials, they are also scoped - they can be accessed only by their original requestor RP
     `;
   }
 }

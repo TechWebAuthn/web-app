@@ -15,6 +15,9 @@ class Cover extends PresentationPageTemplate {
         <section>
           <h3>Cluj, September 20th, 2021</h3>
         </section>
+        <figure>
+          <img src="/images/mihaita.tinta.jpeg" alt="Mihaita Tinta™" />
+        </figure>
       </article>
     `;
   }

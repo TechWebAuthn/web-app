@@ -89,6 +89,12 @@ export const routes = [
     component: "presentation-web-authn-support",
     action: () => import("./slides/web-authn-support"),
   },
+  {
+    name: "web-authn-resources",
+    path: "/web-authn-resources",
+    component: "presentation-web-authn-resources",
+    action: () => import("./slides/web-authn-resources"),
+  },
 ];
 
 class PresentationApp extends LitElement {

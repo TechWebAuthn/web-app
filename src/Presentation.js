@@ -170,9 +170,9 @@ class PresentationApp extends LitElement {
     }
   }
 
-  _onFullscreen() {
+  _onFullscreen(event) {
+    console.log("Fullscreen changed", event);
     if (document.fullscreenElement) {
-      console.log(this._broadcastChannel);
       this._broadcastChannel?.postMessage("entered-fullscreen");
     } else {
       this._broadcastChannel?.postMessage("exited-fullscreen");

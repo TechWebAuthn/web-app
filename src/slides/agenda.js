@@ -9,7 +9,10 @@ class Agenda extends PresentationPageTemplate {
       css`
         ol {
           font-size: 2.4rem;
-          padding-inline-start: 2em;
+          padding-inline-start: 4rem;
+        }
+        aside {
+          flex: 2;
         }
       `,
     ];
@@ -47,8 +50,8 @@ class Agenda extends PresentationPageTemplate {
         </section>
         <aside>
           <figure>
+            <img src="/images/agenda.png" alt="Agenda" />
             <figcaption>
-              <img src="/images/agenda.png" alt="Agenda" />
               <a href="https://www.freepik.com/vectors/illustrations">Illustrations vector created by stories</a>
             </figcaption>
           </figure>

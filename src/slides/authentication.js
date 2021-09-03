@@ -17,9 +17,7 @@ class Authentication extends PresentationPageTemplate {
           <figure>
             <img src="/images/authentication.png" alt="Authentication process" />
             <ficaption>
-              <a href="https://www.freepik.com/vectors/security"
-                >Security vector created by stories - www.freepik.com</a
-              >
+              <a href="https://www.freepik.com/vectors/security">Security vector created by stories</a>
             </ficaption>
           </figure>
         </aside>

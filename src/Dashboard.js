@@ -1,5 +1,5 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
-import { classMap } from "lit/directives/class-map";
+import { classMap } from "lit/directives/class-map.js";
 import UAParser from "ua-parser-js/dist/ua-parser.min";
 import { request } from "./utils/network";
 import { setNotificationMessage } from "./utils/notification";

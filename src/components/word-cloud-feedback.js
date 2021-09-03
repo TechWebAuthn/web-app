@@ -90,8 +90,10 @@ class WordCloudFeedback extends LitElement {
 
   async _drawWordCloud() {
     if (!this._chartsLoaded) {
-      am4core = await import("@amcharts/amcharts4/core");
-      am4plugins_wordCloud = await import("@amcharts/amcharts4/plugins/wordCloud");
+      const { useTheme, create, percent, ColorSet } = await import("@amcharts/amcharts4/core");
+      am4core = { useTheme, create, percent, ColorSet };
+      const { WordCloud, WordCloudSeries } = await import("@amcharts/amcharts4/plugins/wordCloud");
+      am4plugins_wordCloud = { WordCloud, WordCloudSeries };
       am4themes_animated = (await import("@amcharts/amcharts4/themes/animated")).default;
       this._chartsLoaded = true;
     }

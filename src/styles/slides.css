@@ -20,6 +20,7 @@ h1 {
 }
 
 article {
+  font-size: 1.2em;
   width: 100%;
   flex-wrap: wrap;
 }
@@ -53,6 +54,7 @@ figure img {
   flex: 1;
   max-height: fit-content;
   max-width: fit-content;
+  width: 100%;
 }
 
 figure a {
@@ -91,7 +93,8 @@ blockquote::before {
   padding: 0;
   transform: translateX(-2rem);
   gap: 0;
-  top: 15vh;
+  margin-block-start: 15vh;
+  font-size: 1em;
 }
 
 .cover-title > * {
@@ -103,6 +106,7 @@ blockquote::before {
 .cover-title h1 {
   color: inherit;
   padding-block-start: 4rem;
+  padding-block-end: 4rem;
   line-height: 1.5;
 }
 
@@ -117,6 +121,41 @@ blockquote::before {
   color: var(--text-primary);
   border-radius: 0 0 0.5em 0;
   text-align: right;
+}
+
+.cover-avatars {
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-block-end: 1rem;
+  padding-block-start: 1rem;
+}
+
+.cover-avatars img {
+  flex: 0;
+  width: 100%;
+  max-height: 320px;
+  border-radius: 50%;
+  border: 1rem solid var(--brand-color);
+  box-sizing: border-box;
+  aspect-ratio: 1;
+}
+
+.cover-avatars figure {
+  aspect-ratio: 1;
+  max-height: 100%;
+  justify-content: center;
+}
+
+.cover-avatars figcaption {
+  background: var(--brand-color);
+  font-size: 2em;
+  position: relative;
+  bottom: 0;
+  margin: 0 auto;
+  padding: 0.25rem 4rem;
+  bottom: 1.5em;
+  border-radius: 0.5rem;
+  color: var(--presentation-background);
 }
 
 .device {
@@ -181,6 +220,14 @@ blockquote::before {
 
 /* Mac OS settings */
 @media screen and (-webkit-min-device-pixel-ratio: 2) {
+  :host {
+    font-size: 1.4rem;
+  }
+
+  section ol {
+    font-size: 2rem;
+  }
+
   blockquote::before {
     font-size: 1.5em;
     top: 0.64em;
@@ -192,7 +239,7 @@ blockquote::before {
 
 @media screen and (max-width: 720px) {
   .cover-title > * {
-    padding-inline-start: 2rem;
+    padding-inline-start: 4rem;
   }
 
   .cover-title h1 {

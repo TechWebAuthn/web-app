@@ -33,9 +33,11 @@ class Cover extends PresentationPageTemplate {
     return `
       # Going password-less with Web Authentication
 
-      Miță and mArv introduction
+      Welcome everyone! [Introduce ourselves]
 
-      Opening statement about the presentation
+      Today we're going to discuss Web Authentication and share with you some of the things we've learned in the pursuit of a password-less web.
+
+      Before we dive right in, let's have a look at the topics that we'll go through today.
     `;
   }
 }

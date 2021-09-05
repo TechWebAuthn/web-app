@@ -53,13 +53,6 @@ class WordCloudFeedback extends LitElement {
     this._getFeedback();
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    window.addEventListener("popstate", () => {
-      this._setActiveLink(window.location.pathname);
-    });
-  }
-
   disconnectedCallback() {
     this._feedbackSSEConnection.close();
   }

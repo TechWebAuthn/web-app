@@ -16,7 +16,7 @@ class AuthenticationChallenges extends PresentationPageTemplate {
           <figure>
             <img src="/images/authentication-challenges.png" alt="Security concerns" />
             <figcaption>
-              <a href="https://www.freepik.com/vectors/website">Website vector created by stories - www.freepik.com</a>
+              <a href="https://www.freepik.com/vectors/website">Website vector created by stories</a>
             </figcaption>
           </figure>
         </aside>
@@ -31,6 +31,11 @@ class AuthenticationChallenges extends PresentationPageTemplate {
             <li>Plain-text password storage</li>
             <li>Bad use of cryptography</li>
           </ul>
+          <p>
+            <a href="https://www.varonis.com/blog/data-breach-statistics/" target="_blank">
+              98 Must-Know Data Breach Statistics for 2021
+            </a>
+          </p>
         </section>
       </article>
     `;
@@ -40,9 +45,13 @@ class AuthenticationChallenges extends PresentationPageTemplate {
     return `
       # Authentication - Challenges
 
-      Recent studies show that between 60%-80% of data breaches are caused by credential theft.
+      Recent studies and reports show that compromised credentials cause as many as 80% of data breaches.
 
-      Brute-force attacks, phising, password reuse and bad server-side implementations are only some of the causes that lead to credential theft.
+      Brute-force attacks, phishing, weak password policies, application vulnerabilities are only some of the causes leading to credential theft.
+
+      Authentication factors have different weaknesses, and the industry advises using several of them in combination to ensure good security.
+
+      Let's see which of these challenges can Web Authentication help solve.
     `;
   }
 }

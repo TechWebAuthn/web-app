@@ -69,7 +69,7 @@ You will hear during the next slides some new terms like:
 Authenticators come in different forms: platform authenticators - built into the computer/phone or roaming authenticators - external keys - your machine connects to a remote device.
 
 So, until now, the end users had to remember a password - a shared secret.
-Right now, they need to access to an authenticator that uses asymmetric cryptography.
+Right now, they need access to an authenticator that uses asymmetric cryptography.
     `;
   }
 }

@@ -69,7 +69,7 @@ If we encrypt the message with the private key, anybody can see the original mes
 So everybody can validate the message was actually signed by the one having the private key. In this way we validate the identity of the sender and this is the main cryptography principle used in webauthn.
 
 Because the private key never leaves the authenticator, we are sure the message was signed by the right user.
-So we are using strong credentials, they are also scoped - they can be accessed only by their original requestor RP
+So we are using strong credentials instead of a password.
     `;
   }
 }

@@ -84,16 +84,22 @@ export const routes = [
     action: () => import("./slides/web-authn-add-new"),
   },
   {
-    name: "web-authn-support",
-    path: "/web-authn-support",
-    component: "presentation-web-authn-support",
-    action: () => import("./slides/web-authn-support"),
+    name: "web-authn-demo-time",
+    path: "/web-authn-demo-time",
+    component: "presentation-web-authn-demo-time",
+    action: () => import("./slides/web-authn-demo-time"),
   },
   {
     name: "web-authn-resources",
     path: "/web-authn-resources",
     component: "presentation-web-authn-resources",
     action: () => import("./slides/web-authn-resources"),
+  },
+  {
+    name: "web-authn-support",
+    path: "/web-authn-support",
+    component: "presentation-web-authn-support",
+    action: () => import("./slides/web-authn-support"),
   },
   {
     name: "feedback",

@@ -17,9 +17,7 @@ class WebAuthnSupport extends PresentationPageTemplate {
           <figure>
             <img src="/images/web-authn-support.png" alt="Devices" />
             <ficaption>
-              <a href="https://www.freepik.com/vectors/technology"
-                >Technology vector created by stories - www.freepik.com</a
-              >
+              <a href="https://www.freepik.com/vectors/technology">Technology vector created by stories</a>
             </ficaption>
           </figure>
         </aside>

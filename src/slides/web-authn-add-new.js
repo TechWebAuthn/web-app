@@ -128,6 +128,16 @@ class WebAuthnAddNew extends PresentationPageTemplate {
   get _prompterMessage() {
     return `
       # Web Authn - Add a new device
+
+      Using a recovery key could sometimes be a good fit when switching devices, but perhaps we want to access our account from multiple devices, such as laptops and smartphones.
+
+      There are multiple ways to do this, and the specification describes a simple scenario of using a roaming authenticator to register new devices.
+
+      What if we don't use a roaming authenticator?
+
+      - manually move the registration token from one device to another
+      - send the registration token through the relying party or another service
+      - send it between the two devices using a peer-to-peer connection
     `;
   }
 }

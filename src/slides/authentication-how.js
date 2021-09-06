@@ -21,7 +21,7 @@ class AuthenticationHow extends PresentationPageTemplate {
           </figure>
         </aside>
         <section>
-          <h2>The three factors of authentication</h2>
+          <h2>Some factors of authentication</h2>
           <ul>
             <li>Something you know</li>
             <li>Something you have</li>
@@ -48,13 +48,15 @@ class AuthenticationHow extends PresentationPageTemplate {
     return `
       # Authentication - How does it work?
 
-      An authentication factor is a special category of security credential that is used to verify the identity of a user.
+      There are many ways to implement authentication, and all require at least one authentication factor.
 
-      - Something you know: passwords
+      Authentication factors are a particular category of security credentials used to verify the identity of a user.
+
+      - Something you know: passwords (typical example)
       - Something you have: TOTP, smart card, physical token
-      - Something you are:  biometrics (face, fingerprint)
-      - Somewhere you are:  geolocation
-      - Something you do:   behavior
+      - Something you are: biometrics (face, fingerprint)
+      - Somewhere you are: geolocation (geofencing)
+      - Something you do: behavior, personal patterns
     `;
   }
 }

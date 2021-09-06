@@ -14,11 +14,11 @@
     "@amcharts/amcharts4": "^4.10.22",
     "@vaadin/router": "^1.7.4",
     "bowser": "^2.11.0",
-    "lit": "^2.0.0-rc.3",
+    "lit": "^2.0.0-rc.4",
     "marked": "^3.0.2",
     "ua-parser-js": "^0.7.28",
     "vite": "^2.5.3",
-    "web-authn-components": "^0.2.3"
+    "web-authn-components": "^0.2.5"
   },
   "devDependencies": {
     "vite-plugin-pwa": "^0.11.2"

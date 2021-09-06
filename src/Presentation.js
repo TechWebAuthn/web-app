@@ -109,7 +109,7 @@ class PresentationApp extends LitElement {
 
     this.isDarkTheme = window.localStorage.getItem("theme") === "dark";
     window.addEventListener("theme-changed", ({ detail: { theme } }) => (this.isDarkTheme = theme === "dark"));
-    this._keyupListener = this._onKeyup.bind(this);
+    this._keyUpListener = this._onKeyUp.bind(this);
   }
 
   static get properties() {
@@ -126,7 +126,8 @@ class PresentationApp extends LitElement {
     super.connectedCallback();
     this._broadcastChannel = connectToBroadcastChannel("presentation");
     this.onfullscreenchange = this._onFullscreen.bind(this);
-    window.addEventListener("keyup", this._keyupListener);
+    this.onwebkitfullscreenchange = this._onFullscreen.bind(this);
+    window.addEventListener("keyup", this._keyUpListener);
   }
 
   render() {
@@ -140,39 +141,43 @@ class PresentationApp extends LitElement {
   }
 
   disconnectedCallback() {
-    window.removeEventListener("keyup", this._keyupListener);
+    window.removeEventListener("keyup", this._keyUpListener);
 
     this._broadcastChannel.close();
     super.disconnectedCallback();
   }
 
-  _onKeyup(event) {
-    const { key, altKey, ctrlKey } = event;
+  _onKeyUp(event) {
+    const { code, altKey, ctrlKey } = event;
 
-    if (!["ArrowLeft", "ArrowRight", "F11", "p"].includes(key)) return;
+    if (!["ArrowLeft", "ArrowRight", "F11", "KeyP", "KeyF", "KeyR"].includes(code)) return;
     const currentSlide = this.location.pathname.replace("/presentation", "");
     const routeIndex = routes.findIndex((r) => r.path === currentSlide);
 
-    if (key === "ArrowLeft" && routeIndex > 0) {
+    if (code === "ArrowLeft" && routeIndex > 0) {
       Router.go(`/presentation${routes[routeIndex - 1].path}`);
     }
 
-    if (key === "ArrowRight" && routeIndex < routes.length - 1) {
+    if (code === "ArrowRight" && routeIndex < routes.length - 1) {
       Router.go(`/presentation${routes[routeIndex + 1].path}`);
     }
 
-    if (key === "F11" && !document.fullscreenElement) {
-      this.requestFullscreen();
+    if (code === "F11" || (code === "KeyF" && ctrlKey && altKey)) {
+      event.preventDefault();
+      document.fullscreenElement ? document.exitFullscreen() : this.requestFullscreen();
     }
 
-    if (key === "p" && altKey && ctrlKey) {
+    if (code === "KeyP" && altKey && ctrlKey) {
       this._connectPuckJS();
+    }
+
+    if (code === "KeyR" && altKey && ctrlKey) {
+      this._resetPuckJS();
     }
   }
 
   _onFullscreen() {
-    if (document.fullscreenElement) {
-      console.log(this._broadcastChannel);
+    if (document.fullscreenElement || document.webkitfullscreenElement) {
       this._broadcastChannel?.postMessage("entered-fullscreen");
     } else {
       this._broadcastChannel?.postMessage("exited-fullscreen");
@@ -230,11 +235,23 @@ class PresentationApp extends LitElement {
         try {
           const { d } = JSON.parse(data);
 
-          window.dispatchEvent(new KeyboardEvent("keyup", { key: keyMap[d] }));
+          window.dispatchEvent(new KeyboardEvent("keyup", { code: keyMap[d] }));
         } catch (e) {
           return;
         }
       });
+    });
+  }
+
+  _resetPuckJS() {
+    Puck.connect((connection) => {
+      if (!connection) {
+        return alert("Could not connect to device!");
+      }
+
+      connection.write(`reset();`);
+
+      setTimeout(() => connection.close(), 2000);
     });
   }
 }

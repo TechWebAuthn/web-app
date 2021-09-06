@@ -94,6 +94,12 @@ class WebAuthnRecover extends PresentationPageTemplate {
   get _prompterMessage() {
     return `
       # Web Authn - Recover account access
+
+      The credentials are on a personal device, a smartphone perhaps, which means that if we misplace or even lose it, that would render us unable to access our account.
+
+      We stored our recovery key in a safe place in the registration step, and now it's time to use it.
+
+      Using this key, we'll be able to claim the account again through a process similar to registration; this will also remove all devices previously tied to this account.
     `;
   }
 }

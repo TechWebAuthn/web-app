@@ -9,7 +9,10 @@ class Agenda extends PresentationPageTemplate {
       css`
         ol {
           font-size: 2.4rem;
-          padding-inline-start: 2em;
+          padding-inline-start: 4rem;
+        }
+        aside {
+          flex: 2;
         }
       `,
     ];
@@ -47,8 +50,8 @@ class Agenda extends PresentationPageTemplate {
         </section>
         <aside>
           <figure>
+            <img src="/images/agenda.png" alt="Agenda" />
             <figcaption>
-              <img src="/images/agenda.png" alt="Agenda" />
               <a href="https://www.freepik.com/vectors/illustrations">Illustrations vector created by stories</a>
             </figcaption>
           </figure>
@@ -61,7 +64,11 @@ class Agenda extends PresentationPageTemplate {
     return `
       # Agenda
 
-      The topics that we would like to tackle today.
+      We'll start with a brief overview of authentication and talk about some of its challenges.
+
+      A short reminder on asymmetric cryptography will accompany the introduction to Web Authentication, followed by an overview of the main ceremonies involved with this API.
+
+      We'll deep-dive into each ceremony with a live demo to see how everything ties together, talk a bit about Web Authentication platform support and share some of our recommended resources on this topic.
     `;
   }
 }

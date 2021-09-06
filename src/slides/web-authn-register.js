@@ -132,7 +132,7 @@ class WebAuthnRegister extends PresentationPageTemplate {
       - in this page you are seeing on the left hand side, a browser app accessing the account registration page.
 We can type any username here to create an account. This may represent an email address or not. Just to have fun, we will use something else (EMOJIIIII)
 In the log panel, we can see a stream of events with all the logs coming from our RP.
-There are 3 steps involved: 
+There are 3 steps involved:
 - the user provides the username (and that's an optional field in webauthn)
 - the browser asks the RP to create an account for that username. In response, the RP sends its information
 like rpId, origin, user info and a challenge. This data is being used by the authenticator to create a new set of credentials.

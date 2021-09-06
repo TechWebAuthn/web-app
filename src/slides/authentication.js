@@ -17,9 +17,7 @@ class Authentication extends PresentationPageTemplate {
           <figure>
             <img src="/images/authentication.png" alt="Authentication process" />
             <ficaption>
-              <a href="https://www.freepik.com/vectors/security"
-                >Security vector created by stories - www.freepik.com</a
-              >
+              <a href="https://www.freepik.com/vectors/security">Security vector created by stories</a>
             </ficaption>
           </figure>
         </aside>
@@ -32,9 +30,7 @@ class Authentication extends PresentationPageTemplate {
     return `
       # Authentication - Introduction
 
-      The word "authentication" has its origins in the Greek words: "authentikos" (real, genuine) and "authentes" (author).
-
-      In short, users must prove that they are the real authors of the associated account.
+      From the Greek words "authentikos" (real, genuine) and "authentes" (author), authentication describes the act of validating one's identity, usually required before accessing protected resources.
     `;
   }
 }

@@ -1,4 +1,5 @@
 .loader {
+  appearance: none;
   border-radius: 50%;
   width: 4rem;
   height: 4rem;
@@ -8,14 +9,17 @@
   border-left-color: var(--button-canvas-primary);
   transform: translateZ(0);
   animation: spin 1.1s infinite linear;
-}
-
-.loader::-webkit-progress-bar {
-  display: none;
+  background: transparent;
 }
 
 .loader::-moz-progress-bar {
   display: none;
+  background: transparent;
+}
+
+.loader::-webkit-progress-bar {
+  display: none;
+  background: transparent;
 }
 
 .loader:after {

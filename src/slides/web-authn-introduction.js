@@ -1,5 +1,5 @@
 import { css, html, unsafeCSS } from "lit";
-import { unsafeHTML } from "lit/directives/unsafe-html";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import PresentationPageTemplate from "./presentation-page-template";
 import slides from "../styles/slides.css?inline";
 import { setNotificationMessage } from "../utils/notification";

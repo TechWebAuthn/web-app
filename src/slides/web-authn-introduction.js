@@ -40,9 +40,7 @@ class WebAuthnIntroduction extends PresentationPageTemplate {
           <figure>
             <img src="/images/webauthn-intro-1.png" alt="WebAuthn Introduction" />
             <figcaption>
-              <a href="https://www.freepik.com/vectors/technology"
-                >Technology vector created by stories - www.freepik.com</a
-              >
+              <a href="https://www.freepik.com/vectors/technology">Technology vector created by stories</a>
             </figcaption>
           </figure>
         </aside>

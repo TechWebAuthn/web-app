@@ -32,7 +32,7 @@ class Agenda extends PresentationPageTemplate {
                 <li>Challenges</li>
               </ol>
             </li>
-            <li>Asymetric cryptography (brief)</li>
+            <li>Asymmetric cryptography (brief)</li>
             <li>
               Web Authentication
               <ol>

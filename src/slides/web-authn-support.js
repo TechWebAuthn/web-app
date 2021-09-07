@@ -23,8 +23,8 @@ class WebAuthnSupport extends PresentationPageTemplate {
         </aside>
         <section>
           <figure>
-            <img src="/images/fido2-support.png" alt="FIDO2 Support" />
-            <ficaption> Data provided by FIDO Alliance </ficaption>
+            <img src="/images/caniuse-web-authn.png" alt="Can I Use - Web Authentication API" />
+            <ficaption>Can I Use - Web Authentication API</ficaption>
           </figure>
         </section>
       </article>

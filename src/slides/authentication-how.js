@@ -26,7 +26,7 @@ class AuthenticationHow extends PresentationPageTemplate {
             <li>Something you know</li>
             <li>Something you have</li>
             <li>Something you are</li>
-            <li>Somwhere you are</li>
+            <li>Somewhere you are</li>
             <li>Something you do</li>
           </ul>
         </section>

@@ -3,6 +3,7 @@ import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
 import "web-authn-components/registration";
 import "../components/logs";
+import "../components/gist";
 import forms from "../styles/forms.css?inline";
 import cards from "../styles/cards.css?inline";
 import notifications from "../styles/notifications.css?inline";
@@ -19,8 +20,7 @@ class WebAuthnDemoTime extends PresentationPageTemplate {
   }
 
   static get properties() {
-    return {
-    };
+    return {};
   }
 
   static get styles() {
@@ -46,10 +46,10 @@ class WebAuthnDemoTime extends PresentationPageTemplate {
 
       <article>
         <section class="column">
-          <script src="https://gist.github.com/mihaita-tinta/8eac08de0bde4ebefc6f65877000065a.js"></script>
+          <auth-gist data-gist-id="8eac08de0bde4ebefc6f65877000065a"></auth-gist>
         </section>
         <section class="column">
-          <script src="https://gist.github.com/mihaita-tinta/a3b0280dbd5ffd12340584903d193441.js"></script>
+          <auth-gist data-gist-id="a3b0280dbd5ffd12340584903d193441"></auth-gist>
         </section>
         <section class="column">
           <figure>
@@ -66,7 +66,7 @@ class WebAuthnDemoTime extends PresentationPageTemplate {
   get _prompterMessage() {
     return `
       # Web Authn - Demo Time
-      - 
+      -
     `;
   }
 }

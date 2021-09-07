@@ -11,6 +11,10 @@
   align-items: stretch;
 }
 
+::selection {
+  background-color: var(--canvas-info);
+}
+
 h1 {
   font-size: 2.25em;
   line-height: 1;
@@ -216,6 +220,14 @@ blockquote::before {
   padding: 0 1rem;
   min-width: auto;
   display: flex;
+}
+
+auth-gist {
+  max-height: 100%;
+}
+
+auth-gist::part(iframe) {
+  max-height: 70vh;
 }
 
 /* Mac OS settings */

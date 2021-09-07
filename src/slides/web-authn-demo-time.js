@@ -1,7 +1,7 @@
 import { css, html, unsafeCSS } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
-import "web-authn-components/registration";
+import "webauthn-components/registration";
 import "../components/logs";
 import "../components/gist";
 import forms from "../styles/forms.css?inline";

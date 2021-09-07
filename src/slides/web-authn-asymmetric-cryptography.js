@@ -1,7 +1,7 @@
 import { css, html, unsafeCSS } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
-import "web-authn-components/recovery";
+import "webauthn-components/recovery";
 import forms from "../styles/forms.css?inline";
 import cards from "../styles/cards.css?inline";
 import notifications from "../styles/notifications.css?inline";
@@ -63,7 +63,7 @@ class WebAuthnAsymmetricCryptography extends PresentationPageTemplate {
     return `
       # Web Authn - Asymmetric cryptography
       Before we go any further, we have to align on what public key based credentials are.
-In asymmetric cryptography, we have the public key/private key pair. While anybody can use the public key, the access to the private key should be controlled. 
+In asymmetric cryptography, we have the public key/private key pair. While anybody can use the public key, the access to the private key should be controlled.
 Based on this restriction if we encrypt the message with a public key, we get a secured transmission because only one having the private key can see the original message.
 If we encrypt the message with the private key, anybody can see the original message. This is still useful because only one having the private key can create that valid message.
 So everybody can validate the message was actually signed by the one having the private key. In this way we validate the identity of the sender and this is the main cryptography principle used in webauthn.

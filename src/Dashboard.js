@@ -5,7 +5,7 @@ import { request } from "./utils/network";
 import { setNotificationMessage } from "./utils/notification";
 import { logout, getSession } from "./utils/session";
 import "ua-parser-js/dist/ua-parser.min";
-import "web-authn-components/rtc/enrollment-provider";
+import "webauthn-components/rtc/enrollment-provider";
 
 import resets from "./styles/resets.css?inline";
 import cards from "./styles/cards.css?inline";
@@ -91,41 +91,43 @@ class Dashboard extends LitElement {
       <p id="notification" class="notification"></p>
       <div class="card">
         <h3>Welcome back, <strong class="highlight">${username}</strong>!</h3>
-        ${this._myDevices.length
-          ? html`
-              <h4>Registered devices</h4>
-              ${this._isRemovingCurrentDevice
-                ? html`
-                    <p data-type="error" class="notification">
-                      You are about to remove the current device and will be imediately logged out!
-                    </p>
-                    <form class="form row" @submit=${this._continueDeleteDevice}>
-                      <button name="continue">Continue</button>
-                      <button name="cancel" data-type="danger">Cancel</button>
-                    </form>
-                  `
-                : ``}
-              <ul class="device-list">
-                ${this._myDevices.map(
-                  (device) =>
-                    html`
-                      <li class="${classMap({ current: device.currentDevice })}">
-                        <span data-type="icon">${this._getDeviceIcon(device.type)}</span>
-                        <span data-type="label">${device.description}</span>
-                        <form @submit="${this._deleteDevice}" class="form inline">
-                          <input type="hidden" name="id" value=${device.id} />
-                          <input type="hidden" name="currentDevice" value=${device.currentDevice} />
-                          <button data-type="danger" data-size="small">✖</button>
-                        </form>
-                      </li>
+        ${
+          this._myDevices.length
+            ? html`
+                <h4>Registered devices</h4>
+                ${this._isRemovingCurrentDevice
+                  ? html`
+                      <p data-type="error" class="notification">
+                        You are about to remove the current device and will be imediately logged out!
+                      </p>
+                      <form class="form row" @submit=${this._continueDeleteDevice}>
+                        <button name="continue">Continue</button>
+                        <button name="cancel" data-type="danger">Cancel</button>
+                      </form>
                     `
-                )}
-              </ul>
-            `
-          : ``}
+                  : ``}
+                <ul class="device-list">
+                  ${this._myDevices.map(
+                    (device) =>
+                      html`
+                        <li class="${classMap({ current: device.currentDevice })}">
+                          <span data-type="icon">${this._getDeviceIcon(device.type)}</span>
+                          <span data-type="label">${device.description}</span>
+                          <form @submit="${this._deleteDevice}" class="form inline">
+                            <input type="hidden" name="id" value=${device.id} />
+                            <input type="hidden" name="currentDevice" value=${device.currentDevice} />
+                            <button data-type="danger" data-size="small">✖</button>
+                          </form>
+                        </li>
+                      `
+                  )}
+                </ul>
+              `
+            : ``
+        }
         <details class="details">
           <summary>Enroll new device</summary>
-          <web-authn-rtc-enrollment-provider
+          <webauthn-rtc-enrollment-provider
             ?hidden=${this._addDeviceInProgress}
             class="form"
             @enrollment-started="${this._onConnectEvent}"

@@ -3,7 +3,7 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import PresentationPageTemplate from "./presentation-page-template";
 import slides from "../styles/slides.css?inline";
 import { setNotificationMessage } from "../utils/notification";
-import "web-authn-components/recovery";
+import "webauthn-components/recovery";
 import forms from "../styles/forms.css";
 import cards from "../styles/cards.css";
 import notifications from "../styles/notifications.css";

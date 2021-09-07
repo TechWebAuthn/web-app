@@ -1,7 +1,7 @@
 import { css, html, unsafeCSS } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
-import "web-authn-components/registration";
+import "webauthn-components/registration";
 import "../components/logs";
 import forms from "../styles/forms.css?inline";
 import cards from "../styles/cards.css?inline";
@@ -56,7 +56,7 @@ class WebAuthnRegister extends PresentationPageTemplate {
             <div class="card">
               ${!this._isRegisterComplete
                 ? html`
-                    <web-authn-registration
+                    <webauthn-registration
                       class="form"
                       @registration-started="${this._onWebAuthnRegisterEvent}"
                       @registration-created="${this._onWebAuthnRegisterEvent}"
@@ -137,7 +137,7 @@ There are 3 steps involved:
 - the browser asks the RP to create an account for that username. In response, the RP sends its information
 like rpId, origin, user info and a challenge. This data is being used by the authenticator to create a new set of credentials.
 From our previous slide, we said that a message encrypted with a private key guarantees the identity of the sender.
-Here that message represents the challenge and its value it's something with zero meaning. 
+Here that message represents the challenge and its value it's something with zero meaning.
 - the user has to assert their presence to the authenticator
 - the final step here is for the browser to sends the signed challenge coming from the authenticator to the RP and the public key based credential for future references
 

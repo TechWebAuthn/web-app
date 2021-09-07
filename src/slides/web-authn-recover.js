@@ -1,7 +1,7 @@
 import { html, unsafeCSS, css } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
-import "web-authn-components/recovery";
+import "webauthn-components/recovery";
 import "../components/logs";
 import forms from "../styles/forms.css";
 import cards from "../styles/cards.css";
@@ -39,7 +39,7 @@ class WebAuthnRecover extends PresentationPageTemplate {
             <h2>Recover account</h2>
             <p id="notification" class="notification"></p>
             <div class="card">
-              <web-authn-recovery
+              <webauthn-recovery
                 class="form"
                 @recovery-started="${this._onRecoverEvent}"
                 @recovery-created="${this._onRecoverEvent}"

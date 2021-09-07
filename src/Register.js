@@ -1,8 +1,8 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
 import { clearNotificationMessage, setNotificationMessage } from "./utils/notification";
-import "web-authn-components/registration";
-import "web-authn-components/recovery";
-import "web-authn-components/rtc/enrollment-requester";
+import "webauthn-components/registration";
+import "webauthn-components/recovery";
+import "webauthn-components/rtc/enrollment-requester";
 
 import resets from "./styles/resets.css?inline";
 import cards from "./styles/cards.css?inline";
@@ -86,7 +86,7 @@ class Register extends LitElement {
           <summary>Register a new account</summary>
           ${this._isRegisterFlow && !this._isCurrentFlowComplete
             ? html`
-                <web-authn-registration
+                <webauthn-registration
                   class="form"
                   @registration-started="${this._onWebAuthnRegisterEvent}"
                   @registration-created="${this._onWebAuthnRegisterEvent}"
@@ -107,7 +107,7 @@ class Register extends LitElement {
           <summary>Recover account access</summary>
           ${this._isRecoveryFlow && !this._isCurrentFlowComplete
             ? html`
-                <web-authn-recovery
+                <webauthn-recovery
                   class="form"
                   @recovery-started="${this._onRecoverEvent}"
                   @recovery-created="${this._onRecoverEvent}"
@@ -130,7 +130,7 @@ class Register extends LitElement {
           ${this._isAddFlow && !this._isCurrentFlowComplete
             ? !this._showAddFlowLoader
               ? html`
-                  <web-authn-rtc-enrollment-requester
+                  <webauthn-rtc-enrollment-requester
                     class="form"
                     @enrollment-code-requested="${this._onEnrollmentEvent}"
                     @enrollment-started="${this._onEnrollmentEvent}"

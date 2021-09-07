@@ -2,7 +2,7 @@ import { css, html, unsafeCSS } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
 import { request } from "../utils/network";
-import "web-authn-components/login";
+import "webauthn-components/login";
 import "../components/logs";
 import forms from "../styles/forms.css";
 import cards from "../styles/cards.css";
@@ -50,7 +50,7 @@ class WebAuthnAuthentication extends PresentationPageTemplate {
             <div class="card">
               ${!this._isLoggedIn
                 ? html`
-                    <web-authn-login
+                    <webauthn-login
                       class="form"
                       @login-started="${this._onWebAuthnLoginEvent}"
                       @login-retrieved="${this._onWebAuthnLoginEvent}"

@@ -1,7 +1,7 @@
 import { html, unsafeCSS, css } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage, clearNotificationMessage } from "../utils/notification";
-import "web-authn-components/rtc/enrollment-requester";
+import "webauthn-components/rtc/enrollment-requester";
 import "../components/logs";
 import forms from "../styles/forms.css";
 import cards from "../styles/cards.css";
@@ -56,7 +56,7 @@ class WebAuthnAddNew extends PresentationPageTemplate {
               ${!this._isFlowComplete
                 ? !this._showLoader
                   ? html`
-                      <web-authn-rtc-enrollment-requester
+                      <webauthn-rtc-enrollment-requester
                         class="form"
                         @enrollment-code-requested="${this._onEnrollmentEvent}"
                         @enrollment-started="${this._onEnrollmentEvent}"

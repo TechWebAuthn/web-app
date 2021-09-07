@@ -31,7 +31,7 @@ class WebAuthnAuthentication extends PresentationPageTemplate {
       unsafeCSS(notifications),
       unsafeCSS(slides),
       css`
-        web-authn-login::part(input) {
+        webauthn-login::part(input) {
           box-sizing: border-box;
         }
       `,

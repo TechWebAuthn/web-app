@@ -62,9 +62,9 @@ class Register extends LitElement {
       unsafeCSS(layouts),
       unsafeCSS(loaders),
       css`
-        web-authn-registration::part(input),
-        web-authn-recovery::part(input),
-        web-authn-rtc-enrollment-requester::part(code) {
+        webauthn-registration::part(input),
+        webauthn-recovery::part(input),
+        webauthn-rtc-enrollment-requester::part(code) {
           box-sizing: border-box;
         }
       `,

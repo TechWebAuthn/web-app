@@ -33,7 +33,7 @@ class WebAuthnDemoTime extends PresentationPageTemplate {
       unsafeCSS(buttons),
       unsafeCSS(slides),
       css`
-        web-authn-registration::part(input) {
+        webauthn-registration::part(input) {
           box-sizing: border-box;
         }
       `,

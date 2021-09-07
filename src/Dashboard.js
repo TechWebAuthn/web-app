@@ -69,7 +69,7 @@ class Dashboard extends LitElement {
           background-color: var(--canvas-success);
         }
 
-        web-authn-rtc-enrollment-provider::part(input) {
+        webauthn-rtc-enrollment-provider::part(input) {
           box-sizing: border-box;
           text-align: center;
           font-family: monospace;

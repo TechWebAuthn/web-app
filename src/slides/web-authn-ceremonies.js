@@ -22,7 +22,7 @@ class WebAuthnCeremonies extends PresentationPageTemplate {
       unsafeCSS(layouts),
       unsafeCSS(slides),
       css`
-        web-authn-recovery::part(input) {
+        webauthn-recovery::part(input) {
           box-sizing: border-box;
         }
       `,

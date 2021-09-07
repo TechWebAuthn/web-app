@@ -69,6 +69,9 @@ class WordCloudFeedback extends LitElement {
     this._feedbackSSEConnection = new EventSource("/api/feedback", {
       withCredentials: true,
     });
+    this._feedbackSSEConnection.addEventListener("welcome", () => {
+      this.shadowRoot.querySelector("p")?.remove();
+    });
     this._feedbackSSEConnection.addEventListener("feedback", (event) => {
       this.shadowRoot.querySelector("p")?.remove();
       this._updateWordCloud(event, series);

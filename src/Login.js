@@ -25,7 +25,7 @@ class Login extends LitElement {
       unsafeCSS(headings),
       unsafeCSS(notifications),
       css`
-        web-authn-login::part(input) {
+        webauthn-login::part(input) {
           box-sizing: border-box;
         }
       `,

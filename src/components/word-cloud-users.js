@@ -69,6 +69,9 @@ class WordCloudUsers extends LitElement {
     this._userSSEConnection = new EventSource("/api/users", {
       withCredentials: true,
     });
+    this._userSSEConnection.addEventListener("welcome", () => {
+      this.shadowRoot.querySelector("p")?.remove();
+    });
     this._userSSEConnection.addEventListener("register", (event) => {
       this.shadowRoot.querySelector("p")?.remove();
       if (!this._firstUserLoaded) {

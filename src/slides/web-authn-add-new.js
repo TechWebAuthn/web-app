@@ -36,7 +36,7 @@ class WebAuthnAddNew extends PresentationPageTemplate {
       unsafeCSS(loaders),
       unsafeCSS(slides),
       css`
-        web-authn-rtc-enrollment-requester::part(code) {
+        webauthn-rtc-enrollment-requester::part(code) {
           box-sizing: border-box;
         }
       `,

@@ -10,12 +10,12 @@ class WordCloudUsers extends LitElement {
   constructor() {
     super();
     this._chartsLoaded = false;
-    this._feedbackLoaded = false;
+    this._firstUserLoaded = false;
   }
 
   static get properties() {
     return {
-      _feedbackLoaded: Boolean,
+      _firstUserLoaded: Boolean,
     };
   }
 
@@ -37,7 +37,7 @@ class WordCloudUsers extends LitElement {
           position: relative;
         }
 
-        #feedback {
+        #users {
           width: 100%;
           height: 100%;
         }
@@ -54,31 +54,31 @@ class WordCloudUsers extends LitElement {
   }
 
   disconnectedCallback() {
-    this._feedbackSSEConnection.close();
+    this._userSSEConnection.close();
   }
 
   render() {
     return html`
-      <div ?hidden=${!this._feedbackLoaded} id="users"></div>
-      <progress ?hidden="${this._feedbackLoaded}" class="loader" indeterminate></progress>
+      <div ?hidden=${!this._firstUserLoaded} id="users"></div>
+      <progress ?hidden="${this._firstUserLoaded}" class="loader" indeterminate></progress>
     `;
   }
 
   async _getFeedback() {
     const series = await this._drawWordCloud();
-    this._feedbackSSEConnection = new EventSource("/api/users", {
+    this._userSSEConnection = new EventSource("/api/users", {
       withCredentials: true,
     });
-    this._feedbackSSEConnection.addEventListener("feedback", (event) => {
+    this._userSSEConnection.addEventListener("register", (event) => {
       this.shadowRoot.querySelector("p")?.remove();
+      this._firstUserLoaded = true;
       this._updateWordCloud(event, series);
     });
-    this._feedbackSSEConnection.onerror = () => {
+    this._userSSEConnection.onerror = () => {
       const errorMessage = document.createElement("p");
-      errorMessage.textContent = "Could not load feedback";
+      errorMessage.textContent = "Could not load registered users";
       this.shadowRoot.appendChild(errorMessage);
     };
-    this._feedbackLoaded = true;
   }
 
   async _drawWordCloud() {
@@ -93,7 +93,7 @@ class WordCloudUsers extends LitElement {
 
     am4core.useTheme(am4themes_animated);
 
-    const chart = am4core.create(this.shadowRoot.querySelector("#feedback"), am4plugins_wordCloud.WordCloud);
+    const chart = am4core.create(this.shadowRoot.querySelector("#users"), am4plugins_wordCloud.WordCloud);
     const series = chart.series.push(new am4plugins_wordCloud.WordCloudSeries());
 
     chart.responsive.enabled = true;
@@ -116,19 +116,8 @@ class WordCloudUsers extends LitElement {
   }
 
   _updateWordCloud(event, series) {
-    const { data } = event;
-    const parsedData = JSON.parse(data);
-    const newData = [...series.data];
-    Object.entries(parsedData).forEach(([key, value]) => {
-      const index = newData.findIndex((feedback) => feedback.word === key);
-
-      if (index >= 0) {
-        newData[index].count = value;
-      } else {
-        newData.push({ word: key, count: value });
-      }
-    });
-    series.data = [...newData];
+    const { lastEventId } = event;
+    series.data = [...series.data, { word: lastEventId, count: 1 }];
   }
 }
 

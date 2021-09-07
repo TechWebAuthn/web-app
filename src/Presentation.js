@@ -102,10 +102,10 @@ export const routes = [
     action: () => import("./slides/web-authn-support"),
   },
   {
-    name: "feedback",
-    path: "/feedback",
-    component: "presentation-feedback",
-    action: () => import("./slides/feedback"),
+    name: "try-it-out",
+    path: "/try-it-out",
+    component: "presentation-try-it-out",
+    action: () => import("./slides/try-it-out"),
   },
 ];
 

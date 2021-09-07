@@ -24,28 +24,17 @@ class Agenda extends PresentationPageTemplate {
         <h1>Agenda</h1>
         <section>
           <ol>
+            <li><b>Authentication</b> - What / How / Challenges</li>
+            <li><b>Asymmetric cryptography</b> (brief)</li>
             <li>
-              Authentication
-              <ol>
-                <li>What</li>
-                <li>How</li>
-                <li>Challenges</li>
-              </ol>
-            </li>
-            <li>Asymmetric cryptography (brief)</li>
-            <li>
-              Web Authentication
+              <b>Web Authentication</b>
               <ol>
                 <li>Introduction</li>
                 <li>Ceremonies</li>
-                <li>Registration</li>
-                <li>Login</li>
-                <li>Recovery</li>
-                <li>Adding new devices</li>
                 <li>Platform support</li>
               </ol>
             </li>
-            <li>Resources</li>
+            <li><b>Resources</b></li>
           </ol>
         </section>
         <aside>

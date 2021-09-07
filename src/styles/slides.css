@@ -61,7 +61,7 @@ figure img {
   width: 100%;
 }
 
-figure a {
+a {
   color: var(--text-link);
 }
 

@@ -1,4 +1,4 @@
-import { css, html, unsafeCSS } from "lit";
+import { html, unsafeCSS } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
 import "webauthn-components/registration";
@@ -32,17 +32,12 @@ class WebAuthnDemoTime extends PresentationPageTemplate {
       unsafeCSS(codes),
       unsafeCSS(buttons),
       unsafeCSS(slides),
-      css`
-        webauthn-registration::part(input) {
-          box-sizing: border-box;
-        }
-      `,
     ];
   }
 
   render() {
     return html`
-      <h1>Web Authn - Demo Time</h1>
+      <h1>Web Authn - Demo time</h1>
 
       <article>
         <section class="column">
@@ -50,14 +45,6 @@ class WebAuthnDemoTime extends PresentationPageTemplate {
         </section>
         <section class="column">
           <auth-gist data-gist-id="a3b0280dbd5ffd12340584903d193441"></auth-gist>
-        </section>
-        <section class="column">
-          <figure>
-            <img src="/images/webauthn-register.png" alt="WebAuthn Register" />
-            <figcaption>
-              <a href="https://www.freepik.com/vectors/technology">Technology vector created by stories</a>
-            </figcaption>
-          </figure>
         </section>
       </article>
     `;

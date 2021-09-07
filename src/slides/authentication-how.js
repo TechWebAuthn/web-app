@@ -1,10 +1,25 @@
-import { html, unsafeCSS } from "lit";
+import { html, unsafeCSS, css } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import slides from "../styles/slides.css?inline";
 
 class AuthenticationHow extends PresentationPageTemplate {
   static get styles() {
-    return [unsafeCSS(slides)];
+    return [
+      unsafeCSS(slides),
+      css`
+        ul {
+          display: inline-grid;
+        }
+        li {
+          display: grid;
+          gap: 2em;
+          grid-template-columns: 0 1fr 1fr;
+        }
+        li::before {
+          content: "🔐";
+        }
+      `,
+    ];
   }
 
   render() {
@@ -23,14 +38,14 @@ class AuthenticationHow extends PresentationPageTemplate {
         <section>
           <h2>Some factors of authentication</h2>
           <ul>
-            <li>Something you know</li>
-            <li>Something you have</li>
-            <li>Something you are</li>
-            <li>Somewhere you are</li>
-            <li>Something you do</li>
+            <li>Something you know <span>passwords</span></li>
+            <li>Something you have <span>TOTP, RSA SecureID</span></li>
+            <li>Something you are <span>face, fingerprint, voice</span></li>
+            <li>Somewhere you are <span>geolocation</span></li>
+            <li>Something you do <span>personal patterns</span></li>
           </ul>
         </section>
-        <section>
+        <!-- <section>
           <h2>Some common types of authentication</h2>
           <ul>
             <li>Password-based</li>
@@ -39,7 +54,7 @@ class AuthenticationHow extends PresentationPageTemplate {
             <li>Biometric</li>
             <li>Token-based</li>
           </ul>
-        </section>
+        </section> -->
       </article>
     `;
   }

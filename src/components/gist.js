@@ -7,14 +7,14 @@ class Gist extends HTMLElement {
 
   connectedCallback() {
     this.gistId = this.dataset.gistId;
+    this._baseFontSize = Math.floor(this.computedStyleMap().get("font-size").value);
+    this._pixelRatio = window.devicePixelRatio;
 
     this.root.appendChild(this._styles);
     this.root.appendChild(document.createElement("iframe"));
     if (this.gistId) {
       this.render();
     }
-
-    this.onresize = console.log;
   }
 
   render() {
@@ -24,24 +24,33 @@ class Gist extends HTMLElement {
     iframe.title = `Gist ID: ${this.gistId}`;
     iframe.contentDocument.open();
     iframe.contentDocument.writeln(
-      `<html>
-        <body onload="this.frameElement.style.height = document.body.querySelector('table').scrollHeight + 40 + 'px'">
+      `<html style="font-size: ${this._innerFontSize}">
+        <body onload="this.frameElement.style.height = 'calc(' +document.body.querySelector('table').scrollHeight + 'px + 4.2rem)'">
           <script type="text/javascript" src="https://gist.github.com/${this.gistId}.js"></script>
         </body>
         <style>
           body { margin: 0; overflow: hidden; }
-          .gist-meta {
+          .gist .gist-meta {
             position: absolute;
-            bottom: 0;
-            width: 100%;
+            bottom: calc(1rem + 2px);
+            width: calc(100% - 2px);
             box-sizing: border-box;
+            font-size: 1.2rem;
+            padding: 0.5rem;
           }
-          .gist-data {
-            height: calc(100% - 40px);
+          .gist .gist-data {
+            height: calc(100% - 1.2rem);
+            padding-bottom: 2.5rem;
+            box-sizing: border-box;
           }
           .gist .blob-wrapper {
             max-height: 100%;
             overflow: auto;
+          }
+          .gist .js-line-number,
+          .gist .js-file-line {
+            font-size: 1.6rem;
+            line-height: 1.6;
           }
         </style>
       </html>`
@@ -60,6 +69,10 @@ class Gist extends HTMLElement {
     const styleElement = document.createElement("style");
     styleElement.innerText = styles;
     return styleElement;
+  }
+
+  get _innerFontSize() {
+    return this._baseFontSize / 2;
   }
 }
 

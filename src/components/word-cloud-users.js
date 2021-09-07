@@ -71,13 +71,17 @@ class WordCloudUsers extends LitElement {
     });
     this._userSSEConnection.addEventListener("register", (event) => {
       this.shadowRoot.querySelector("p")?.remove();
-      this._firstUserLoaded = true;
+      if (!this._firstUserLoaded) {
+        this._firstUserLoaded = true;
+      }
       this._updateWordCloud(event, series);
     });
     this._userSSEConnection.onerror = () => {
-      const errorMessage = document.createElement("p");
-      errorMessage.textContent = "Could not load registered users";
-      this.shadowRoot.appendChild(errorMessage);
+      if (!this.shadowRoot.querySelector("p")) {
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = "Could not load registered users";
+        this.shadowRoot.appendChild(errorMessage);
+      }
     };
   }
 

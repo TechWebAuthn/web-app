@@ -74,9 +74,11 @@ class WordCloudFeedback extends LitElement {
       this._updateWordCloud(event, series);
     });
     this._feedbackSSEConnection.onerror = () => {
-      const errorMessage = document.createElement("p");
-      errorMessage.textContent = "Could not load feedback";
-      this.shadowRoot.appendChild(errorMessage);
+      if (!this.shadowRoot.querySelector("p")) {
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = "Could not load feedback";
+        this.shadowRoot.appendChild(errorMessage);
+      }
     };
     this._feedbackLoaded = true;
   }

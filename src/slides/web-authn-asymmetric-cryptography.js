@@ -32,7 +32,7 @@ class WebAuthnAsymmetricCryptography extends PresentationPageTemplate {
 
   render() {
     return html`
-      <h1>Web Authn - Asymmetric cryptography</h1>
+      <h1>WebAuthn - Asymmetric cryptography</h1>
 
       <article>
         <aside class="wide">

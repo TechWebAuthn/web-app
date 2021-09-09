@@ -24,7 +24,7 @@ class WebAuthnResources extends LitElement {
 
   render() {
     return html`
-      <h1>Web Authn - Resources</h1>
+      <h1>WebAuthn - Resources</h1>
       <article>
         <aside>
           <figure>

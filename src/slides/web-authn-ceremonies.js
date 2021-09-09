@@ -31,7 +31,7 @@ class WebAuthnCeremonies extends PresentationPageTemplate {
 
   render() {
     return html`
-      <h1>Web Authn - Ceremonies</h1>
+      <h1>WebAuthn - Ceremonies</h1>
 
       <article>
         <section>

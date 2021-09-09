@@ -1,4 +1,4 @@
-import { html, unsafeCSS } from "lit";
+import { html, unsafeCSS, css } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
 import "webauthn-components/registration";
@@ -32,12 +32,17 @@ class WebAuthnDemoTime extends PresentationPageTemplate {
       unsafeCSS(codes),
       unsafeCSS(buttons),
       unsafeCSS(slides),
+      css`
+        article {
+          margin-block-end: 4rem;
+        }
+      `,
     ];
   }
 
   render() {
     return html`
-      <h1>Web Authn - Demo time</h1>
+      <h1>WebAuthn - Demo time</h1>
 
       <article>
         <section class="column">

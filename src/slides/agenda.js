@@ -7,12 +7,12 @@ class Agenda extends PresentationPageTemplate {
     return [
       unsafeCSS(slides),
       css`
-        ol {
-          font-size: 2.4rem;
+        ul {
+          font-size: 3rem;
           padding-inline-start: 4rem;
         }
         aside {
-          flex: 2;
+          flex: 1;
         }
       `,
     ];
@@ -20,22 +20,22 @@ class Agenda extends PresentationPageTemplate {
 
   render() {
     return html`
+      <h1>Agenda</h1>
       <article>
-        <h1>Agenda</h1>
         <section>
-          <ol>
+          <ul>
             <li><b>Authentication</b> - What / How / Challenges</li>
-            <li><b>Asymmetric cryptography</b> (brief)</li>
             <li>
               <b>Web Authentication</b>
-              <ol>
+              <ul>
+                <li>Asymmetric cryptography (brief)</li>
                 <li>Introduction</li>
                 <li>Ceremonies</li>
                 <li>Platform support</li>
-              </ol>
+              </ul>
             </li>
             <li><b>Resources</b></li>
-          </ol>
+          </ul>
         </section>
         <aside>
           <figure>

@@ -6,6 +6,7 @@ import { setNotificationMessage } from "../utils/notification";
 import "webauthn-components/recovery";
 import forms from "../styles/forms.css";
 import cards from "../styles/cards.css";
+import layouts from "../styles/layouts.css";
 import notifications from "../styles/notifications.css";
 
 import svgFile from "../../public/images/web-authn-actors.svg?raw";
@@ -22,6 +23,7 @@ class WebAuthnIntroduction extends PresentationPageTemplate {
       unsafeCSS(forms),
       unsafeCSS(cards),
       unsafeCSS(notifications),
+      unsafeCSS(layouts),
       unsafeCSS(slides),
       css`
         webauthn-recovery::part(input) {
@@ -33,7 +35,7 @@ class WebAuthnIntroduction extends PresentationPageTemplate {
 
   render() {
     return html`
-      <h1>Web Authn - Introduction</h1>
+      <h1>WebAuthn - Introduction</h1>
 
       <article>
         <aside>
@@ -44,7 +46,7 @@ class WebAuthnIntroduction extends PresentationPageTemplate {
             </figcaption>
           </figure>
         </aside>
-        <section>
+        <section class="column">
           <blockquote>
             A new standard enabling the creation and use of strong, attested, scoped, public key-based credentials by
             web apps

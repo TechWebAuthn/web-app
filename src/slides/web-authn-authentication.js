@@ -40,7 +40,7 @@ class WebAuthnAuthentication extends PresentationPageTemplate {
 
   render() {
     return html`
-      <h1>Web Authn - Authentication</h1>
+      <h1>WebAuthn - Authentication</h1>
 
       <article>
         <aside class="fit-content">

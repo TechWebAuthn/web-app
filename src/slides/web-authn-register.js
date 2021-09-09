@@ -46,7 +46,7 @@ class WebAuthnRegister extends PresentationPageTemplate {
 
   render() {
     return html`
-      <h1>Web Authn - Register</h1>
+      <h1>WebAuthn - Register</h1>
 
       <article>
         <aside class="fit-content">

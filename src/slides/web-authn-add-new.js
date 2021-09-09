@@ -45,7 +45,7 @@ class WebAuthnAddNew extends PresentationPageTemplate {
 
   render() {
     return html`
-      <h1>Web Authn - Add a new device</h1>
+      <h1>WebAuthn - Add a new device</h1>
 
       <article>
         <aside class="fit-content">

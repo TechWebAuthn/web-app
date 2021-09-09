@@ -11,14 +11,14 @@ class Cover extends PresentationPageTemplate {
     return html`
       <article class="cover-title">
         <h1>Going password-less with Web Authentication</h1>
-        <h2>Mihăiță (Miță) Tinta & Bogdan (mArv) Arvinte</h2>
+        <h2>Mihăiță (Miță) Țintă & Bogdan (mArv) Arvinte</h2>
         <section>
-          <h3>Cluj, September 20th, 2021</h3>
+          <h3>Cluj, September 20, 2021</h3>
         </section>
       </article>
       <section class="cover-avatars">
         <figure>
-          <img src="/images/mihaita.tinta.jpg" alt="Mihaita Tinta" />
+          <img src="/images/mihaita.tinta.jpg" alt="Mihăiță Țintă" />
           <figcaption>Miță</figcaption>
         </figure>
         <figure>

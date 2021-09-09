@@ -31,7 +31,7 @@ class WebAuthnRecover extends PresentationPageTemplate {
 
   render() {
     return html`
-      <h1>Web Authn - Recover account access</h1>
+      <h1>WebAuthn - Recover account access</h1>
 
       <article>
         <aside class="fit-content">

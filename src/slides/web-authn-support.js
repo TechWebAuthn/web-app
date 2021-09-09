@@ -1,16 +1,30 @@
-import { html, unsafeCSS } from "lit";
+import { html, unsafeCSS, css } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import resets from "../styles/resets.css?inline";
+import layouts from "../styles/layouts.css?inline";
 import slides from "../styles/slides.css?inline";
 
 class WebAuthnSupport extends PresentationPageTemplate {
   static get styles() {
-    return [unsafeCSS(resets), unsafeCSS(slides)];
+    return [
+      unsafeCSS(resets),
+      unsafeCSS(layouts),
+      unsafeCSS(slides),
+      css`
+        figure img {
+          height: 100%;
+        }
+
+        .column figure {
+          max-width: 90%;
+        }
+      `,
+    ];
   }
 
   render() {
     return html`
-      <h1>Web Authn - Platform support</h1>
+      <h1>WebAuthn - Platform support</h1>
 
       <article>
         <aside>
@@ -21,10 +35,18 @@ class WebAuthnSupport extends PresentationPageTemplate {
             </ficaption>
           </figure>
         </aside>
-        <section>
+        <section class="column">
           <figure>
-            <img src="/images/caniuse-web-authn.png" alt="Can I Use - Web Authentication API" />
-            <ficaption>Can I Use - Web Authentication API</ficaption>
+            <img src="/images/platform-support.png" alt="WebAuthn platform support" />
+            <ficaption
+              ><a href="https://webauthn.me/browser-support" target="_blank">Browser platform support</a></ficaption
+            >
+          </figure>
+          <figure>
+            <img src="/images/roaming-support.png" alt="WebAuthn roaming support" />
+            <ficaption
+              ><a href="https://webauthn.me/browser-support" target="_blank">Browser roaming support</a></ficaption
+            >
           </figure>
         </section>
       </article>

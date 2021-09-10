@@ -42,6 +42,10 @@
   flex: 2;
 }
 
+.narrow {
+  flex: 1;
+}
+
 .image-grid {
   margin: 0 auto;
   padding: 0;

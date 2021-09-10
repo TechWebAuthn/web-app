@@ -129,4 +129,4 @@ class WebAuthnAuthentication extends PresentationPageTemplate {
   }
 }
 
-customElements.define("presentation-web-authn-authentication", WebAuthnAuthentication);
+customElements.define("presentation-webauthn-authentication", WebAuthnAuthentication);

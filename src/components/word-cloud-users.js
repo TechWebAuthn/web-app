@@ -54,7 +54,7 @@ class WordCloudUsers extends LitElement {
   }
 
   disconnectedCallback() {
-    this._userSSEConnection.close();
+    this._userSSEConnection?.close();
   }
 
   render() {

@@ -4,7 +4,7 @@ import resets from "../styles/resets.css?inline";
 import layouts from "../styles/layouts.css?inline";
 import slides from "../styles/slides.css?inline";
 
-class WebAuthnSupport extends PresentationPageTemplate {
+class WebAuthnPlatformSupport extends PresentationPageTemplate {
   static get styles() {
     return [
       unsafeCSS(resets),
@@ -24,31 +24,25 @@ class WebAuthnSupport extends PresentationPageTemplate {
 
   render() {
     return html`
-      <h1>WebAuthn - Platform support</h1>
+      <h1>WebAuthn - Browser platform support</h1>
 
       <article>
-        <aside>
-          <figure>
-            <img src="/images/web-authn-support.png" alt="Devices" />
-            <ficaption>
-              <a href="https://www.freepik.com/vectors/technology">Technology vector created by stories</a>
-            </ficaption>
-          </figure>
-        </aside>
-        <section class="column">
+        <section class="wide">
           <figure>
             <img src="/images/platform-support.png" alt="WebAuthn platform support" />
             <ficaption
               ><a href="https://webauthn.me/browser-support" target="_blank">Browser platform support</a></ficaption
             >
           </figure>
-          <figure>
-            <img src="/images/roaming-support.png" alt="WebAuthn roaming support" />
-            <ficaption
-              ><a href="https://webauthn.me/browser-support" target="_blank">Browser roaming support</a></ficaption
-            >
-          </figure>
         </section>
+        <aside>
+          <figure>
+            <img src="/images/webauthn-platform-support.png" alt="Devices" />
+            <ficaption>
+              <a href="https://www.freepik.com/vectors/technology">Technology vector created by stories</a>
+            </ficaption>
+          </figure>
+        </aside>
       </article>
     `;
   }
@@ -60,4 +54,4 @@ class WebAuthnSupport extends PresentationPageTemplate {
   }
 }
 
-customElements.define("presentation-web-authn-support", WebAuthnSupport);
+customElements.define("presentation-webauthn-platform-support", WebAuthnPlatformSupport);

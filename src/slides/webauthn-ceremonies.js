@@ -1,32 +1,11 @@
-import { css, html, unsafeCSS } from "lit";
+import { html, unsafeCSS } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
-import { setNotificationMessage } from "../utils/notification";
-import forms from "../styles/forms.css?inline";
-import cards from "../styles/cards.css?inline";
-import notifications from "../styles/notifications.css?inline";
 import layouts from "../styles/layouts.css?inline";
 import slides from "../styles/slides.css?inline";
 
 class WebAuthnCeremonies extends PresentationPageTemplate {
-  constructor() {
-    super();
-
-    this._setNotificationMessage = setNotificationMessage.bind(this);
-  }
-
   static get styles() {
-    return [
-      unsafeCSS(forms),
-      unsafeCSS(cards),
-      unsafeCSS(notifications),
-      unsafeCSS(layouts),
-      unsafeCSS(slides),
-      css`
-        webauthn-recovery::part(input) {
-          box-sizing: border-box;
-        }
-      `,
-    ];
+    return [unsafeCSS(layouts), unsafeCSS(slides)];
   }
 
   render() {
@@ -101,4 +80,4 @@ And finally we are adding a device enrollment process with different variations 
   }
 }
 
-customElements.define("presentation-web-authn-ceremonies", WebAuthnCeremonies);
+customElements.define("presentation-webauthn-ceremonies", WebAuthnCeremonies);

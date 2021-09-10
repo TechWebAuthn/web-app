@@ -1,28 +1,15 @@
 import { css, html, unsafeCSS } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import PresentationPageTemplate from "./presentation-page-template";
-import slides from "../styles/slides.css?inline";
-import { setNotificationMessage } from "../utils/notification";
 import "webauthn-components/recovery";
-import forms from "../styles/forms.css";
-import cards from "../styles/cards.css";
 import layouts from "../styles/layouts.css";
-import notifications from "../styles/notifications.css";
+import slides from "../styles/slides.css?inline";
 
-import svgFile from "../../public/images/web-authn-actors.svg?raw";
+import svgFile from "../../public/images/webauthn-actors.svg?raw";
 
 class WebAuthnIntroduction extends PresentationPageTemplate {
-  constructor() {
-    super();
-
-    this._setNotificationMessage = setNotificationMessage.bind(this);
-  }
-
   static get styles() {
     return [
-      unsafeCSS(forms),
-      unsafeCSS(cards),
-      unsafeCSS(notifications),
       unsafeCSS(layouts),
       unsafeCSS(slides),
       css`
@@ -74,4 +61,4 @@ Right now, they need access to an authenticator that uses asymmetric cryptograph
   }
 }
 
-customElements.define("presentation-web-authn-introduction", WebAuthnIntroduction);
+customElements.define("presentation-webauthn-introduction", WebAuthnIntroduction);

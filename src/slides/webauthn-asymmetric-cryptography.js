@@ -1,25 +1,12 @@
 import { css, html, unsafeCSS } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
-import { setNotificationMessage } from "../utils/notification";
 import "webauthn-components/recovery";
-import forms from "../styles/forms.css?inline";
-import cards from "../styles/cards.css?inline";
-import notifications from "../styles/notifications.css?inline";
 import layouts from "../styles/layouts.css?inline";
 import slides from "../styles/slides.css?inline";
 
 class WebAuthnAsymmetricCryptography extends PresentationPageTemplate {
-  constructor() {
-    super();
-
-    this._setNotificationMessage = setNotificationMessage.bind(this);
-  }
-
   static get styles() {
     return [
-      unsafeCSS(forms),
-      unsafeCSS(cards),
-      unsafeCSS(notifications),
       unsafeCSS(layouts),
       unsafeCSS(slides),
       css`
@@ -38,10 +25,14 @@ class WebAuthnAsymmetricCryptography extends PresentationPageTemplate {
         <aside class="wide">
           <figure>
             <img src="/images/asymmetric-signing-diagram.png" alt="Asymmetric signing diagram" />
-            <!--                        TODO draw it -->
+            <figcaption>
+              <a href="https://sectigo.com/resource-library/public-key-vs-private-key" target="_blank"
+                >Public Keys and Private Keys in Public Key Cryptography</a
+              >
+            </figcaption>
           </figure>
         </aside>
-        <section>
+        <section class="narrow">
           <h3>Terms</h3>
           <ul>
             <li>Public Key - anybody can have it</li>
@@ -74,4 +65,4 @@ So we are using strong credentials instead of a password.
   }
 }
 
-customElements.define("presentation-web-authn-asymmetric-cryptography", WebAuthnAsymmetricCryptography);
+customElements.define("presentation-webauthn-asymmetric-cryptography", WebAuthnAsymmetricCryptography);

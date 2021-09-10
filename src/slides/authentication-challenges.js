@@ -33,8 +33,13 @@ class AuthenticationChallenges extends PresentationPageTemplate {
           </ul>
           <p>
             <a href="https://www.varonis.com/blog/data-breach-statistics/" target="_blank">
-              98 Must-Know Data Breach Statistics for 2021
+              📊 98 Must-Know Data Breach Statistics for 2021
             </a>
+          </p>
+          <p>
+            <a href="https://haveibeenpwned.com/" target="_blank"
+              >🕵️ Check if your email or phone is in a data breach</a
+            >
           </p>
         </section>
       </article>

@@ -149,4 +149,4 @@ With this mechanism in place, a phishing attack won't work even the user doesn't
   }
 }
 
-customElements.define("presentation-web-authn-register", WebAuthnRegister);
+customElements.define("presentation-webauthn-register", WebAuthnRegister);

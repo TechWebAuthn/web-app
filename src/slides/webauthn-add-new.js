@@ -127,7 +127,7 @@ class WebAuthnAddNew extends PresentationPageTemplate {
 
   get _prompterMessage() {
     return `
-      # Web Authn - Add a new device
+      # WebAuthn - Add a new device
 
       Using a recovery key could sometimes be a good fit when switching devices, but perhaps we want to access our account from multiple devices, such as laptops and smartphones.
 
@@ -142,4 +142,4 @@ class WebAuthnAddNew extends PresentationPageTemplate {
   }
 }
 
-customElements.define("presentation-web-authn-add-new", WebAuthnAddNew);
+customElements.define("presentation-webauthn-add-new", WebAuthnAddNew);

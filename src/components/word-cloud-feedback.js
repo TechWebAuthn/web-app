@@ -54,7 +54,7 @@ class WordCloudFeedback extends LitElement {
   }
 
   disconnectedCallback() {
-    this._feedbackSSEConnection.close();
+    this._feedbackSSEConnection?.close();
   }
 
   render() {

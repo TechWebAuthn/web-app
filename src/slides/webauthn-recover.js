@@ -104,4 +104,4 @@ class WebAuthnRecover extends PresentationPageTemplate {
   }
 }
 
-customElements.define("presentation-web-authn-recover", WebAuthnRecover);
+customElements.define("presentation-webauthn-recover", WebAuthnRecover);

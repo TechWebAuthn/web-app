@@ -78,16 +78,28 @@ export const routes = [
     action: () => import("./slides/webauthn-recover"),
   },
   {
+    name: "webauthn-add-new-options",
+    path: "/webauthn-add-new-options",
+    component: "presentation-webauthn-add-new-options",
+    action: () => import("./slides/webauthn-add-new-options"),
+  },
+  {
     name: "webauthn-add-new",
     path: "/webauthn-add-new",
     component: "presentation-webauthn-add-new",
     action: () => import("./slides/webauthn-add-new"),
   },
   {
-    name: "webauthn-demo-time",
-    path: "/webauthn-demo-time",
-    component: "presentation-webauthn-demo-time",
-    action: () => import("./slides/webauthn-demo-time"),
+    name: "webauthn-rp-initial-steps",
+    path: "/webauthn-rp-initial-steps",
+    component: "presentation-webauthn-rp-initial-steps",
+    action: () => import("./slides/webauthn-rp-initial-steps"),
+  },
+  {
+    name: "webauthn-easy-adoption-wc",
+    path: "/webauthn-easy-adoption-wc",
+    component: "presentation-webauthn-easy-adoption-wc",
+    action: () => import("./slides/webauthn-easy-adoption-wc"),
   },
   {
     name: "webauthn-resources",
@@ -122,6 +134,7 @@ class PresentationApp extends LitElement {
     this.isDarkTheme = window.localStorage.getItem("theme") === "dark";
     window.addEventListener("theme-changed", ({ detail: { theme } }) => (this.isDarkTheme = theme === "dark"));
     this._keyUpListener = this._onKeyUp.bind(this);
+    this.stopNavigation = false;
   }
 
   static get properties() {
@@ -160,6 +173,7 @@ class PresentationApp extends LitElement {
   }
 
   _onKeyUp(event) {
+    if (this.stopNavigation) return;
     const { code, altKey, ctrlKey } = event;
 
     if (!["ArrowLeft", "ArrowRight", "F11", "KeyP", "KeyF", "KeyR"].includes(code)) return;

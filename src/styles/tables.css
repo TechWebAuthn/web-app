@@ -1,0 +1,22 @@
+table {
+  border-collapse: collapse;
+}
+
+table :is(td, th) {
+  padding: 0.5em;
+  font-size: 0.8em;
+  border: 1px solid var(--canvas-info);
+}
+
+table.grid td:first-child {
+  font-weight: bold;
+}
+
+table td.y {
+  background-color: var(--button-canvas-primary);
+  color: var(--button-text-primary);
+}
+
+table td.n {
+  background-color: var(--canvas-error);
+}

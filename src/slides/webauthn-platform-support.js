@@ -2,6 +2,7 @@ import { html, unsafeCSS, css } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import resets from "../styles/resets.css?inline";
 import layouts from "../styles/layouts.css?inline";
+import tables from "../styles/tables.css?inline";
 import slides from "../styles/slides.css?inline";
 
 class WebAuthnPlatformSupport extends PresentationPageTemplate {
@@ -9,6 +10,7 @@ class WebAuthnPlatformSupport extends PresentationPageTemplate {
     return [
       unsafeCSS(resets),
       unsafeCSS(layouts),
+      unsafeCSS(tables),
       unsafeCSS(slides),
       css`
         figure img {
@@ -28,12 +30,75 @@ class WebAuthnPlatformSupport extends PresentationPageTemplate {
 
       <article>
         <section class="wide">
-          <figure>
-            <img src="/images/platform-support.png" alt="WebAuthn platform support" />
-            <ficaption
-              ><a href="https://webauthn.me/browser-support" target="_blank">Browser platform support</a></ficaption
-            >
-          </figure>
+          <table class="grid">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Android 7+</th>
+                <th>iOS 14.5+</th>
+                <th>Windows 10 <small>(with Windows Hello)</small></th>
+                <th>macOS Catalina</th>
+                <th>macOS Big Sur</th>
+                <th>Desktop Linux</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Chrome</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>Safari</td>
+                <td>N/A</td>
+                <td class="y">Yes</td>
+                <td>N/A</td>
+                <td class="n">No</td>
+                <td class="y">Yes</td>
+                <td>N/A</td>
+              </tr>
+              <tr>
+                <td>Firefox</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td class="n">No</td>
+                <td class="n">No</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>Brave</td>
+                <td class="n">No</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>Edge</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
+                <td class=>-</td>
+              </tr>
+              <tr>
+                <td>Internet Explorer</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td class="n">No</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>N/A</td>
+              </tr>
+            </tbody>
+          </table>
         </section>
         <aside>
           <figure>

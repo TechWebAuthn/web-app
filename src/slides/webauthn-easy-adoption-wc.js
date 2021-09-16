@@ -4,14 +4,14 @@ import "../components/gist";
 import layouts from "../styles/layouts.css?inline";
 import slides from "../styles/slides.css?inline";
 
-class WebAuthnDemoTime extends PresentationPageTemplate {
+class WebAuthnEasyAdoptionWC extends PresentationPageTemplate {
   static get styles() {
     return [
       unsafeCSS(layouts),
       unsafeCSS(slides),
       css`
         article {
-          margin-block-end: 4rem;
+          margin-block-end: 6rem;
         }
       `,
     ];
@@ -19,17 +19,17 @@ class WebAuthnDemoTime extends PresentationPageTemplate {
 
   render() {
     return html`
-      <h1>WebAuthn - Demo time</h1>
+      <h1>WebAuthn - Easy adoption with Web Components</h1>
 
       <article>
         <section class="column">
-          <auth-gist data-gist-id="8eac08de0bde4ebefc6f65877000065a"></auth-gist>
+          <auth-gist data-gist-id="53b9e82b723ac923117f155d38f1b604" data-multi-file></auth-gist>
         </section>
         <section class="column">
-          <auth-gist data-gist-id="a3b0280dbd5ffd12340584903d193441"></auth-gist>
+          <auth-gist data-gist-id="12c1f1367bbb2a4b2894e5c24e8da8aa" data-multi-file></auth-gist>
         </section>
         <section class="column">
-          <auth-gist data-gist-id="92aa7a150376855427de875ad772d3ab"></auth-gist>
+          <auth-gist data-gist-id="d60e0778a9e9c92e4fe2e57393cae226"></auth-gist>
         </section>
       </article>
     `;
@@ -37,10 +37,10 @@ class WebAuthnDemoTime extends PresentationPageTemplate {
 
   get _prompterMessage() {
     return `
-      # WebAuthn - Demo Time
+      # WebAuthn - Easy adoption with Web Components
       -
     `;
   }
 }
 
-customElements.define("presentation-webauthn-demo-time", WebAuthnDemoTime);
+customElements.define("presentation-webauthn-easy-adoption-wc", WebAuthnEasyAdoptionWC);

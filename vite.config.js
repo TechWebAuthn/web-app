@@ -16,6 +16,8 @@ export default defineConfig({
       workbox: {
         cleanupOutdatedCaches: true,
         skipWaiting: true,
+        cacheId: Date.now().toString(32),
+        globIgnores: ["**/pdfmake*", "**/xlsx*", "**/vfs_fonts*"],
       },
       manifest: {
         name: "WebAuthn ❤️ WebRTC",

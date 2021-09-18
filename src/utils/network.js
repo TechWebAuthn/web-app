@@ -1,3 +1,5 @@
+const BroadcastChannels = {};
+
 export async function request(url, options = {}) {
   try {
     const mergedOptions = {
@@ -21,7 +23,11 @@ export async function request(url, options = {}) {
       throw error;
     }
 
-    return response.headers.get("Content-Length") == 0 ? null : await response.json();
+    try {
+      return await response.json();
+    } catch (error) {
+      return null;
+    }
   } catch (error) {
     throw new Error(getStatusErrorMessage(error));
   }
@@ -40,4 +46,14 @@ export function getStatusErrorMessage(error) {
     default:
       return "Something went wrong";
   }
+}
+
+export function connectToBroadcastChannel(channelName = "app") {
+  const channel = BroadcastChannels[channelName] || new BroadcastChannel(channelName);
+
+  if (!BroadcastChannels[channelName]) {
+    BroadcastChannels[channelName] = channel;
+  }
+
+  return channel;
 }

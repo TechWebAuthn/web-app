@@ -33,6 +33,10 @@
   width: 2em;
 }
 
+.card.expandable button.expand svg {
+  fill: currentColor;
+}
+
 .card.expandable button.expand:active {
   color: var(--text-link-active);
 }

@@ -1,12 +1,14 @@
-import { LitElement, html, unsafeCSS, css } from "lit";
-import slides from "../styles/slides.css?inline";
+import { html, unsafeCSS, css } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
-import "web-authn-components/recovery";
+import "webauthn-components/recovery";
+import "../components/logs";
 import forms from "../styles/forms.css";
 import cards from "../styles/cards.css";
 import notifications from "../styles/notifications.css";
+import slides from "../styles/slides.css?inline";
 
-class WebAuthnRecover extends LitElement {
+class WebAuthnRecover extends PresentationPageTemplate {
   constructor() {
     super();
 
@@ -20,7 +22,7 @@ class WebAuthnRecover extends LitElement {
       unsafeCSS(notifications),
       unsafeCSS(slides),
       css`
-        web-authn-recovery::part(input) {
+        webauthn-recovery::part(input) {
           box-sizing: border-box;
         }
       `,
@@ -29,7 +31,7 @@ class WebAuthnRecover extends LitElement {
 
   render() {
     return html`
-      <h1>Web Authn - Recover account access</h1>
+      <h1>WebAuthn - Recover account access</h1>
 
       <article>
         <aside class="fit-content">
@@ -37,7 +39,7 @@ class WebAuthnRecover extends LitElement {
             <h2>Recover account</h2>
             <p id="notification" class="notification"></p>
             <div class="card">
-              <web-authn-recovery
+              <webauthn-recovery
                 class="form"
                 @recovery-started="${this._onRecoverEvent}"
                 @recovery-created="${this._onRecoverEvent}"
@@ -47,13 +49,16 @@ class WebAuthnRecover extends LitElement {
             </div>
           </output>
         </aside>
-        <section>
-          <h2>Recovery steps</h2>
-          <ul>
-            <li>Step 1...</li>
-            <li>Step 2...</li>
-            <li>Step 3...</li>
-          </ul>
+        <section class="column">
+          <auth-logs></auth-logs>
+        </section>
+        <section class="column">
+          <figure>
+            <img src="/images/webauthn-recover.png" alt="WebAuthn Recover Account Access" />
+            <figcaption>
+              <a href="https://www.freepik.com/vectors/website">Website vector created by stories</a>
+            </figcaption>
+          </figure>
         </section>
       </article>
     `;
@@ -85,6 +90,18 @@ class WebAuthnRecover extends LitElement {
 
     this._setNotificationMessage(message, notificationType);
   }
+
+  get _prompterMessage() {
+    return `
+      # Web Authn - Recover account access
+
+      The credentials are on a personal device, a smartphone perhaps, which means that if we misplace or even lose it, that would render us unable to access our account.
+
+      We stored our recovery key in a safe place in the registration step, and now it's time to use it.
+
+      Using this key, we'll be able to claim the account again through a process similar to registration; this will also remove all devices previously tied to this account.
+    `;
+  }
 }
 
-customElements.define("presentation-web-authn-recover", WebAuthnRecover);
+customElements.define("presentation-webauthn-recover", WebAuthnRecover);

@@ -1,9 +1,25 @@
-import { LitElement, html, unsafeCSS } from "lit";
+import { html, unsafeCSS, css } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import slides from "../styles/slides.css?inline";
 
-class AuthenticationHow extends LitElement {
+class AuthenticationHow extends PresentationPageTemplate {
   static get styles() {
-    return [unsafeCSS(slides)];
+    return [
+      unsafeCSS(slides),
+      css`
+        ul {
+          display: inline-grid;
+        }
+        li {
+          display: grid;
+          gap: 2em;
+          grid-template-columns: 0 1fr 1fr;
+        }
+        li::before {
+          content: "🔐";
+        }
+      `,
+    ];
   }
 
   render() {
@@ -15,21 +31,21 @@ class AuthenticationHow extends LitElement {
           <figure>
             <img src="/images/authentication-how.png" alt="Authentication method" />
             <figcaption>
-              <a href="https://www.freepik.com/vectors/computer"
-                >Computer vector created by stories - www.freepik.com</a
-              >
+              <a href="https://www.freepik.com/vectors/computer">Computer vector created by stories</a>
             </figcaption>
           </figure>
         </aside>
         <section>
-          <h2>The three factors of authentication</h2>
+          <h2>Some factors of authentication</h2>
           <ul>
-            <li>Something you know</li>
-            <li>Something you have</li>
-            <li>Something you are</li>
+            <li>Something you know <span>passwords</span></li>
+            <li>Something you have <span>TOTP, RSA SecureID</span></li>
+            <li>Something you are <span>face, fingerprint, voice</span></li>
+            <li>Somewhere you are <span>geolocation</span></li>
+            <li>Something you do <span>personal patterns</span></li>
           </ul>
         </section>
-        <section>
+        <!-- <section>
           <h2>Some common types of authentication</h2>
           <ul>
             <li>Password-based</li>
@@ -38,8 +54,24 @@ class AuthenticationHow extends LitElement {
             <li>Biometric</li>
             <li>Token-based</li>
           </ul>
-        </section>
+        </section> -->
       </article>
+    `;
+  }
+
+  get _prompterMessage() {
+    return `
+      # Authentication - How does it work?
+
+      There are many ways to implement authentication, and all require at least one authentication factor.
+
+      Authentication factors are a particular category of security credentials used to verify the identity of a user.
+
+      - Something you know: passwords (typical example)
+      - Something you have: TOTP, smart card, physical token
+      - Something you are: biometrics (face, fingerprint)
+      - Somewhere you are: geolocation (geofencing)
+      - Something you do: behavior, personal patterns
     `;
   }
 }

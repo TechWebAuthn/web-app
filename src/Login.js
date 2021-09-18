@@ -1,7 +1,7 @@
 import { LitElement, html, css, unsafeCSS } from "lit";
 import { setNotificationMessage } from "./utils/notification";
 import { hasValidSession } from "./utils/session";
-import "web-authn-components/login";
+import "webauthn-components/login";
 
 import resets from "./styles/resets.css?inline";
 import cards from "./styles/cards.css?inline";
@@ -25,7 +25,7 @@ class Login extends LitElement {
       unsafeCSS(headings),
       unsafeCSS(notifications),
       css`
-        web-authn-login::part(input) {
+        webauthn-login::part(input) {
           box-sizing: border-box;
         }
       `,
@@ -37,7 +37,7 @@ class Login extends LitElement {
       <h2 class="page-subtitle">Login</h2>
       <p id="notification" class="notification"></p>
       <div class="card">
-        <web-authn-login
+        <webauthn-login
           class="form"
           @login-started="${this._onWebAuthnLoginEvent}"
           @login-retrieved="${this._onWebAuthnLoginEvent}"

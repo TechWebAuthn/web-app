@@ -1,8 +1,8 @@
 import { LitElement, html, unsafeCSS, css } from "lit";
 import { clearNotificationMessage, setNotificationMessage } from "./utils/notification";
-import "web-authn-components/registration";
-import "web-authn-components/recovery";
-import "web-authn-components/rtc/enrollment-requester";
+import "webauthn-components/registration";
+import "webauthn-components/recovery";
+import "webauthn-components/rtc/enrollment-requester";
 
 import resets from "./styles/resets.css?inline";
 import cards from "./styles/cards.css?inline";
@@ -62,9 +62,9 @@ class Register extends LitElement {
       unsafeCSS(layouts),
       unsafeCSS(loaders),
       css`
-        web-authn-registration::part(input),
-        web-authn-recovery::part(input),
-        web-authn-rtc-enrollment-requester::part(code) {
+        webauthn-registration::part(input),
+        webauthn-recovery::part(input),
+        webauthn-rtc-enrollment-requester::part(code) {
           box-sizing: border-box;
         }
       `,
@@ -86,7 +86,7 @@ class Register extends LitElement {
           <summary>Register a new account</summary>
           ${this._isRegisterFlow && !this._isCurrentFlowComplete
             ? html`
-                <web-authn-registration
+                <webauthn-registration
                   class="form"
                   @registration-started="${this._onWebAuthnRegisterEvent}"
                   @registration-created="${this._onWebAuthnRegisterEvent}"
@@ -107,7 +107,7 @@ class Register extends LitElement {
           <summary>Recover account access</summary>
           ${this._isRecoveryFlow && !this._isCurrentFlowComplete
             ? html`
-                <web-authn-recovery
+                <webauthn-recovery
                   class="form"
                   @recovery-started="${this._onRecoverEvent}"
                   @recovery-created="${this._onRecoverEvent}"
@@ -130,14 +130,14 @@ class Register extends LitElement {
           ${this._isAddFlow && !this._isCurrentFlowComplete
             ? !this._showAddFlowLoader
               ? html`
-                  <web-authn-rtc-enrollment-requester
+                  <webauthn-rtc-enrollment-requester
                     class="form"
                     @enrollment-code-requested="${this._onEnrollmentEvent}"
                     @enrollment-started="${this._onEnrollmentEvent}"
                     @enrollment-created="${this._onEnrollmentEvent}"
                     @enrollment-completed="${this._onEnrollmentEvent}"
                     @enrollment-error="${this._onEnrollmentEvent}"
-                    @enrollment-canceled="${this._onEnrollmentEvent}"
+                    @enrollment-cancelled="${this._onEnrollmentEvent}"
                     .rtcIceServers="${this.rtcIceServers}"
                   ></web-authn-rtc-enrollment-requester>
                 `
@@ -253,8 +253,8 @@ class Register extends LitElement {
         this._isCurrentFlowComplete = true;
         this._showAddFlowLoader = false;
         break;
-      case "enrollment-canceled":
-        message = message || "Enrollment has been canceled";
+      case "enrollment-cancelled":
+        message = message || "Enrollment has been cancelled";
         notificationType = "error";
         break;
       case "enrollment-error":

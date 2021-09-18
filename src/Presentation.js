@@ -1,4 +1,6 @@
 import { LitElement, html, unsafeCSS } from "lit";
+import { connectToBroadcastChannel } from "./utils/network";
+import "./utils/puck";
 import { Router } from "@vaadin/router";
 import resets from "./styles/resets.css?inline";
 import presentation from "./styles/presentation.css?inline";
@@ -14,6 +16,12 @@ export const routes = [
     path: "/cover",
     component: "presentation-cover",
     action: () => import("./slides/cover"),
+  },
+  {
+    name: "agenda",
+    path: "/agenda",
+    component: "presentation-agenda",
+    action: () => import("./slides/agenda"),
   },
   {
     name: "authentication",
@@ -34,22 +42,88 @@ export const routes = [
     action: () => import("./slides/authentication-challenges"),
   },
   {
-    name: "web-authn-recover",
-    path: "/web-authn-recover",
-    component: "presentation-web-authn-recover",
-    action: () => import("./slides/web-authn-recover"),
+    name: "webauthn-introduction",
+    path: "/webauthn-introduction",
+    component: "presentation-webauthn-introduction",
+    action: () => import("./slides/webauthn-introduction"),
   },
   {
-    name: "web-authn-add-new",
-    path: "/web-authn-add-new",
-    component: "presentation-web-authn-add-new",
-    action: () => import("./slides/web-authn-add-new"),
+    name: "webauthn-asymmetric-cryptography",
+    path: "/webauthn-asymmetric-cryptography",
+    component: "presentation-webauthn-asymmetric-cryptography",
+    action: () => import("./slides/webauthn-asymmetric-cryptography"),
   },
   {
-    name: "web-authn-support",
-    path: "/web-authn-support",
-    component: "presentation-web-authn-support",
-    action: () => import("./slides/web-authn-support"),
+    name: "webauthn-ceremonies",
+    path: "/webauthn-ceremonies",
+    component: "presentation-webauthn-ceremonies",
+    action: () => import("./slides/webauthn-ceremonies"),
+  },
+  {
+    name: "webauthn-register",
+    path: "/webauthn-register",
+    component: "presentation-webauthn-register",
+    action: () => import("./slides/webauthn-register"),
+  },
+  {
+    name: "webauthn-authentication",
+    path: "/webauthn-authentication",
+    component: "presentation-webauthn-authentication",
+    action: () => import("./slides/webauthn-authentication"),
+  },
+  {
+    name: "webauthn-recover",
+    path: "/webauthn-recover",
+    component: "presentation-webauthn-recover",
+    action: () => import("./slides/webauthn-recover"),
+  },
+  {
+    name: "webauthn-add-new-options",
+    path: "/webauthn-add-new-options",
+    component: "presentation-webauthn-add-new-options",
+    action: () => import("./slides/webauthn-add-new-options"),
+  },
+  {
+    name: "webauthn-add-new",
+    path: "/webauthn-add-new",
+    component: "presentation-webauthn-add-new",
+    action: () => import("./slides/webauthn-add-new"),
+  },
+  {
+    name: "webauthn-rp-initial-steps",
+    path: "/webauthn-rp-initial-steps",
+    component: "presentation-webauthn-rp-initial-steps",
+    action: () => import("./slides/webauthn-rp-initial-steps"),
+  },
+  {
+    name: "webauthn-easy-adoption-wc",
+    path: "/webauthn-easy-adoption-wc",
+    component: "presentation-webauthn-easy-adoption-wc",
+    action: () => import("./slides/webauthn-easy-adoption-wc"),
+  },
+  {
+    name: "webauthn-resources",
+    path: "/webauthn-resources",
+    component: "presentation-webauthn-resources",
+    action: () => import("./slides/webauthn-resources"),
+  },
+  {
+    name: "webauthn-platform-support",
+    path: "/webauthn-platform-support",
+    component: "presentation-webauthn-platform-support",
+    action: () => import("./slides/webauthn-platform-support"),
+  },
+  {
+    name: "webauthn-roaming-support",
+    path: "/webauthn-roaming-support",
+    component: "presentation-webauthn-roaming-support",
+    action: () => import("./slides/webauthn-roaming-support"),
+  },
+  {
+    name: "try-it-out",
+    path: "/try-it-out",
+    component: "presentation-try-it-out",
+    action: () => import("./slides/try-it-out"),
   },
 ];
 
@@ -59,7 +133,8 @@ class PresentationApp extends LitElement {
 
     this.isDarkTheme = window.localStorage.getItem("theme") === "dark";
     window.addEventListener("theme-changed", ({ detail: { theme } }) => (this.isDarkTheme = theme === "dark"));
-    this._navigationListener = this._onNavigation.bind(this);
+    this._keyUpListener = this._onKeyUp.bind(this);
+    this.stopNavigation = false;
   }
 
   static get properties() {
@@ -74,7 +149,10 @@ class PresentationApp extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    window.addEventListener("keyup", this._navigationListener);
+    this._broadcastChannel = connectToBroadcastChannel("presentation");
+    this.onfullscreenchange = this._onFullscreen.bind(this);
+    this.onwebkitfullscreenchange = this._onFullscreen.bind(this);
+    window.addEventListener("keyup", this._keyUpListener);
   }
 
   render() {
@@ -88,21 +166,119 @@ class PresentationApp extends LitElement {
   }
 
   disconnectedCallback() {
-    window.removeEventListener("keyup", this._navigationListener);
+    window.removeEventListener("keyup", this._keyUpListener);
+
+    this._broadcastChannel.close();
     super.disconnectedCallback();
   }
 
-  _onNavigation(event) {
-    const { key } = event;
-    if (!["ArrowLeft", "ArrowRight"].includes(key)) return;
+  _onKeyUp(event) {
+    if (this.stopNavigation) return;
+    const { code, altKey, ctrlKey } = event;
+
+    if (!["ArrowLeft", "ArrowRight", "F11", "KeyP", "KeyF", "KeyR"].includes(code)) return;
     const currentSlide = this.location.pathname.replace("/presentation", "");
     const routeIndex = routes.findIndex((r) => r.path === currentSlide);
-    if (key === "ArrowLeft" && routeIndex > 0) {
+
+    if (code === "ArrowLeft" && routeIndex > 0) {
       Router.go(`/presentation${routes[routeIndex - 1].path}`);
     }
-    if (key === "ArrowRight" && routeIndex < routes.length - 1) {
+
+    if (code === "ArrowRight" && routeIndex < routes.length - 1) {
       Router.go(`/presentation${routes[routeIndex + 1].path}`);
     }
+
+    if (code === "F11" || (code === "KeyF" && ctrlKey && altKey)) {
+      event.preventDefault();
+      document.fullscreenElement ? document.exitFullscreen() : this.requestFullscreen();
+    }
+
+    if (code === "KeyP" && altKey && ctrlKey) {
+      this._connectPuckJS();
+    }
+
+    if (code === "KeyR" && altKey && ctrlKey) {
+      this._resetPuckJS();
+    }
+  }
+
+  _onFullscreen() {
+    if (document.fullscreenElement || document.webkitfullscreenElement) {
+      this._broadcastChannel?.postMessage("entered-fullscreen");
+    } else {
+      this._broadcastChannel?.postMessage("exited-fullscreen");
+    }
+  }
+
+  _connectPuckJS() {
+    Puck.connect((connection) => {
+      if (!connection) {
+        return alert("Could not connect to device!");
+      }
+
+      connection.write(`
+        reset();
+        let ledTimeout;
+
+        function press() {
+          if (ledTimeout) {
+            clearTimeout(ledTimeout);
+          }
+
+          const data = {};
+          const movement = Puck.accel();
+          if (movement.acc.z < 0) {
+            LED1.set();
+            LED2.reset();
+            data.d = 'prev';
+          } else {
+            LED2.set();
+            LED1.reset();
+            data.d = 'next'
+          }
+
+          Bluetooth.write(JSON.stringify(data));
+
+          ledTimeout = setTimeout(() => {
+            LED1.reset();
+            LED2.reset();
+          }, 100);
+        }
+
+        setWatch(press, BTN, { repeat: true, debounce: 100 });
+      `);
+
+      connection.on("data", (data) => {
+        if (!data || !data.startsWith("{")) {
+          return;
+        }
+
+        const keyMap = {
+          next: "ArrowRight",
+          prev: "ArrowLeft",
+        };
+
+        try {
+          const { d } = JSON.parse(data);
+
+          window.dispatchEvent(new KeyboardEvent("keyup", { code: keyMap[d] }));
+        } catch (e) {
+          return;
+        }
+      });
+    });
+  }
+
+  _resetPuckJS() {
+    Puck.connect((connection) => {
+      if (!connection) {
+        return alert("Could not connect to device!");
+      }
+
+      connection.write(`reset();`);
+
+      setTimeout(() => connection.close(), 2000);
+    });
   }
 }
 

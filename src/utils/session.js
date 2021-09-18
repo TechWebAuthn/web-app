@@ -8,9 +8,8 @@ export function isLoggedIn() {
 export async function logout(event) {
   if (event) event.preventDefault();
 
-  await fetch("/api/logout", {
+  await request("/api/logout", {
     method: "POST",
-    credentials: "include",
   });
   Router.go("/");
   window.dispatchEvent(new CustomEvent("session-changed", { detail: { isLoggedIn: false } }));

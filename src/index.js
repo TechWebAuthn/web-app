@@ -3,6 +3,7 @@ import { LitElement, html, unsafeCSS, css } from "lit";
 import "./components/theme-toggle";
 import "./components/nav";
 import { hasValidSession, isLoggedIn } from "./utils/session";
+import resets from "./styles/resets.css?inline";
 import links from "./styles/links.css?inline";
 import headings from "./styles/headings.css?inline";
 import { routes as presentationRoutes } from "./Presentation";
@@ -47,6 +48,12 @@ const routes = [
     action: () => import("./Presentation"),
     children: presentationRoutes,
   },
+  {
+    name: "prompter",
+    path: "/prompter",
+    component: "presentation-prompter",
+    action: () => import("./Prompter"),
+  },
 ];
 
 router.setRoutes(routes);
@@ -58,9 +65,11 @@ class AuthApp extends LitElement {
     this.isLoggedIn = isLoggedIn();
     if (this.isLoggedIn) this._checkValidSession();
 
-    this.isInPresentationMode = window.location.pathname.startsWith("/presentation");
+    const { pathname } = window.location;
+
+    this.isInPresentationMode = pathname.startsWith("/presentation") || pathname.startsWith("/prompter");
     window.addEventListener("vaadin-router-location-changed", () => {
-      this.isInPresentationMode = window.location.pathname.startsWith("/presentation");
+      this.isInPresentationMode = pathname.startsWith("/presentation") || pathname.startsWith("/prompter");
     });
   }
 
@@ -73,6 +82,7 @@ class AuthApp extends LitElement {
 
   static get styles() {
     return [
+      unsafeCSS(resets),
       unsafeCSS(links),
       unsafeCSS(headings),
       css`

@@ -4,9 +4,9 @@ import { setNotificationMessage } from "../utils/notification";
 import { request } from "../utils/network";
 import "webauthn-components/login";
 import "../components/logs";
-import forms from "../styles/forms.css";
-import cards from "../styles/cards.css";
-import notifications from "../styles/notifications.css";
+import forms from "../styles/forms.css?inline";
+import cards from "../styles/cards.css?inline";
+import notifications from "../styles/notifications.css?inline";
 import slides from "../styles/slides.css?inline";
 
 class WebAuthnAuthentication extends PresentationPageTemplate {

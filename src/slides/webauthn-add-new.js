@@ -3,11 +3,11 @@ import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage, clearNotificationMessage } from "../utils/notification";
 import "webauthn-components/rtc/enrollment-requester";
 import "../components/logs";
-import forms from "../styles/forms.css";
-import cards from "../styles/cards.css";
-import codes from "../styles/codes.css";
-import notifications from "../styles/notifications.css";
-import loaders from "../styles/loaders.css";
+import forms from "../styles/forms.css?inline";
+import cards from "../styles/cards.css?inline";
+import codes from "../styles/codes.css?inline";
+import notifications from "../styles/notifications.css?inline";
+import loaders from "../styles/loaders.css?inlineF";
 import slides from "../styles/slides.css?inline";
 
 class WebAuthnAddNew extends PresentationPageTemplate {

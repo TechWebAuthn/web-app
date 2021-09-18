@@ -2,7 +2,7 @@ import { css, html, unsafeCSS } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import PresentationPageTemplate from "./presentation-page-template";
 import "webauthn-components/recovery";
-import layouts from "../styles/layouts.css";
+import layouts from "../styles/layouts.css?inline";
 import slides from "../styles/slides.css?inline";
 
 import svgFile from "../../public/images/webauthn-actors.svg?raw";

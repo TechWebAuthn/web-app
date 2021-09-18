@@ -3,9 +3,9 @@ import PresentationPageTemplate from "./presentation-page-template";
 import { setNotificationMessage } from "../utils/notification";
 import "webauthn-components/recovery";
 import "../components/logs";
-import forms from "../styles/forms.css";
-import cards from "../styles/cards.css";
-import notifications from "../styles/notifications.css";
+import forms from "../styles/forms.css?inline";
+import cards from "../styles/cards.css?inline";
+import notifications from "../styles/notifications.css?inline";
 import slides from "../styles/slides.css?inline";
 
 class WebAuthnRecover extends PresentationPageTemplate {

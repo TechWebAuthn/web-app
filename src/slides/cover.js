@@ -10,7 +10,7 @@ class Cover extends PresentationPageTemplate {
   render() {
     return html`
       <article class="cover-title">
-        <h1>Going password-less with Web Authentication</h1>
+        <h1>Going passwordless with Web Authentication</h1>
         <h2>Mihăiță (Miță) Țintă & Bogdan (mArv) Arvinte</h2>
         <section>
           <h3>Cluj, September 20, 2021</h3>
@@ -31,11 +31,11 @@ class Cover extends PresentationPageTemplate {
 
   get _prompterMessage() {
     return `
-      # Going password-less with Web Authentication
+      # Going passwordless with Web Authentication
 
       Welcome everyone! [Introduce ourselves]
 
-      Today we're going to discuss Web Authentication and share with you some of the things we've learned in the pursuit of a password-less web.
+      Today we're going to discuss Web Authentication and share with you some of the things we've learned in the pursuit of a passwordless web.
 
       Before we dive right in, let's have a look at the topics that we'll go through today.
     `;

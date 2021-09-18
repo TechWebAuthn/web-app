@@ -1,4 +1,4 @@
-import { html, unsafeCSS, css } from "lit";
+import { html, unsafeCSS } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import resets from "../styles/resets.css?inline";
 import layouts from "../styles/layouts.css?inline";
@@ -7,21 +7,7 @@ import slides from "../styles/slides.css?inline";
 
 class WebAuthnPlatformSupport extends PresentationPageTemplate {
   static get styles() {
-    return [
-      unsafeCSS(resets),
-      unsafeCSS(layouts),
-      unsafeCSS(tables),
-      unsafeCSS(slides),
-      css`
-        figure img {
-          height: 100%;
-        }
-
-        .column figure {
-          max-width: 90%;
-        }
-      `,
-    ];
+    return [unsafeCSS(resets), unsafeCSS(layouts), unsafeCSS(tables), unsafeCSS(slides)];
   }
 
   render() {
@@ -73,7 +59,7 @@ class WebAuthnPlatformSupport extends PresentationPageTemplate {
               <tr>
                 <td>Brave</td>
                 <td class="n">No</td>
-                <td class="y">Yes</td>
+                <td class="n">No</td>
                 <td class="y">Yes</td>
                 <td class="y">Yes</td>
                 <td class="y">Yes</td>

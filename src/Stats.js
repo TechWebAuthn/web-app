@@ -65,7 +65,11 @@ class Stats extends LitElement {
         </dl>
       </div>
       <div class="expandable card center column">
-        <button @click="${this._toggleFullscreen}" class="expand">&#x26F6;</button>
+        <button @click="${this._toggleFullscreen}" class="expand">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M24 9h-4v-5h-5v-4h9v9zm-9 15v-4h5v-5h4v9h-9zm-15-9h4v5h5v4h-9v-9zm9-15v4h-5v5h-4v-9h9z" />
+          </svg>
+        </button>
         <h3>Feedback</h3>
         <word-cloud-feedback></word-cloud-feedback>
       </div>
@@ -105,8 +109,8 @@ class Stats extends LitElement {
   }
 
   _toggleFullscreen(event) {
-    const parent = event.target.parentElement;
-    parent.classList.toggle("fullscreen");
+    const expandable = event.target.closest(".expandable");
+    expandable.classList.toggle("fullscreen");
   }
 }
 

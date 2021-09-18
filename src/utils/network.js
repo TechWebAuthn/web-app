@@ -49,11 +49,15 @@ export function getStatusErrorMessage(error) {
 }
 
 export function connectToBroadcastChannel(channelName = "app") {
-  const channel = BroadcastChannels[channelName] || new BroadcastChannel(channelName);
+  if ("BroadcastChannel" in window) {
+    const channel = BroadcastChannels[channelName] || new BroadcastChannel(channelName);
 
-  if (!BroadcastChannels[channelName]) {
-    BroadcastChannels[channelName] = channel;
+    if (!BroadcastChannels[channelName]) {
+      BroadcastChannels[channelName] = channel;
+    }
+
+    return channel;
+  } else {
+    return null;
   }
-
-  return channel;
 }

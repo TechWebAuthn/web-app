@@ -2,7 +2,7 @@
   font-size: 1.75rem;
 }
 
-:host > * {
+:host > *:not(style) {
   padding: 2rem;
   display: flex;
   gap: 4rem;
@@ -88,7 +88,7 @@ blockquote::before {
 
 /* Designs */
 
-.cover-title {
+article.cover-title {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -102,44 +102,50 @@ blockquote::before {
   gap: 0;
   margin-block-start: 15vh;
   font-size: 1em;
+  flex: 0 1 45%;
+  flex-wrap: nowrap;
 }
 
-.cover-title > * {
+article.cover-title > * {
   padding-inline-start: 8rem;
   padding-inline-end: 2rem;
   box-sizing: border-box;
 }
 
-.cover-title h1 {
+article.cover-title h1 {
   color: inherit;
   padding-block-start: 4rem;
   padding-block-end: 4rem;
   line-height: 1.5;
+  margin-block-end: auto;
 }
 
-.cover-title h2 {
+article.cover-title h2 {
   margin-block-end: 1rem;
   font-weight: 500;
   font-size: 1.25em;
 }
 
-.cover-title section {
+article.cover-title section {
+  flex: 0;
   background-color: var(--presentation-light-gray);
   color: var(--text-primary);
   border-radius: 0 0 0.5em 0;
   text-align: right;
 }
 
-.cover-avatars {
+section.cover-avatars {
   flex-direction: row;
   flex-wrap: wrap;
   padding-block-end: 1rem;
   padding-block-start: 1rem;
+  flex: 0 1 30%;
 }
 
-.cover-avatars img {
+section.cover-avatars img {
   flex: 0;
-  width: 100%;
+  height: 100%;
+  width: auto;
   max-height: 320px;
   min-height: auto;
   border-radius: 50%;
@@ -148,13 +154,13 @@ blockquote::before {
   aspect-ratio: 1;
 }
 
-.cover-avatars figure {
+section.cover-avatars figure {
   aspect-ratio: 1;
   max-height: 100%;
   justify-content: center;
 }
 
-.cover-avatars figcaption {
+section.cover-avatars figcaption {
   background: var(--brand-color);
   font-size: 2em;
   position: relative;

@@ -2,7 +2,8 @@
 @import url(//db.onlinewebfonts.com/c/5724ce1882e134bfbb68a761b8e85b51?family=ING+Me);
 
 :host {
-  font-family: "ING Me";
+  font-family: "ING Me", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif;
   box-sizing: border-box;
   display: flex;
   min-height: 100vh;
@@ -25,10 +26,10 @@ footer {
   position: fixed;
   bottom: 0;
   right: 0;
-  display: flex;
-  justify-content: flex-end;
+  display: inline;
   padding: 2rem;
   height: 8rem;
+  width: 8rem;
 }
 
 footer svg {

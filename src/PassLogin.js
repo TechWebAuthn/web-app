@@ -41,12 +41,12 @@ class PassLogin extends LitElement {
   async _onSubmit(event) {
     event.preventDefault();
 
-    const data = new FormData(event.target);
+    const data = new URLSearchParams(new FormData(event.target));
 
     const response = await fetch("/api/login", {
       method: "POST",
-      body: JSON.stringify(Object.fromEntries(data.entries())),
-      headers: { "Content-Type": "application/json" },
+      body: data,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
 
     const result = await response.json();

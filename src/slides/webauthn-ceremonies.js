@@ -1,11 +1,19 @@
-import { html, unsafeCSS } from "lit";
+import { html, unsafeCSS, css } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import layouts from "../styles/layouts.css?inline";
 import slides from "../styles/slides.css?inline";
 
 class WebAuthnCeremonies extends PresentationPageTemplate {
   static get styles() {
-    return [unsafeCSS(layouts), unsafeCSS(slides)];
+    return [
+      unsafeCSS(layouts),
+      unsafeCSS(slides),
+      css`
+        section {
+          font-size: 1.25em;
+        }
+      `,
+    ];
   }
 
   render() {

@@ -1,10 +1,17 @@
-import { html, unsafeCSS } from "lit";
+import { html, unsafeCSS, css } from "lit";
 import PresentationPageTemplate from "./presentation-page-template";
 import slides from "../styles/slides.css?inline";
 
 class AuthenticationChallenges extends PresentationPageTemplate {
   static get styles() {
-    return [unsafeCSS(slides)];
+    return [
+      unsafeCSS(slides),
+      css`
+        ul {
+          font-size: 1.5em;
+        }
+      `,
+    ];
   }
 
   render() {

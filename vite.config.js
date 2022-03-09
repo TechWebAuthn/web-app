@@ -11,7 +11,7 @@ export default defineConfig({
     VitePWA({
       strategies: "generateSW",
       registerType: "autoUpdate",
-      includeAssets: ["icons/*.ico"],
+      includeAssets: ["icons/*.ico", "images/*"],
       injectRegister: "inline",
       workbox: {
         cleanupOutdatedCaches: true,

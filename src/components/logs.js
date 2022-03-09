@@ -25,7 +25,7 @@ export class Logs extends LitElement {
         :host {
           display: flex;
           height: 100%;
-          font-size: 1rem;
+          font-size: 1.75rem;
         }
         .card {
           margin: 0;
@@ -63,10 +63,9 @@ export class Logs extends LitElement {
           position: sticky;
           top: 0;
           background: var(--canvas-secondary);
-          width: 100%;
           left: 0px;
           align-items: baseline;
-          width: calc(100% + 4rem);
+          margin-inline-end: -4rem;
           transform: translateX(-2rem);
         }
         .log-actions {

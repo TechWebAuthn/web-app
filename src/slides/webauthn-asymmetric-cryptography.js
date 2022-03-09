@@ -13,6 +13,10 @@ class WebAuthnAsymmetricCryptography extends PresentationPageTemplate {
         webauthn-recovery::part(input) {
           box-sizing: border-box;
         }
+
+        section {
+          font-size: 1.25em;
+        }
       `,
     ];
   }

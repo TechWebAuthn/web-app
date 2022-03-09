@@ -9,6 +9,7 @@ class AuthenticationHow extends PresentationPageTemplate {
       css`
         ul {
           display: inline-grid;
+          font-size: 1.5em;
         }
         li {
           display: grid;

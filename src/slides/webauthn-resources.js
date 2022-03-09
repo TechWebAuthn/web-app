@@ -1,4 +1,4 @@
-import { html, LitElement, unsafeCSS } from "lit";
+import { html, LitElement, unsafeCSS, css } from "lit";
 import forms from "../styles/forms.css?inline";
 import cards from "../styles/cards.css?inline";
 import slides from "../styles/slides.css?inline";
@@ -6,7 +6,17 @@ import notifications from "../styles/notifications.css?inline";
 
 class WebAuthnResources extends LitElement {
   static get styles() {
-    return [unsafeCSS(forms), unsafeCSS(cards), unsafeCSS(notifications), unsafeCSS(slides)];
+    return [
+      unsafeCSS(forms),
+      unsafeCSS(cards),
+      unsafeCSS(notifications),
+      unsafeCSS(slides),
+      css`
+        section {
+          font-size: 1.25em;
+        }
+      `,
+    ];
   }
 
   render() {

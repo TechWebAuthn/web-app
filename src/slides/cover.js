@@ -13,7 +13,7 @@ class Cover extends PresentationPageTemplate {
         <h1>Going passwordless with Web Authentication</h1>
         <h2>Mihăiță (Miță) Țintă & Bogdan (mArv) Arvinte</h2>
         <section>
-          <h3>Cluj, September 20, 2021</h3>
+          <h3>Bucharest, March 25, 2022</h3>
         </section>
       </article>
       <section class="cover-avatars">

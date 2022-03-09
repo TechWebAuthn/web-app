@@ -34,6 +34,7 @@ class Agenda extends PresentationPageTemplate {
                 <li>Platform support</li>
               </ul>
             </li>
+            <li><b>Phishing use case (password vs. WebAuthn)</b></li>
             <li><b>Resources</b></li>
           </ul>
         </section>

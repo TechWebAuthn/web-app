@@ -3,9 +3,9 @@ import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
   server: {
-    hmr: {
-      port: 443,
-    },
+    // hmr: {
+    //   port: 443,
+    // },
   },
   plugins: [
     VitePWA({

@@ -149,9 +149,9 @@ section.cover-avatars img {
   max-height: 320px;
   min-height: auto;
   border-radius: 50%;
-  border: 1rem solid var(--brand-color);
   box-sizing: border-box;
   aspect-ratio: 1;
+  filter: grayscale(100%) brightness(1.25);
 }
 
 section.cover-avatars figure {

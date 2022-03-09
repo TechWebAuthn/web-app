@@ -54,6 +54,12 @@ const routes = [
     component: "presentation-prompter",
     action: () => import("./Prompter"),
   },
+  {
+    name: "pass-login",
+    path: "/pass-login",
+    component: "auth-pass-login",
+    action: () => import("./PassLogin"),
+  },
 ];
 
 router.setRoutes(routes);

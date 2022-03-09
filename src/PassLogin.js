@@ -54,7 +54,7 @@ class PassLogin extends LitElement {
 
       console.log("Result", result);
 
-      let message = event.detail?.message;
+      let message = `Welcome back, ${result.username}!`;
       let notificationType = "info";
 
       this._setNotificationMessage(message, notificationType);

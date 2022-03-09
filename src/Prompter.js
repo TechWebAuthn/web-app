@@ -1,6 +1,6 @@
 import { css, html, LitElement, unsafeCSS } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import marked from "marked";
+import { marked } from "marked";
 import { connectToBroadcastChannel } from "./utils/network";
 
 import resets from "./styles/resets.css?inline";
@@ -66,7 +66,7 @@ class Prompter extends LitElement {
   render() {
     return html`
       <h1>${this._slideName}</h1>
-      <div>${unsafeHTML(marked(this._slideText))}</div>
+      <div>${unsafeHTML(marked.parse(this._slideText))}</div>
       <output>${this._formatedTimer}</output>
     `;
   }

@@ -43,20 +43,24 @@ class PassLogin extends LitElement {
 
     const data = new URLSearchParams(new FormData(event.target));
 
-    const response = await fetch("/api/login", {
-      method: "POST",
-      body: data,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    });
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        body: data,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    console.log("Result", result);
+      console.log("Result", result);
 
-    let message = event.detail?.message;
-    let notificationType = "info";
+      let message = event.detail?.message;
+      let notificationType = "info";
 
-    this._setNotificationMessage(message, notificationType);
+      this._setNotificationMessage(message, notificationType);
+    } catch (error) {
+      this._setNotificationMessage(error.message || "Something went wrong", "error");
+    }
   }
 }
 

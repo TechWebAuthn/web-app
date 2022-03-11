@@ -90,6 +90,12 @@ export const routes = [
     action: () => import("./slides/webauthn-add-new"),
   },
   {
+    name: "webauthn-phishing-use-case",
+    path: "/webauthn-phishing-use-case",
+    component: "presentation-webauthn-phishing-use-case",
+    action: () => import("./slides/webauthn-phishing-use-case"),
+  },
+  {
     name: "webauthn-rp-initial-steps",
     path: "/webauthn-rp-initial-steps",
     component: "presentation-webauthn-rp-initial-steps",

@@ -176,7 +176,8 @@ class PresentationApp extends LitElement {
     if (this.stopNavigation) return;
     const { code, altKey, ctrlKey } = event;
 
-    if (!["ArrowLeft", "ArrowRight", "F11", "KeyP", "KeyF", "KeyR"].includes(code)) return;
+    if (!["ArrowLeft", "ArrowRight", "F11", "KeyP", "KeyF", "KeyR", "BracketLeft", "BracketRight"].includes(code))
+      return;
     const currentSlide = this.location.pathname.replace("/presentation", "");
     const routeIndex = routes.findIndex((r) => r.path === currentSlide);
 
@@ -199,6 +200,14 @@ class PresentationApp extends LitElement {
 
     if (code === "KeyR" && altKey && ctrlKey) {
       this._resetPuckJS();
+    }
+
+    if (code === "BracketLeft" && altKey && ctrlKey) {
+      this._broadcastChannel?.postMessage("start-timer");
+    }
+
+    if (code === "BracketRight" && altKey && ctrlKey) {
+      this._broadcastChannel?.postMessage("stop-timer");
     }
   }
 

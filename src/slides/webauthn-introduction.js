@@ -46,17 +46,20 @@ class WebAuthnIntroduction extends PresentationPageTemplate {
 
   get _prompterMessage() {
     return `
-      #WebAuthentication intro
+      # WebAuthn - Introduction
+
       WebAuthentication is a specification which enables passwordless authentication by using strong, attested and scoped public key based credentials by web applications.
 
-It was developed by the W3C and the Fido Alliance and their ambition was to create a more secured process around authentication.
-You will hear during the next slides some new terms like:
-- Relying Party - the web application you are building. This is like: https://mycluj.e-primariaclujnapoca.ro/
-- Authenticator is a device/software used by the Browser to create and access public key based credentials. The browser uses the WebAuthentication API - an extension to the Credential Management API to communicate with it.
-Authenticators come in different forms: platform authenticators - built into the computer/phone or roaming authenticators - external keys - your machine connects to a remote device.
+      It was developed by the W3C and the Fido Alliance and their ambition was to create a more secured process around authentication.
+      You will hear during the next slides some new terms like:
 
-So, until now, the end users had to remember a password - a shared secret.
-Right now, they need access to an authenticator that uses asymmetric cryptography.
+      - Relying Party - the web application you are building.
+      - Authenticator is a device/software used by the Browser to create and access public key based credentials. The browser uses the WebAuthentication API - an extension to the Credential Management API to communicate with it.
+
+      Authenticators come in different forms: platform authenticators - built into the computer/phone or roaming authenticators - external keys - your machine connects to a remote device.
+
+      So, until now, the end users had to remember a password - a shared secret.
+      Right now, they need access to an authenticator that uses asymmetric cryptography.
     `;
   }
 }

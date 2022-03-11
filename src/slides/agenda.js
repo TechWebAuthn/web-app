@@ -58,7 +58,9 @@ class Agenda extends PresentationPageTemplate {
 
       A short reminder on asymmetric cryptography will accompany the introduction to Web Authentication, followed by an overview of the main ceremonies involved with this API.
 
-      We'll deep-dive into each ceremony with a live demo to see how everything ties together, talk a bit about Web Authentication platform support and share some of our recommended resources on this topic.
+      We'll deep-dive into each ceremony with a live demo to see how everything ties together and talk a bit about Web Authentication platform support.
+
+      We'll also go over a phising attack, in which we'll compare password login and web authentication login, and close off with some of our recommended resources on Web Authentication'.
     `;
   }
 }

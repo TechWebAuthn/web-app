@@ -38,7 +38,8 @@ class WebAuthnEasyAdoptionWC extends PresentationPageTemplate {
   get _prompterMessage() {
     return `
       # WebAuthn - Easy adoption with Web Components
-      -
+
+      Check the gists.
     `;
   }
 }

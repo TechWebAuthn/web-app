@@ -58,7 +58,7 @@ class WebAuthnRoamingSupport extends PresentationPageTemplate {
               </tr>
               <tr>
                 <td>Brave</td>
-                <td class="n">No</td>
+                <td class="y">Yes</td>
                 <td class="y">Yes</td>
                 <td class="y">Yes</td>
                 <td class="y">Yes</td>
@@ -101,6 +101,8 @@ class WebAuthnRoamingSupport extends PresentationPageTemplate {
   get _prompterMessage() {
     return `
       # Web Authn - Browser roaming support
+
+      When it comes to roaming support, the compatibility table is almost entirely blue, with Internet Explorer and several unavailable combinations as exceptions.
     `;
   }
 }

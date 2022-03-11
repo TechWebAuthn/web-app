@@ -49,6 +49,21 @@ class WebAuthnAddNewOptions extends PresentationPageTemplate {
       </article>
     `;
   }
+
+  get _prompterMessage() {
+    return `
+      # WebAuthn - Options to add a new device
+
+      There are several options available for adding a new device:
+
+      1. Use a roaming authenticator to access your account from another device.
+      2. Send a token through an external channel (e.g. type it, email, WhatsApp, etc.).
+      3. Send a token through a WebSocket connection between the two devices.
+      4. Send a token through WebRTC (peer-to-peer) between the two devices (use WebSockets for discovery).
+
+      We'll explore the last one as it relieves the server of an open connection and provides secure peer-to-peer communication.
+    `;
+  }
 }
 
 customElements.define("presentation-webauthn-add-new-options", WebAuthnAddNewOptions);

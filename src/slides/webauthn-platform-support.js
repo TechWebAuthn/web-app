@@ -58,8 +58,8 @@ class WebAuthnPlatformSupport extends PresentationPageTemplate {
               </tr>
               <tr>
                 <td>Brave</td>
-                <td class="n">No</td>
-                <td class="n">No</td>
+                <td class="y">Yes</td>
+                <td class="y">Yes</td>
                 <td class="y">Yes</td>
                 <td class="y">Yes</td>
                 <td class="y">Yes</td>
@@ -72,7 +72,7 @@ class WebAuthnPlatformSupport extends PresentationPageTemplate {
                 <td class="y">Yes</td>
                 <td class="y">Yes</td>
                 <td class="y">Yes</td>
-                <td class=>-</td>
+                <td>-</td>
               </tr>
               <tr>
                 <td>Internet Explorer</td>
@@ -100,7 +100,15 @@ class WebAuthnPlatformSupport extends PresentationPageTemplate {
 
   get _prompterMessage() {
     return `
-      # Web Authn - Add a new device
+      # WebAuthn - Browser platform support
+
+      As far as built-in support for browsers is concerned, we have limitation when it comes ot the Linux operating system.
+
+      The interaction with TPM is non-trivial to implement, so we can't use any browser on Linux unfortunately.
+
+      Because WebAuthentication support landed more recently in Safari, older versions of macOS and iOS will not work standalone.
+
+      Internet Explorer also does not work, in fact, it doesn't work at all, even with roaming authenticators.
     `;
   }
 }

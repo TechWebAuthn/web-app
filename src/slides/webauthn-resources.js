@@ -1,10 +1,11 @@
-import { html, LitElement, unsafeCSS, css } from "lit";
+import { html, unsafeCSS, css } from "lit";
+import PresentationPageTemplate from "./presentation-page-template";
 import forms from "../styles/forms.css?inline";
 import cards from "../styles/cards.css?inline";
 import slides from "../styles/slides.css?inline";
 import notifications from "../styles/notifications.css?inline";
 
-class WebAuthnResources extends LitElement {
+class WebAuthnResources extends PresentationPageTemplate {
   static get styles() {
     return [
       unsafeCSS(forms),
@@ -47,6 +48,17 @@ class WebAuthnResources extends LitElement {
           </ul>
         </section>
       </article>
+    `;
+  }
+
+  get _prompterMessage() {
+    return `
+      # WebAuthn - Resources
+
+      There are many other resources available out there:
+
+      - webauthn.io
+      - webauthn.me
     `;
   }
 }

@@ -14,6 +14,7 @@ class Prompter extends LitElement {
     this._slideText = "...";
     this._slideTimer = 0;
     this._timerInterval = null;
+    this._isTimerOn = false;
   }
 
   static get properties() {
@@ -48,8 +49,14 @@ class Prompter extends LitElement {
           font-size: 1.2em;
         }
 
+        ul,
+        ol {
+          margin-inline-start: 1em;
+          margin-block-end: 1em;
+        }
+
         p {
-          margin-block-end: 2em;
+          margin-block-end: 1em;
         }
 
         output {
@@ -72,12 +79,19 @@ class Prompter extends LitElement {
   }
 
   _parseMessage({ data }) {
-    if (data.endsWith("fullscreen")) {
-      if (data === "entered-fullscreen") {
-        this._timerInterval = setInterval(this._countUp.bind(this), 1000);
+    if (data.endsWith("timer")) {
+      if (data === "start-timer") {
+        if (this._isTimerOn) {
+          clearInterval(this._timerInterval);
+          this._isTimerOn = false;
+        } else {
+          this._timerInterval = setInterval(this._countUp.bind(this), 1000);
+          this._isTimerOn = true;
+        }
       } else {
         clearInterval(this._timerInterval);
         this._slideTimer = 0;
+        this._isTimerOn = false;
       }
       return;
     }

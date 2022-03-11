@@ -38,7 +38,8 @@ class WebAuthnRPInitialSteps extends PresentationPageTemplate {
   get _prompterMessage() {
     return `
       # WebAuthn - Relying Party initial steps
-      -
+
+      Check the gists.
     `;
   }
 }

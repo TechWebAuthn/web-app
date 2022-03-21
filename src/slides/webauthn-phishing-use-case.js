@@ -54,9 +54,6 @@ class WebAuthnPhishingUseCase extends PresentationPageTemplate {
     ];
   }
 
-  // viewBox="-140 150 960 100"
-  // preserveAspectRatio="xMidYMid meet"
-
   render() {
     return html`
       <h1>WebAuthn - Phishing use case</h1>

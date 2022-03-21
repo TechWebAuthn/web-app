@@ -5,6 +5,8 @@ import { Router } from "@vaadin/router";
 import resets from "./styles/resets.css?inline";
 import presentation from "./styles/presentation.css?inline";
 
+import "https://kit.fontawesome.com/288b9fe9d3.js";
+
 export const routes = [
   {
     name: "index",

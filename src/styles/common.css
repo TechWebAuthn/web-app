@@ -1,3 +1,7 @@
+:root {
+  --fa-style-family: "FontAwesome";
+}
+
 /* Light color theme variables */
 :root,
 :root[data-theme="light"] {

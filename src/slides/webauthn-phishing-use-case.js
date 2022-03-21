@@ -1,11 +1,13 @@
 import { css, html, unsafeCSS } from "lit";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import PresentationPageTemplate from "./presentation-page-template";
 import "webauthn-components/recovery";
 import layouts from "../styles/layouts.css?inline";
 import slides from "../styles/slides.css?inline";
 import cards from "../styles/cards.css?inline";
 
-import svgFile from "../../public/images/webauthn-actors.svg?raw";
+import passwordSVG from "../../public/images/password-login.svg?raw";
+import webauthnSVG from "../../public/images/webauthn-login.svg?raw";
 
 class WebAuthnPhishingUseCase extends PresentationPageTemplate {
   static get styles() {
@@ -29,6 +31,10 @@ class WebAuthnPhishingUseCase extends PresentationPageTemplate {
           box-sizing: border-box;
         }
 
+        figure {
+          max-width: 100%;
+        }
+
         section.fullscreen {
           align-items: center;
           justify-content: center;
@@ -39,9 +45,17 @@ class WebAuthnPhishingUseCase extends PresentationPageTemplate {
           aspect-ratio: 2;
           font-size: 1.5rem;
         }
+
+        svg {
+          flex: 1;
+          aspect-ratio: 2;
+        }
       `,
     ];
   }
+
+  // viewBox="-140 150 960 100"
+  // preserveAspectRatio="xMidYMid meet"
 
   render() {
     return html`
@@ -55,7 +69,7 @@ class WebAuthnPhishingUseCase extends PresentationPageTemplate {
             </svg>
           </button>
           <figure>
-            <img src="/images/password-login.svg" alt="WebAuthn password login diagram" />
+            ${unsafeHTML(passwordSVG)}
             <figcaption>Login with password</figcaption>
           </figure>
         </section>
@@ -66,7 +80,7 @@ class WebAuthnPhishingUseCase extends PresentationPageTemplate {
             </svg>
           </button>
           <figure>
-            <img src="/images/webauthn-login.svg" alt="WebAuthn login diagram" />
+            ${unsafeHTML(webauthnSVG)}
             <figcaption>Login with Web Authentication</figcaption>
           </figure>
         </section>

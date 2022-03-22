@@ -38,6 +38,7 @@ export class Logs extends LitElement {
         }
         .heading {
           font-weight: bold;
+          display: inline-flex;
         }
         .class {
           color: var(--text-link);
@@ -78,6 +79,9 @@ export class Logs extends LitElement {
           background: var(--button-canvas-primary);
           color: var(--button-text-primary);
           border: none;
+        }
+        li {
+          list-style-position: inside;
         }
       `,
     ];
